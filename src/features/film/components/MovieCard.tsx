@@ -1,12 +1,12 @@
 import classes from "./MovieCard.module.css";
 import { Card, Text, Group, Box } from "@mantine/core";
 import Link from "next/link";
-import { BriefMovie } from "@/types/movie.type";
-import { getTmdbImage } from "./movie.helper";
+import { getTmdbImage } from "../film.helper";
+import { Movie } from "../types/movie.type";
 
 export type MovieCardProps = {
-  movie: BriefMovie;
-}
+  movie: Movie;
+};
 
 export function MovieCard({ movie }: MovieCardProps) {
   return (
@@ -16,8 +16,8 @@ export function MovieCard({ movie }: MovieCardProps) {
         shadow="lg"
         className={classes.card}
         radius="md"
-        w={250}
-        h={350}
+        w={200}
+        h={300}
       >
         <Box
           className={classes.image}
@@ -29,13 +29,19 @@ export function MovieCard({ movie }: MovieCardProps) {
 
         <div className={classes.content}>
           <div>
-            <Text size="lg" className={classes.title} fw={500}>
+            <Text className={classes.title} fw={500}>
               {movie.title}
             </Text>
 
             <Group justify="space-between" gap="xs">
               <Text size="sm" className={classes.author}>
-                {movie.vote_average.toFixed(1)}
+                {"Movie"}
+              </Text>
+              <Text size="xs" c="dimmed">
+                •
+              </Text>
+              <Text size="sm" className={classes.author}>
+                {movie.vote_average?.toFixed(1)}
               </Text>
             </Group>
           </div>

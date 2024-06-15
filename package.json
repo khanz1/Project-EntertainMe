@@ -9,13 +9,19 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.2.0",
     "@mantine/core": "^7.10.1",
     "@mantine/form": "^7.10.1",
     "@mantine/hooks": "^7.10.1",
+    "@mantinex/dev-icons": "^1.0.2",
+    "@prisma/client": "^5.15.0",
+    "@prisma/extension-accelerate": "^1.1.0",
     "@tabler/icons-react": "^3.5.0",
     "next": "14.2.4",
+    "next-auth": "^5.0.0-beta.19",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-infinite-scroll-component": "^6.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -26,6 +32,10 @@
     "postcss": "^8.4.38",
     "postcss-preset-mantine": "^1.15.0",
     "postcss-simple-vars": "^7.0.1",
+    "prisma": "^5.15.0",
     "typescript": "^5"
+  },
+  "prisma": {
+    "schema": "src/db/prisma/schema.prisma"
   }
 }
