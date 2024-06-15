@@ -8,18 +8,16 @@ import {
   Text,
   Paper,
   Group,
-  PaperProps,
   Button,
   Divider,
   Checkbox,
   Anchor,
   Stack,
-  Container,
 } from "@mantine/core";
 import { GoogleButton } from "@/features/auth/GoogleButton";
 import { TwitterButton } from "@/features/auth/TwitterButton";
 
-export default function AuthenticationForm(props: PaperProps) {
+export default function Page() {
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -43,7 +41,7 @@ export default function AuthenticationForm(props: PaperProps) {
   };
 
   return (
-      <Paper radius="md" m="auto" withBorder {...props}>
+      <Paper radius="md" m="auto" withBorder>
         <Text size="lg" fw={500}>
           Welcome to Mantine, {type} with
         </Text>
