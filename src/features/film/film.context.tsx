@@ -2,8 +2,15 @@
 import { fLowercaseUnderscore } from "@/utils/formatter.helper";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 import { useDebouncedState, useDebouncedValue } from "@mantine/hooks";
-import { FetchProps, Film, FILM_FILTERS, ResData } from "./types/film.type";
-import { fetchMovies, fetchTVSeries } from "./film.action";
+import {
+  FetchProps,
+  Film,
+  FILM_FILTERS,
+  FILM_TYPE,
+  Genre,
+  ResData,
+} from "./types/film.type";
+import { fetchGenres, fetchMovies, fetchTVSeries } from "./film.action";
 
 export type FilmContextProps = {
   filmList: ResData<Film[]>;
@@ -14,6 +21,8 @@ export type FilmContextProps = {
   setFilter: React.Dispatch<React.SetStateAction<FILM_FILTERS>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  genres: Genre[];
+  setGenres: React.Dispatch<React.SetStateAction<Genre[]>>;
   hasMoreFilm: boolean;
 };
 const FilmContext = createContext<FilmContextProps | undefined>(undefined);
@@ -46,16 +55,36 @@ export const fetchFilmList = async (
   };
 };
 
+export const fetchGenreList = async () => {
+  const [movies, tvSeries] = await Promise.all([
+    fetchGenres(FILM_TYPE.MOVIE),
+    fetchGenres(FILM_TYPE.TV_SERIES),
+  ]);
+
+  // merge genres and remove duplicates
+  const genres = movies.concat(tvSeries);
+
+  return genres.filter((genre, i, self) => {
+    return (
+      i === self.findIndex((t) => t.id === genre.id && t.name === genre.name)
+    );
+  }).toSorted((a, b) => a.name.localeCompare(b.name));
+};
+
 export const FilmProvider = ({ children }: Readonly<FilmProviderProps>) => {
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<FILM_FILTERS>(FILM_FILTERS.POPULAR);
   const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
+  const [genres, setGenres] = useState<Genre[]>([]);
   const [search, setSearch] = useState("");
   const [debounced] = useDebouncedValue(search, 500);
 
   useEffect(() => {
+    fetchGenreList().then(setGenres);
+  }, []);
+
+  useEffect(() => {
     (async () => {
-      console.log(debounced, "<<d");
       const filterResult = fLowercaseUnderscore(filter) as FILM_FILTERS;
       const data = await fetchFilmList({
         page,
@@ -80,10 +109,12 @@ export const FilmProvider = ({ children }: Readonly<FilmProviderProps>) => {
       page,
       filter,
       search,
+      genres,
       setFilmList,
       setPage,
       setFilter,
       setSearch,
+      setGenres,
       hasMoreFilm:
         filmList.results.length === 0
           ? true
@@ -98,6 +129,8 @@ export const FilmProvider = ({ children }: Readonly<FilmProviderProps>) => {
     setFilter,
     search,
     setSearch,
+    genres,
+    setGenres,
   ]);
 
   return <FilmContext.Provider value={state}>{children}</FilmContext.Provider>;

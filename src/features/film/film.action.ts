@@ -129,7 +129,6 @@ export const fetchReviews = async (
 
 export const fetchSeasonByTvId = async (tvId: number, seasonNumber: number): Promise<Season> => {
   const url = new URL(`${TMDB_HOST}/3/tv/${tvId}/season/${seasonNumber}`);
-  console.log(url, '<<url')
 
   const response = await fetch(url, {
     headers: {

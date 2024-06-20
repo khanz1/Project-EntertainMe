@@ -35,7 +35,8 @@ const filterList = [
 }));
 
 export default function Page() {
-  const { genres, filmList, hasMoreFilm, filter, setFilter, setPage } = useFilm();
+  const { genres, filmList, hasMoreFilm, filter, setFilter, setPage } =
+    useFilm();
 
   return (
     <Container size="xl" my={25}>

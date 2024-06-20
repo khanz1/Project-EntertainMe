@@ -21,6 +21,6 @@ export function SwitchSearch() {
   );
 
   return (
-    <Switch size="md" color="dark.4" onLabel={"Manga"} offLabel={"Movie/TV"} />
+    <Switch size="xl" color="dark.4" onLabel={"Manga"} offLabel={"Movie/TV"} />
   );
 }
