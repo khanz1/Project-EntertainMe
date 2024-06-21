@@ -40,6 +40,12 @@ export type Review = {
   url: string;
 };
 
+export type ResFailed = {
+  success: false;
+  status_code: number;
+  status_message: string;
+};
+
 export type ResData<T> = {
   page: number;
   results: T;

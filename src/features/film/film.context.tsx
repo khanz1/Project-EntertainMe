@@ -39,7 +39,7 @@ export const filmState: ResData<Film[]> = {
 };
 
 export const fetchFilmList = async (
-  props: FetchProps
+  props: Partial<FetchProps>
 ): Promise<ResData<Film[]>> => {
   const [movies, tvSeriesList] = await Promise.all([
     fetchMovies(props),
@@ -64,11 +64,13 @@ export const fetchGenreList = async () => {
   // merge genres and remove duplicates
   const genres = movies.concat(tvSeries);
 
-  return genres.filter((genre, i, self) => {
-    return (
-      i === self.findIndex((t) => t.id === genre.id && t.name === genre.name)
-    );
-  }).toSorted((a, b) => a.name.localeCompare(b.name));
+  return genres
+    .filter((genre, i, self) => {
+      return (
+        i === self.findIndex((t) => t.id === genre.id && t.name === genre.name)
+      );
+    })
+    .toSorted((a, b) => a.name.localeCompare(b.name));
 };
 
 export const FilmProvider = ({ children }: Readonly<FilmProviderProps>) => {

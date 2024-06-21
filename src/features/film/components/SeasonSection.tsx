@@ -46,13 +46,15 @@ export const SeasonSection = ({ tvSeries }: SeasonSectionProps) => {
       />
       <Group mt="xl" justify="center" wrap="wrap" gap="lg">
         {season.episodes.map((episode) => (
-          <Link
+          <Box
+            component={Link}
+            w="100%"
             key={episode.id}
             href={`/watch/${tvSeries.id}?s=${seasonNumber}&e=${seasonNumber}`}
             style={{ textDecoration: "none" }}
           >
             <EpisodeCard episode={episode} />
-          </Link>
+          </Box>
         ))}
       </Group>
     </Box>

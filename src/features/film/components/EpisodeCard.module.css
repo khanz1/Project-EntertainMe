@@ -1,5 +1,10 @@
 .card {
   background-color: var(--mantine-color-body);
+  width: 100%;
+}
+
+.card:hover {
+  background-color: var(--mantine-color-gray-8);
 }
 
 .title {
@@ -10,6 +15,10 @@
   line-height: 1.2;
 }
 
-.body {
-  padding: var(--mantine-spacing-md);
+.image {
+  transition: transform 500ms ease;
+}
+
+.image:hover {
+  transform: scale(1.03);
 }
