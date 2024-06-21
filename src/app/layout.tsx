@@ -8,7 +8,6 @@ import {
 } from "@mantine/core";
 import { Navbar } from "@/features/app/Navbar";
 import { cookies } from "next/headers";
-import { FilmProvider } from "@/features/film/film.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,10 +44,8 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
       </head>
       <body className={inter.className}>
         <MantineProvider defaultColorScheme={theme}>
-          <FilmProvider>
-            <Navbar />
-            {children}
-          </FilmProvider>
+          <Navbar />
+          {children}
         </MantineProvider>
       </body>
     </html>

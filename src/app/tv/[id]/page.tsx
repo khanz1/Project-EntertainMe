@@ -1,21 +1,11 @@
 import Link from "next/link";
 import {
   Image,
-  Text,
   Group,
-  Badge,
-  Rating,
   ActionIcon,
   Box,
-  Stack,
-  Button,
-  ScrollArea,
-  Center,
-  Tabs,
-  rem,
 } from "@mantine/core";
-import { IconArrowLeft, IconMessageCircle, IconPhoto, IconSettings } from "@tabler/icons-react";
-import { Comment } from "@/features/film/components/Comment";
+import { IconArrowLeft } from "@tabler/icons-react";
 import { fetchReviews, fetchSeriesById } from "@/features/film/film.action";
 import { FILM_TYPE } from "@/features/film/types/film.type";
 import { getTmdbImage } from "@/features/film/film.helper";

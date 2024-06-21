@@ -3,6 +3,7 @@
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from "@/constant";
 import {
   FetchProps,
+  Film,
   FILM_TYPE,
   Genre,
   ResData,
@@ -12,6 +13,42 @@ import {
 } from "./types/film.type";
 import { Movie, MovieDetail, Season } from "./types/movie.type";
 import { TVSeries, TVSeriesDetail } from "./types/series.type";
+
+export type FetchFilmList = (
+  props: Partial<FetchProps>
+) => Promise<ResData<Film[]>>;
+
+export const fetchFilmList: FetchFilmList = async (props) => {
+  const [movies, tvSeriesList] = await Promise.all([
+    fetchMovies(props),
+    fetchTVSeries(props),
+  ]);
+
+  const results = [...tvSeriesList.results, ...movies.results];
+  return {
+    page: movies.page,
+    results,
+    total_pages: Math.max(movies.total_pages, tvSeriesList.total_pages),
+    total_results: movies.total_results + tvSeriesList.total_results,
+  };
+};
+
+export const fetchGenreList = async () => {
+  const [movies, tvSeries] = await Promise.all([
+    fetchGenres(FILM_TYPE.MOVIE),
+    fetchGenres(FILM_TYPE.TV_SERIES),
+  ]);
+
+  const genres = movies.concat(tvSeries);
+
+  return genres
+    .filter((genre, i, self) => {
+      return (
+        i === self.findIndex((t) => t.id === genre.id && t.name === genre.name)
+      );
+    })
+    .toSorted((a, b) => a.name.localeCompare(b.name));
+};
 
 export const fetchMoviesByGenre = async (genreId: string) => {
   let url = new URL(`${TMDB_HOST}/3/discover/movie`);

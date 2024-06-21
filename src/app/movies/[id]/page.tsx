@@ -12,7 +12,7 @@ import {
   ScrollArea,
   Center,
 } from "@mantine/core";
-// import classes from "@/features/film/styles/movie-detail.module.css";
+
 import { IconArrowLeft } from "@tabler/icons-react";
 import { Comment } from "@/features/film/components/Comment";
 import { fetchMovieById, fetchReviews } from "@/features/film/film.action";

@@ -2,7 +2,6 @@
 
 import { MovieCard } from "@/features/film/components/MovieCard";
 import { TVSeriesCard } from "@/features/film/components/TVSeriesCard";
-import { useFilm } from "@/features/film/film.context";
 import { isMovie, isTVSeries } from "@/features/film/film.helper";
 import { FILM_FILTERS } from "@/features/film/types/film.type";
 import { fCapitalizeSpace, fThousandsNumber } from "@/utils/formatter.helper";
@@ -35,8 +34,6 @@ const filterList = [
 }));
 
 export default function Page() {
-  const { genres, filmList, hasMoreFilm, filter, setFilter, setPage } =
-    useFilm();
 
   return (
     <Container size="xl" my={25}>
@@ -45,9 +42,9 @@ export default function Page() {
           <Card shadow="sm" radius="md" withBorder>
             <InputLabel>Filter by Genre</InputLabel>
             <Stack my="sm">
-              {genres.map((genre) => (
+              {/* {genres.map((genre) => (
                 <Checkbox label={genre.name} key={genre.id} />
-              ))}
+              ))} */}
             </Stack>
           </Card>
         </Grid.Col>
@@ -56,22 +53,22 @@ export default function Page() {
             <Select
               placeholder="Pick value"
               data={filterList}
-              value={filter}
-              onChange={(val) => {
-                if (val) {
-                  setFilter(val as FILM_FILTERS);
-                }
-              }}
+              // value={filter}
+              // onChange={(val) => {
+              //   if (val) {
+              //     setFilter(val as FILM_FILTERS);
+              //   }
+              // }}
             />
             <Text>
-              Showing {fThousandsNumber(filmList.results.length)} from{" "}
-              {fThousandsNumber(filmList.total_results)} film
+              {/* Showing {fThousandsNumber(filmList.results.length)} from{" "}
+              {fThousandsNumber(filmList.total_results)} film */}
             </Text>
           </Group>
-          <InfiniteScroll
-            dataLength={filmList.results.length}
-            next={() => setPage((prev) => prev + 1)}
-            hasMore={hasMoreFilm}
+          {/* <InfiniteScroll
+            // dataLength={filmList.results.length}
+            // next={() => setPage((prev) => prev + 1)}
+            // hasMore={hasMoreFilm}
             loader={
               <Center my="xl">
                 <Loader color="blue" />
@@ -98,7 +95,7 @@ export default function Page() {
                 }
               })}
             </Box>
-          </InfiniteScroll>
+          </InfiniteScroll> */}
         </Grid.Col>
       </Grid>
     </Container>

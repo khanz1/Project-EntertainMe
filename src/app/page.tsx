@@ -2,10 +2,10 @@
 
 import { MovieCard } from "@/features/film/components/MovieCard";
 import { TVSeriesCard } from "@/features/film/components/TVSeriesCard";
-import { fetchFilmList, fetchGenreList, useFilm } from "@/features/film/film.context";
+import { fetchFilmList, fetchGenreList } from "@/features/film/film.action";
 import { isMovie, isTVSeries } from "@/features/film/film.helper";
 import { FetchProps, Film, FILM_FILTERS, Genre, ResData } from "@/features/film/types/film.type";
-import { fCapitalizeSpace, fLowercaseUnderscore, fThousandsNumber } from "@/utils/formatter.helper";
+import { fCapitalizeSpace, fThousandsNumber } from "@/utils/formatter.helper";
 import {
   Box,
   Card,
@@ -62,7 +62,6 @@ export default function Page() {
 
   useEffect(() => {
     (async () => {
-      console.log("fetching", filter, page, page)
       const options: Partial<FetchProps> = {
         page,
         filter,
