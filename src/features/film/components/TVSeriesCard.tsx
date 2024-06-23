@@ -1,8 +1,8 @@
-import classes from "./MovieCard.module.css";
-import { Card, Text, Group, Box } from "@mantine/core";
-import Link from "next/link";
-import { getTmdbImage } from "../film.helper";
-import { TVSeries } from "../types/series.type";
+import classes from './MovieCard.module.css';
+import { Box, Card, Group, Text } from '@mantine/core';
+import Link from 'next/link';
+import { getTmdbImage } from '../film.helper';
+import { TVSeries } from '../types/series.type';
 
 export type TVSeriesCardProps = {
   tvSeries: TVSeries;
@@ -10,7 +10,7 @@ export type TVSeriesCardProps = {
 
 export function TVSeriesCard({ tvSeries }: TVSeriesCardProps) {
   return (
-    <Link style={{ textDecoration: "none" }} href={`/tv/${tvSeries.id}`}>
+    <Link style={{ textDecoration: 'none' }} href={`/tv/${tvSeries.id}`}>
       <Card
         p="lg"
         shadow="lg"
@@ -29,13 +29,13 @@ export function TVSeriesCard({ tvSeries }: TVSeriesCardProps) {
 
         <div className={classes.content}>
           <div>
-            <Text className={classes.title} fw={500}>
+            <Text className={classes.title} fw={500} lineClamp={1}>
               {tvSeries.name}
             </Text>
 
             <Group gap="xs">
               <Text size="sm" className={classes.author}>
-                {"TV"}
+                {'TV'}
               </Text>
               <Text size="xs" c="dimmed">
                 •

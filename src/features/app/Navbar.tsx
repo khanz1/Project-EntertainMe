@@ -1,37 +1,36 @@
-"use client";
+'use client';
 
-import { Group, Input } from "@mantine/core";
-import classes from "./Navbar.module.css";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { IconSearch, IconX } from "@tabler/icons-react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { SwitchSearch } from "./Switch";
-import { useDebouncedValue } from "@mantine/hooks";
+import { Group, Input } from '@mantine/core';
+import classes from './Navbar.module.css';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { IconSearch, IconX } from '@tabler/icons-react';
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { useDebouncedValue } from '@mantine/hooks';
 
 const links = [
-  { link: "/", label: "Home" },
-  { link: "/about", label: "About" },
+  { link: '/', label: 'Home' },
+  { link: '/about', label: 'About' },
 ];
 export const Navbar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const pathname = usePathname();
   const [debounced] = useDebouncedValue(search, 500);
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    url.searchParams.set("search", debounced);
-    url.searchParams.set("page", "1");
+    url.searchParams.set('search', debounced);
+    url.searchParams.set('page', '1');
     router.push(url.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);
 
   if (
-    pathname.startsWith("/movies/") ||
-    pathname.startsWith("/watch/") ||
-    pathname.startsWith("/tv/")
+    pathname.startsWith('/movies/') ||
+    pathname.startsWith('/watch/') ||
+    pathname.startsWith('/tv/')
   ) {
     return null;
   }
@@ -47,7 +46,7 @@ export const Navbar = () => {
           ))}
         </Group>
         <Group>
-          <SwitchSearch />
+          {/*<SwitchSearch />*/}
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -57,12 +56,12 @@ export const Navbar = () => {
               <IconX
                 size={16}
                 style={{
-                  cursor: "pointer",
-                  display: search ? "block" : "none",
+                  cursor: 'pointer',
+                  display: search ? 'block' : 'none',
                 }}
                 onClick={() => {
                   const url = new URL(window.location.href);
-                  url.searchParams.delete("search");
+                  url.searchParams.delete('search');
                   router.push(url.toString());
                 }}
               />

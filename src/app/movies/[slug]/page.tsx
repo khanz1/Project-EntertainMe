@@ -1,48 +1,38 @@
-import Link from "next/link";
-import {
-  Image,
-  Text,
-  Group,
-  Badge,
-  Rating,
-  ActionIcon,
-  Box,
-  Stack,
-  Button,
-  ScrollArea,
-  Center,
-} from "@mantine/core";
+import Link from 'next/link';
+import { ActionIcon, Badge, Box, Button, Center, Group, Image, Rating, ScrollArea, Stack, Text } from '@mantine/core';
 
-import { IconArrowLeft } from "@tabler/icons-react";
-import { Comment } from "@/features/film/components/Comment";
-import { fetchMovieById, fetchReviews } from "@/features/film/film.action";
-import { FILM_TYPE } from "@/features/film/types/film.type";
-import { getTmdbImage } from "@/features/film/film.helper";
+import { IconArrowLeft } from '@tabler/icons-react';
+import { Comment } from '@/features/film/components/Comment';
+import { fetchMovieById, fetchReviews } from '@/features/film/film.action';
+import { FILM_TYPE } from '@/features/film/types/film.type';
+import { getTmdbImage } from '@/features/film/film.helper';
+import { parseIdFromSlug } from '@/utils/slugify.helper';
 
 export type PageProps = {
   params: {
-    id: string;
+    slug: string;
   };
 };
 
 export default async function Page({ params }: PageProps) {
+  const movieId = parseIdFromSlug(params.slug);
   const [movie, reviews] = await Promise.all([
-    fetchMovieById(Number(params.id)),
-    fetchReviews(Number(params.id), FILM_TYPE.MOVIE),
+    fetchMovieById(movieId),
+    fetchReviews(movieId, FILM_TYPE.MOVIE),
   ]);
 
   return (
     <Box>
       <Link href="/">
         <ActionIcon
-          style={{ position: "absolute", top: "1%", left: "1%" }}
+          style={{ position: 'absolute', top: '1%', left: '1%' }}
           variant="subtle"
           color="white"
           size="xl"
           radius="xs"
           aria-label="Button Back"
         >
-          <IconArrowLeft style={{ width: "70%", height: "70%" }} stroke={1.5} />
+          <IconArrowLeft style={{ width: '70%', height: '70%' }} stroke={1.5} />
         </ActionIcon>
       </Link>
       <Group wrap="nowrap" gap="xl">

@@ -1,6 +1,5 @@
-import exp from "constants";
-import { Movie } from "./movie.type";
-import { TVSeries } from "./series.type";
+import { Movie } from './movie.type';
+import { TVSeries } from './series.type';
 
 export interface Genre {
   id: number;
@@ -54,16 +53,17 @@ export type ResData<T> = {
 };
 
 export enum FILM_TYPE {
-  MOVIE = "movie",
-  TV_SERIES = "tv",
-};
+  MOVIE = 'movie',
+  TV_SERIES = 'tv',
+}
+
 export enum FILM_FILTERS {
-  POPULAR = "popular",
-  TOP_RATED = "top_rated",
-  UPCOMING = "upcoming",
-  NOW_PLAYING = "now_playing",
-  ON_THE_AIR = "on_the_air",
-  AIRING_TODAY = "airing_today",
+  POPULAR = 'popular',
+  TOP_RATED = 'top_rated',
+  UPCOMING = 'upcoming',
+  NOW_PLAYING = 'now_playing',
+  ON_THE_AIR = 'on_the_air',
+  AIRING_TODAY = 'airing_today',
 }
 
 export type WithType<T> = T & { type?: FILM_TYPE };
@@ -73,3 +73,19 @@ export type FetchProps = {
   filter: FILM_FILTERS;
   search: string;
 };
+
+// Define a type alias for the parameters of the getFilmList function
+type SortOrder = 'asc' | 'desc';
+export type FindFilmListParams = {
+  page?: number;
+  pageSize?: number;
+  searchTerm?: string;
+  sortBy?: FILM_FILTERS; // Add more fields as needed
+  sortOrder?: SortOrder;
+  genre?: string;
+};
+
+export enum ENTERTAIN_TYPE {
+  MOVIE = 'movie',
+  TV = 'tv',
+}

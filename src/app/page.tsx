@@ -1,29 +1,16 @@
-"use client";
+'use client';
 
-import { MovieCard } from "@/features/film/components/MovieCard";
-import { TVSeriesCard } from "@/features/film/components/TVSeriesCard";
-import { fetchFilmList, fetchGenreList } from "@/features/film/film.action";
-import { isMovie, isTVSeries } from "@/features/film/film.helper";
-import { FetchProps, Film, FILM_FILTERS, Genre, ResData } from "@/features/film/types/film.type";
-import { fCapitalizeSpace, fThousandsNumber } from "@/utils/formatter.helper";
-import {
-  Box,
-  Card,
-  Center,
-  Checkbox,
-  Container,
-  Grid,
-  Group,
-  InputLabel,
-  Loader,
-  Select,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
+import { MovieCard } from '@/features/film/components/MovieCard';
+import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
+import { fetchFilmList, fetchGenreList } from '@/features/film/film.action';
+import { isMovie, isTVSeries } from '@/features/film/film.helper';
+import { ENTERTAIN_TYPE, FetchProps, Film, FILM_FILTERS, Genre, ResData } from '@/features/film/types/film.type';
+import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
+import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -36,7 +23,7 @@ const filterList = [
   label: fCapitalizeSpace(f),
   value: f,
 }));
-export const filmState: ResData<Film[]> = {
+const filmState: ResData<Film[]> = {
   page: 1,
   results: [],
   total_pages: 1,
@@ -50,9 +37,10 @@ export default function Page() {
 
   const searchParams = useSearchParams();
 
-  const search = searchParams.get("search") || "";
-  const page = searchParams.get("page") ? parseInt(searchParams.get("page")!) : 1;
-  const filter = searchParams.get("filter") as FILM_FILTERS || FILM_FILTERS.POPULAR;
+  const search = searchParams.get('search') || '';
+  const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
+  const filter = searchParams.get('filter') as FILM_FILTERS || FILM_FILTERS.POPULAR;
+  const type = searchParams.get('type') as ENTERTAIN_TYPE || 'movie';
   const [debounced] = useDebouncedValue(search, 500);
 
 
@@ -93,17 +81,17 @@ export default function Page() {
   return (
     <Container size="xl" my={25}>
       <Grid>
-        <Grid.Col span={2}>
-          <Card shadow="sm" radius="md" withBorder>
-            <InputLabel>Filter by Genre</InputLabel>
-            <Stack my="sm">
-              {genres.map((genre) => (
-                <Checkbox label={genre.name} key={genre.id} />
-              ))}
-            </Stack>
-          </Card>
-        </Grid.Col>
-        <Grid.Col span={10}>
+        {/*<Grid.Col span={2}>*/}
+        {/*  <Card shadow="sm" radius="md" withBorder>*/}
+        {/*    <InputLabel>Filter by Genre</InputLabel>*/}
+        {/*    <Stack my="sm">*/}
+        {/*      {genres.map((genre) => (*/}
+        {/*        <Checkbox label={genre.name} key={genre.id} />*/}
+        {/*      ))}*/}
+        {/*    </Stack>*/}
+        {/*  </Card>*/}
+        {/*</Grid.Col>*/}
+        <Grid.Col>
           <Group justify="space-between" mb="md" mx="md">
             <Select
               placeholder="Pick value"
@@ -112,15 +100,15 @@ export default function Page() {
               onChange={(val) => {
                 if (val) {
                   const url = new URL(window.location.href);
-                  url.searchParams.set("filter", val);
-                  url.searchParams.set("page", "1");
+                  url.searchParams.set('filter', val);
+                  url.searchParams.set('page', '1');
                   router.push(url.toString());
                   // setFilter(val as FILM_FILTERS);
                 }
               }}
             />
             <Text>
-              Showing {fThousandsNumber(filmList.results.length)} from{" "}
+              Showing {fThousandsNumber(filmList.results.length)} from{' '}
               {fThousandsNumber(filmList.total_results)} film
             </Text>
           </Group>
@@ -128,9 +116,9 @@ export default function Page() {
             dataLength={filmList.results.length}
             next={() => {
               const url = new URL(window.location.href);
-              url.searchParams.set("page", (page + 1).toString());
+              url.searchParams.set('page', (page + 1).toString());
               router.push(url.toString(), {
-                scroll: false
+                scroll: false,
               });
             }}
             hasMore={hasMoreFilm}
@@ -140,14 +128,16 @@ export default function Page() {
               </Center>
             }
           >
-            <Box
-              style={{
-                display: "flex",
-                gap: 5,
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignContent: "flex-start",
-              }}
+            <Group
+              gap="md"
+              align="center"
+              // style={{
+              //   display: 'flex',
+              //   gap: 5,
+              //   flexWrap: 'wrap',
+              //   justifyContent: 'center',
+              //   alignContent: 'flex-start',
+              // }}
             >
               {filmList.results.map((film) => {
                 if (!film.vote_average) {
@@ -159,7 +149,7 @@ export default function Page() {
                   return <TVSeriesCard key={film.id} tvSeries={film} />;
                 }
               })}
-            </Box>
+            </Group>
           </InfiniteScroll>
         </Grid.Col>
       </Grid>

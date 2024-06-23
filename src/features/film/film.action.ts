@@ -1,22 +1,24 @@
-"use server";
+'use server';
 
-import { TMDB_ACCESS_TOKEN, TMDB_HOST } from "@/constant";
+import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import {
   FetchProps,
   Film,
+  FILM_FILTERS,
   FILM_TYPE,
   Genre,
   ResData,
   type ResFailed,
   Review,
   WithType,
-} from "./types/film.type";
-import { Movie, MovieDetail, Season } from "./types/movie.type";
-import { TVSeries, TVSeriesDetail } from "./types/series.type";
+} from './types/film.type';
+import { Movie, MovieDetail, Season } from './types/movie.type';
+import { TVSeries, TVSeriesDetail } from './types/series.type';
 
 export type FetchFilmList = (
-  props: Partial<FetchProps>
+  props: Partial<FetchProps>,
 ) => Promise<ResData<Film[]>>;
+
 
 export const fetchFilmList: FetchFilmList = async (props) => {
   const [movies, tvSeriesList] = await Promise.all([
@@ -24,7 +26,12 @@ export const fetchFilmList: FetchFilmList = async (props) => {
     fetchTVSeries(props),
   ]);
 
-  const results = [...tvSeriesList.results, ...movies.results];
+  let results = [...tvSeriesList.results, ...movies.results];
+  if (props?.filter === FILM_FILTERS.POPULAR) {
+    results = results.toSorted((a, b) => b.popularity - a.popularity);
+  } else if (props?.filter === FILM_FILTERS.TOP_RATED) {
+    results = results.toSorted((a, b) => b.vote_average - a.vote_average);
+  }
   return {
     page: movies.page,
     results,
@@ -52,7 +59,7 @@ export const fetchGenreList = async () => {
 
 export const fetchMoviesByGenre = async (genreId: string) => {
   let url = new URL(`${TMDB_HOST}/3/discover/movie`);
-  url.searchParams.append("with_genres", genreId);
+  url.searchParams.append('with_genres', genreId);
 
   const response = await fetch(url, {
     headers: {
@@ -67,11 +74,11 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   let url = new URL(`${TMDB_HOST}/3/movie/${props?.filter}`);
   if (props?.search) {
     url = new URL(`${TMDB_HOST}/3/search/movie`);
-    url.searchParams.append("query", props.search);
+    url.searchParams.append('query', props.search);
   }
 
   if (props?.page) {
-    url.searchParams.append("page", String(props.page));
+    url.searchParams.append('page', String(props.page));
   }
 
   const response = await fetch(url, {
@@ -81,7 +88,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   });
 
   const movies: ResData<WithType<Movie>[]> | ResFailed = await response.json();
-  if ("success" in movies) {
+  if ('success' in movies) {
     return {
       page: 0,
       results: [],
@@ -89,7 +96,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
       total_results: 0,
     };
   }
-  console.log(movies, "<>>><MOVIES");
+  console.log(movies, '<>>><MOVIES');
   const mappedMovies = movies.results.map((movie) => {
     movie.type = FILM_TYPE.MOVIE;
     return movie;
@@ -118,11 +125,11 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 
   if (props?.search) {
     url = new URL(`${TMDB_HOST}/3/search/tv`);
-    url.searchParams.append("query", props.search);
+    url.searchParams.append('query', props.search);
   }
 
   if (props?.page) {
-    url.searchParams.append("page", String(props.page));
+    url.searchParams.append('page', String(props.page));
   }
 
   const response = await fetch(url, {
@@ -133,7 +140,7 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 
   const tvSeriesList: ResData<WithType<TVSeries>[]> | ResFailed =
     await response.json();
-  if ("success" in tvSeriesList) {
+  if ('success' in tvSeriesList) {
     return {
       page: 0,
       results: [],
@@ -167,7 +174,7 @@ export const fetchSeriesById = async (id: number): Promise<TVSeriesDetail> => {
 export const fetchGenres = async (filmType: FILM_TYPE) => {
   const url = new URL(`${TMDB_HOST}/3/genre/${filmType}/list`);
 
-  url.searchParams.append("language", "en");
+  url.searchParams.append('language', 'en');
 
   const response = await fetch(url, {
     headers: {
@@ -182,7 +189,7 @@ export const fetchGenres = async (filmType: FILM_TYPE) => {
 
 export const fetchReviews = async (
   movieId: number,
-  filmType: FILM_TYPE
+  filmType: FILM_TYPE,
 ): Promise<ResData<Review[]>> => {
   const url = new URL(`${TMDB_HOST}/3/${filmType}/${movieId}/reviews`);
 
@@ -197,7 +204,7 @@ export const fetchReviews = async (
 
 export const fetchSeasonByTvId = async (
   tvId: number,
-  seasonNumber: number
+  seasonNumber: number,
 ): Promise<Season> => {
   const url = new URL(`${TMDB_HOST}/3/tv/${tvId}/season/${seasonNumber}`);
 

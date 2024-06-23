@@ -1,7 +1,7 @@
-import { Box, Card, Group, Image, Text } from "@mantine/core";
-import { getTmdbImage } from "../film.helper";
-import { Episode } from "../types/movie.type";
-import classes from "./EpisodeCard.module.css";
+import { Box, Card, Group, Image, Text } from '@mantine/core';
+import { getTmdbImage } from '../film.helper';
+import { Episode } from '../types/movie.type';
+import classes from './EpisodeCard.module.css';
 
 export type EpisodeCardProps = {
   episode: Episode;
@@ -14,13 +14,12 @@ export function EpisodeCard({ episode }: EpisodeCardProps) {
         <Image
           className={classes.image}
           src={getTmdbImage(episode.still_path)}
-          height={160}
           alt={episode.name}
         />
         <Box px="md" w="100%" className={classes.cardBody}>
           <Group justify="space-between" wrap="nowrap">
             <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>
-              {episode.episode_number}.{" "}{episode.name}
+              {episode.episode_number}.{' '}{episode.name}
             </Text>
             <Text>{episode.runtime}m</Text>
           </Group>
@@ -29,6 +28,6 @@ export function EpisodeCard({ episode }: EpisodeCardProps) {
           </Text>
         </Box>
       </Group>
-      </Card>
+    </Card>
   );
 }

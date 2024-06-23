@@ -1,23 +1,23 @@
-import { Group, NativeSelect, Box } from "@mantine/core";
-import { TVSeriesDetail } from "../types/series.type";
-import { useEffect, useState } from "react";
-import { fetchSeasonByTvId } from "../film.action";
-import { Season } from "../types/movie.type";
-import { EpisodeCard } from "./EpisodeCard";
-import Link from "next/link";
+import { Box, Group, NativeSelect } from '@mantine/core';
+import { TVSeriesDetail } from '../types/series.type';
+import { useEffect, useState } from 'react';
+import { fetchSeasonByTvId } from '../film.action';
+import { Season } from '../types/movie.type';
+import { EpisodeCard } from './EpisodeCard';
+import Link from 'next/link';
 
 export type SeasonSectionProps = {
   tvSeries: TVSeriesDetail;
 };
 
 export const defaultSeason: Season = {
-  _id: "",
-  air_date: "",
+  _id: '',
+  air_date: '',
   episodes: [],
-  name: "",
-  overview: "",
+  name: '',
+  overview: '',
   id: 0,
-  poster_path: "",
+  poster_path: '',
   season_number: 0,
   vote_average: 0,
 };
@@ -44,14 +44,14 @@ export const SeasonSection = ({ tvSeries }: SeasonSectionProps) => {
           setSeasonNumber(Number(event.target.value));
         }}
       />
-      <Group mt="xl" justify="center" wrap="wrap" gap="lg">
+      <Group mt="xl" justify="center" wrap="wrap" gap="sm">
         {season.episodes.map((episode) => (
           <Box
             component={Link}
             w="100%"
             key={episode.id}
             href={`/watch/${tvSeries.id}?s=${seasonNumber}&e=${seasonNumber}`}
-            style={{ textDecoration: "none" }}
+            style={{ textDecoration: 'none' }}
           >
             <EpisodeCard episode={episode} />
           </Box>
