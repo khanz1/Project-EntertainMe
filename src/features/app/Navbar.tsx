@@ -9,7 +9,8 @@ import React, { useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 
 const links = [
-  { link: '/', label: 'Home' },
+  { link: '/', label: 'Movies/TV' },
+  { link: '/manga', label: 'Manga' },
   { link: '/about', label: 'About' },
 ];
 export const Navbar = () => {
@@ -30,7 +31,9 @@ export const Navbar = () => {
   if (
     pathname.startsWith('/movies/') ||
     pathname.startsWith('/watch/') ||
-    pathname.startsWith('/tv/')
+    pathname.startsWith('/tv/') ||
+    pathname.startsWith('/read/') ||
+    pathname.startsWith('/manga/')
   ) {
     return null;
   }

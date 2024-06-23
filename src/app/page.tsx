@@ -131,13 +131,6 @@ export default function Page() {
             <Group
               gap="md"
               align="center"
-              // style={{
-              //   display: 'flex',
-              //   gap: 5,
-              //   flexWrap: 'wrap',
-              //   justifyContent: 'center',
-              //   alignContent: 'flex-start',
-              // }}
             >
               {filmList.results.map((film) => {
                 if (!film.vote_average) {

@@ -96,7 +96,6 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
       total_results: 0,
     };
   }
-  console.log(movies, '<>>><MOVIES');
   const mappedMovies = movies.results.map((movie) => {
     movie.type = FILM_TYPE.MOVIE;
     return movie;
