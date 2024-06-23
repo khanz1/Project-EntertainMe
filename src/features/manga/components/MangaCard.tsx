@@ -5,7 +5,7 @@ import { fSlug } from '@/utils/slugify.helper';
 import { CoverCollection, Manga, MangaFileSize } from '@/features/manga/manga.type';
 import { useEffect, useState } from 'react';
 import { fetchMangaCover } from '@/features/manga/manga.action';
-import { getMangaCover } from '@/features/manga/manga.helper';
+import { getMangaCover, getMangaTitle } from '@/features/manga/manga.helper';
 
 export type MovieCardProps = {
   manga: Manga;
@@ -39,7 +39,8 @@ export function MangaCard({ manga }: MovieCardProps) {
     }
   }, []);
   return (
-    <Link style={{ textDecoration: 'none' }} href={`/manga/${fSlug(manga.attributes.title.en, manga.id)}`}>
+    <Link style={{ textDecoration: 'none' }}
+          href={`/manga/${fSlug(getMangaTitle(manga), manga.id)}`}>
       <Card
         p="lg"
         shadow="lg"
@@ -62,7 +63,7 @@ export function MangaCard({ manga }: MovieCardProps) {
         <div className={classes.content}>
           <div>
             <Text className={classes.title} fw={500} lineClamp={1}>
-              {manga.attributes.title['en']}
+              {getMangaTitle(manga)}
             </Text>
 
             <Group justify="space-between" gap="xs">

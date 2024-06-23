@@ -46,7 +46,8 @@ export default function Page({ params }: PageProps) {
             <Box key={index} style={{ height: '100vh', margin: 'auto' }}>
               <Image alt={`${index}`}
                      style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                     src={`${chapter.baseUrl}/data-saver/${chapter.chapter.hash}/${image}`} />
+                // src={`${chapter.baseUrl}/data-saver/${chapter.chapter.hash}/${image}`} />
+                     src={`/api/manga/data-saver/${chapter.chapter.hash}/${image}`} />
             </Box>
           ))}
         </Stack>

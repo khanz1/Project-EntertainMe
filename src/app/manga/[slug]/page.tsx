@@ -4,7 +4,7 @@ import { ActionIcon, Box, Center, Group, Image, Rating, ScrollArea, Stack, Text 
 import { IconArrowLeft } from '@tabler/icons-react';
 import { parseMangaIdFromSlug } from '@/utils/slugify.helper';
 import { fetchMangaByMangaId, fetchMangaCover, fetchStatisticsByMangaId } from '@/features/manga/manga.action';
-import { getMangaCover } from '@/features/manga/manga.helper';
+import { getMangaCover, getMangaTitle } from '@/features/manga/manga.helper';
 import { VolumeFeed } from '@/features/manga/components/VolumeFeed';
 
 export type PageProps = {
@@ -51,12 +51,12 @@ export default async function Page({ params }: PageProps) {
             mangaId: mangaId,
           }) : ''}
           h="100vh"
-          alt={manga.attributes.title['en']}
+          alt={getMangaTitle(manga)}
         />
         <ScrollArea h="100vh" w="100%" pr="xl">
           <Stack gap="xs" justify="center" py="xl">
             <Text tt="uppercase" ta="center" fw={700} size="xl">
-              {manga.attributes.title['en']}
+              {getMangaTitle(manga)}
             </Text>
 
             {/*<Group gap="sm" justify="center">*/}

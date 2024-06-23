@@ -1,4 +1,4 @@
-import { GetMangaCoverParams, MangaFileSize } from '@/features/manga/manga.type';
+import { GetMangaCoverParams, Manga, MangaFileSize } from '@/features/manga/manga.type';
 
 /**
  * Constructs the URL for a manga cover image from the MangaDex API.
@@ -11,10 +11,22 @@ import { GetMangaCoverParams, MangaFileSize } from '@/features/manga/manga.type'
  * @returns {string} The URL of the manga cover image.
  */
 export const getMangaCover = (props: GetMangaCoverParams, size: MangaFileSize = MangaFileSize.ORIGINAL): string => {
+  // let ORIGIN = getOrigin();
+  // if (size === MangaFileSize.ORIGINAL) {
+  //   return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}`;
+  // }
+  //
+  // return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
+
   if (size === MangaFileSize.ORIGINAL) {
-    return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}`;
+    return `/api/manga/covers/${props.mangaId}/${props.fileName}`;
   }
 
-  return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
+  return `/api/manga/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
 };
 
+
+export const getMangaTitle = (manga: Manga) => {
+  const titleLang = Object.keys(manga.attributes.title)[0];
+  return manga.attributes.title.en || manga.attributes.title[titleLang];
+};
