@@ -58,6 +58,7 @@ export enum FILM_TYPE {
 }
 
 export enum FILM_FILTERS {
+  NONE = '',
   POPULAR = 'popular',
   TOP_RATED = 'top_rated',
   UPCOMING = 'upcoming',

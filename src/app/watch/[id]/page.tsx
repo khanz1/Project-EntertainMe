@@ -1,43 +1,30 @@
 'use client';
-import { ActionIcon, Box } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { Box } from '@mantine/core';
+import { BackButton } from '@/features/app/BackButton';
 
-export type PageParams = {
-  id: string;
-};
+type PageProps = {
+  params: {
+    id: string;
+  };
+  searchParams: {
+    s: string;
+    e: string;
+  };
+}
 
-export type SearchParams = {
-  s: string;
-  e: string;
-};
-
-export default function Page() {
-  const router = useRouter();
-  const params = useParams<PageParams>();
-  const searchParams = useSearchParams();
+export default function Page({ params, searchParams }: PageProps) {
 
   let url = `https://vidsrc.to/embed/movie/${params.id}`;
-  if (searchParams.get('s')) {
-    url = `https://vidsrc.to/embed/tv/${params.id}/${searchParams.get('s')}`;
+  if (searchParams.s) {
+    url = `https://vidsrc.to/embed/tv/${params.id}/${searchParams.s}`;
   }
-  if (searchParams.get('e')) {
-    url += `/${searchParams.get('e')}`;
+  if (searchParams.e) {
+    url += `/${searchParams.e}`;
   }
 
   return (
     <Box style={{ height: '100vh', position: 'relative' }}>
-      <ActionIcon
-        style={{ position: 'absolute', top: '1%', left: '1%', zIndex: 10 }}
-        variant="subtle"
-        color="white"
-        size="xl"
-        radius="xs"
-        aria-label="Button Back"
-        onClick={() => router.back()}
-      >
-        <IconArrowLeft style={{ width: '70%', height: '70%' }} stroke={1.5} />
-      </ActionIcon>
+      <BackButton />
       <Box
         component="iframe"
         src={url}

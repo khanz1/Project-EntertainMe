@@ -9,21 +9,29 @@ import React, { useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 
 const links = [
-  { link: '/', label: 'Movies/TV' },
+  { link: '/', label: 'Home' },
+  { link: '/movies', label: 'Movies' },
+  { link: '/tv', label: 'TV Series' },
   { link: '/manga', label: 'Manga' },
   { link: '/about', label: 'About' },
 ];
 export const Navbar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [search, setSearch] = useState(searchParams.get('search') || '');
+  const recentSearch = searchParams.get('search');
+  const [search, setSearch] = useState(recentSearch || '');
   const pathname = usePathname();
   const [debounced] = useDebouncedValue(search, 500);
+
+  useEffect(() => {
+    setSearch(searchParams.get('search') || '');
+  }, [recentSearch]);
 
   useEffect(() => {
     const url = new URL(window.location.href);
     url.searchParams.set('search', debounced);
     url.searchParams.set('page', '1');
+    url.searchParams.delete('filter');
     router.push(url.toString());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);

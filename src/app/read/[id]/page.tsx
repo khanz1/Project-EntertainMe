@@ -1,10 +1,9 @@
 'use client';
-import { ActionIcon, Box, Image, ScrollArea, Stack } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
+import { Box, Image, ScrollArea, Stack } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ChapterResponse } from '@/features/manga/types/chapter.type';
 import { fetchChapterById } from '@/features/manga/manga.action';
+import { BackButton } from '@/features/app/BackButton';
 
 export type PageProps = {
   params: {
@@ -12,7 +11,6 @@ export type PageProps = {
   }
 };
 export default function Page({ params }: PageProps) {
-  const router = useRouter();
   const [chapter, setChapter] = useState<ChapterResponse>({
     result: '',
     baseUrl: '',
@@ -29,17 +27,7 @@ export default function Page({ params }: PageProps) {
 
   return (
     <Box style={{ height: '100vh', position: 'relative' }}>
-      <ActionIcon
-        style={{ position: 'fixed', top: '1%', left: '1%', zIndex: 10 }}
-        variant="subtle"
-        color="white"
-        size="xl"
-        radius="xs"
-        aria-label="Button Back"
-        onClick={() => router.back()}
-      >
-        <IconArrowLeft style={{ width: '70%', height: '70%' }} stroke={1.5} />
-      </ActionIcon>
+      <BackButton />
       <ScrollArea>
         <Stack gap="md">
           {chapter.chapter.dataSaver.map((image, index) => (
