@@ -4,9 +4,15 @@ import { FetchProps, FILM_FILTERS, ResData, type ResFailed, WithType } from '@/f
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { Movie } from '@/features/film/types/movie.type';
 import { kv } from '@vercel/kv';
+import { cookies } from 'next/headers';
 
 
 export const fetchMovies = async (props?: Partial<FetchProps>) => {
+  // There is a bug when fetch next page in same page are not triggering the kv cache
+  // after read https://github.com/vercel/next.js/discussions/50045#discussioncomment-7218266
+  // I found that the cookies() function is resetting the cache
+  const _ = cookies();
+
   const search = props?.search || null;
   const page = props?.page || 1;
   const filter = props?.filter || FILM_FILTERS.POPULAR;
@@ -23,14 +29,11 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   }
 
   const cache = await kv.get(KV_KEY);
-  console.log(cache, KV_KEY, '<<< kv');
 
   if (cache) {
-    console.log(KV_KEY, 'cache');
     return cache as ResData<WithType<Movie>[]>;
   }
 
-  console.log(KV_KEY, 'fetch');
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
