@@ -28,9 +28,9 @@ export default function Page({ params, searchParams }: PageProps) {
       <Box
         component="iframe"
         src={url}
-        allowFullScreen
+        allowFullScreen={true}
         allow="fullscreen; autoplay"
-        style={{ width: '100%', height: '100%', border: 0, position: 'absolute', top: 0, left: 0 }}
+        style={{ width: '100%', height: '100%', border: 0 }}
       ></Box>
     </Box>
   );
