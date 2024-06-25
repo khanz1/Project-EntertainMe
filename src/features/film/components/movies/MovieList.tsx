@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Center, Grid, Group, Loader, Select, Text } from '@mantine/core';
+import { Center, Grid, Group, Loader, Select, Text } from '@mantine/core';
 import { MovieCard } from '@/features/film/components/MovieCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
@@ -27,8 +27,8 @@ export type MovieListProps = {
   filter: string;
 }
 
-export const MovieList = ({ movies: m, hasMoreMovies, page, filter }: MovieListProps) => {
-  const movieRef = useRef<ResData<Movie[]>>({ ...m });
+export const MovieList = ({ movies: data, hasMoreMovies, page, filter }: MovieListProps) => {
+  const movieRef = useRef<ResData<Movie[]>>({ ...data });
   const router = useRouter();
 
   const fetchNextMovies = () => {
@@ -51,18 +51,17 @@ export const MovieList = ({ movies: m, hasMoreMovies, page, filter }: MovieListP
 
   const movies = useMemo(() => {
     if (page > 1) {
-      movieRef.current.results = movieRef.current.results.concat(m.results);
-      movieRef.current.page = m.page;
+      movieRef.current.results = movieRef.current.results.concat(data.results);
+      movieRef.current.page = data.page;
     }
 
     return movieRef.current;
-  }, [m]);
+  }, [data]);
 
   return (
     <Grid>
       <Grid.Col>
         <Group justify="space-between" mb="md" mx="md">
-          <Button onClick={fetchNextMovies}>{movies.results.length} next</Button>
           <Select
             placeholder="Pick value"
             data={filterList}

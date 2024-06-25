@@ -1,11 +1,9 @@
-import { ActionIcon, Box, Center, Group, Image, Rating, ScrollArea, Stack, Text } from '@mantine/core';
-
-import { IconArrowLeft } from '@tabler/icons-react';
+import { Box, Center, Group, Image, Rating, ScrollArea, Stack, Text } from '@mantine/core';
 import { parseMangaIdFromSlug } from '@/utils/slugify.helper';
 import { fetchMangaByMangaId, fetchMangaCover, fetchStatisticsByMangaId } from '@/features/manga/manga.action';
 import { getMangaCover, getMangaTitle } from '@/features/manga/manga.helper';
 import { VolumeFeed } from '@/features/manga/components/VolumeFeed';
-import { useRouter } from 'next/navigation';
+import { BackButton } from '@/features/app/BackButton';
 
 export type PageProps = {
   params: {
@@ -14,7 +12,6 @@ export type PageProps = {
 };
 
 export default async function Page({ params }: PageProps) {
-  const router = useRouter();
   const mangaId = parseMangaIdFromSlug(params.slug);
   if (!mangaId) {
     return null;
@@ -33,17 +30,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Box>
-      <ActionIcon
-        onClick={() => router.back()}
-        style={{ position: 'absolute', top: '1%', left: '1%' }}
-        variant="subtle"
-        color="white"
-        size="xl"
-        radius="xs"
-        aria-label="Button Back"
-      >
-        <IconArrowLeft style={{ width: '70%', height: '70%' }} stroke={1.5} />
-      </ActionIcon>
+      <BackButton />
       <Group wrap="nowrap" gap="xl">
         <Image
           src={coverId ? getMangaCover({

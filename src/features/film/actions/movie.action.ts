@@ -26,9 +26,11 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   console.log(cache, KV_KEY, '<<< kv');
 
   if (cache) {
+    console.log(KV_KEY, 'cache');
     return cache as ResData<WithType<Movie>[]>;
   }
 
+  console.log(KV_KEY, 'fetch');
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
