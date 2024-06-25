@@ -1,17 +1,32 @@
-import { FetchProps, ResData, type ResFailed, WithType } from '@/features/film/types/film.type';
+'use server';
+
+import { FetchProps, FILM_FILTERS, ResData, type ResFailed, WithType } from '@/features/film/types/film.type';
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { Movie } from '@/features/film/types/movie.type';
+import { kv } from '@vercel/kv';
 
 
 export const fetchMovies = async (props?: Partial<FetchProps>) => {
-  let url = new URL(`${TMDB_HOST}/3/movie/${props?.filter}`);
-  if (props?.search) {
+  const search = props?.search || null;
+  const page = props?.page || 1;
+  const filter = props?.filter || FILM_FILTERS.POPULAR;
+  let KV_KEY = `movie:${filter}:${page}`;
+
+  let url = new URL(`${TMDB_HOST}/3/movie/${filter}`);
+  url.searchParams.append('page', String(page));
+
+  if (search) {
+    KV_KEY = `movie:${search}:${page}`;
+
     url = new URL(`${TMDB_HOST}/3/search/movie`);
-    url.searchParams.append('query', props.search);
+    url.searchParams.append('query', search);
   }
 
-  if (props?.page) {
-    url.searchParams.append('page', String(props.page));
+  const cache = await kv.get(KV_KEY);
+  console.log(cache, KV_KEY, '<<< kv');
+
+  if (cache) {
+    return cache as ResData<WithType<Movie>[]>;
   }
 
   const response = await fetch(url, {
@@ -29,6 +44,6 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
       total_results: 0,
     };
   }
-
+  await kv.set(KV_KEY, movies);
   return movies;
 };

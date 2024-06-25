@@ -25,14 +25,17 @@ export const Navbar = () => {
 
   useEffect(() => {
     setSearch(searchParams.get('search') || '');
-  }, [recentSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('search', debounced);
-    url.searchParams.set('page', '1');
-    url.searchParams.delete('filter');
-    router.push(url.toString());
+    if (search) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('search', debounced);
+      url.searchParams.set('page', '1');
+      url.searchParams.delete('filter');
+      router.push(url.toString());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);
 
