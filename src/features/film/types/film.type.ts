@@ -75,18 +75,22 @@ export type FetchProps = {
   search: string;
 };
 
-// Define a type alias for the parameters of the getFilmList function
-type SortOrder = 'asc' | 'desc';
-export type FindFilmListParams = {
-  page?: number;
-  pageSize?: number;
-  searchTerm?: string;
-  sortBy?: FILM_FILTERS; // Add more fields as needed
-  sortOrder?: SortOrder;
-  genre?: string;
-};
-
 export enum ENTERTAIN_TYPE {
   MOVIE = 'movie',
   TV = 'tv',
 }
+
+
+type MovieStreamProps = {
+  type: FILM_TYPE.MOVIE
+  movieId: number;
+}
+
+type TVStreamProps = {
+  type: FILM_TYPE.TV_SERIES
+  tvId: number;
+  season: number;
+  episode: number;
+}
+
+export type StreamAvailabilityProps = MovieStreamProps | TVStreamProps;

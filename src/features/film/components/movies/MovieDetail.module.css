@@ -1,0 +1,21 @@
+.overlay {
+    height: 100vh;
+    width: 100%;
+}
+
+.image {
+    position: absolute;
+    z-index: 0;
+    background-size: cover;
+    transition: transform 500ms ease;
+}
+
+.container {
+    top: 30vh;
+    width: 90%;
+    height: 100%;
+    background-color: var(--mantine-color-dark-8);
+    margin: -30rem auto 0;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+}

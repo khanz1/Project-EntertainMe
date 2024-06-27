@@ -1,4 +1,4 @@
-import { Genre, ProductionCompany, ProductionCountry, SpokenLanguage } from "./film.type";
+import { Genre, ProductionCompany, ProductionCountry, SpokenLanguage } from './film.type';
 
 interface BaseMovie {
   adult: boolean;
@@ -41,6 +41,9 @@ export interface MovieDetail extends BaseMovie {
   revenue: number;
   runtime: number;
   spoken_languages: SpokenLanguage[];
+  /**
+   * Movie release status, it can be "Released" or "Upcoming"
+   */
   status: string;
   tagline: string;
 }

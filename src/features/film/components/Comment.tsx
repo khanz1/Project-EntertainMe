@@ -1,9 +1,9 @@
-"use client";
-import { Text, Avatar, Group } from "@mantine/core";
-import { getTmdbImage } from "../film.helper";
-import { useEffect, useState } from "react";
-import { Review } from "../types/film.type";
-import { fDateTimeGB } from "@/utils/formatter.helper";
+'use client';
+import { Avatar, Box, Group, Spoiler, Text } from '@mantine/core';
+import { getTmdbImage } from '../film.helper';
+import { useEffect, useState } from 'react';
+import { Review } from '../types/film.type';
+import { fDateTimeGB } from '@/utils/formatter.helper';
 
 export type CommentProps = {
   review: Review;
@@ -35,9 +35,13 @@ export function Comment({ review }: CommentProps) {
           </Text>
         </div>
       </Group>
-      <Text pl={54} pt="sm" size="sm">
-        {review.content}
-      </Text>
+      <Box pl={54}>
+        <Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">
+          <Text pt="sm" size="sm">
+            {review.content}
+          </Text>
+        </Spoiler>
+      </Box>
     </div>
   );
 }

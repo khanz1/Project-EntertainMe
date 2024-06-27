@@ -1,0 +1,26 @@
+.card {
+    background-color: var(--mantine-color-body);
+    width: 100%;
+}
+
+.card:hover {
+    background-color: var(--mantine-color-gray-8);
+}
+
+.title {
+    font-weight: bold;
+    font-family: Greycliff CF,
+    var(--mantine-font-family), serif;
+    line-height: 1.2;
+}
+
+.image {
+    object-fit: fill;
+    height: 160px;
+    width: 410px;
+    transition: transform 500ms ease;
+}
+
+.image:hover {
+    transform: scale(1.03);
+}
