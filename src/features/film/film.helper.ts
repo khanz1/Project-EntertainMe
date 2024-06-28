@@ -9,7 +9,10 @@ export enum ImageSize {
   ORIGINAL = 'original',
 }
 
-export const getTmdbImage = (filePath: string, size: ImageSize = ImageSize.MEDIUM) => {
+export const getTmdbImage = (
+  filePath: string,
+  size: ImageSize = ImageSize.MEDIUM,
+) => {
   if (size === ImageSize.LARGE) {
     return `https://image.tmdb.org/t/p/w500${filePath}`;
   } else if (size === ImageSize.MEDIUM) {
@@ -35,4 +38,23 @@ export const fMinutes = (minutes: number): string => {
   const minutesString = remainingMinutes > 0 ? `${remainingMinutes}m` : '';
   const separator = hours > 0 && remainingMinutes > 0 ? ' ' : '';
   return hoursString + separator + minutesString;
+};
+
+export type MovieVidSrcProps = {
+  type: FILM_TYPE.MOVIE;
+  movieId: number;
+};
+
+export type TVVidSrcProps = {
+  type: FILM_TYPE.TV_SERIES;
+  id: number;
+  season: number;
+  episode: number;
+};
+
+export const getVidSrcStreamUrl = (props: MovieVidSrcProps | TVVidSrcProps) => {
+  if (props.type === FILM_TYPE.MOVIE) {
+    return `https://vidsrc.to/embed/movie/${props.movieId}`;
+  }
+  return `/watch/${props.id}/season/${props.season}/episode/${props.episode}`;
 };

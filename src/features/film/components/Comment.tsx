@@ -37,9 +37,11 @@ export function Comment({ review }: CommentProps) {
       </Group>
       <Box pl={54}>
         <Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">
-          <Text pt="sm" size="sm">
-            {review.content}
-          </Text>
+          <Text
+            pt="sm"
+            size="sm"
+            dangerouslySetInnerHTML={{ __html: review.content }}
+          />
         </Spoiler>
       </Box>
     </div>
