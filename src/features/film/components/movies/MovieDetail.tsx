@@ -9,7 +9,6 @@ import {
   Grid,
   Group,
   Image,
-  Indicator,
   Modal,
   rem,
   ScrollArea,
@@ -18,40 +17,24 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import {
-  fMinutes,
-  getTmdbImage,
-  getVidSrcStreamUrl,
-  ImageSize,
-} from '@/features/film/film.helper';
-import React, { useEffect, useState } from 'react';
+import { fMinutes, getTmdbImage, getVidSrcStreamUrl, ImageSize } from '@/features/film/film.helper';
+import React, { useEffect, useMemo, useState } from 'react';
 import { type MovieDetail as TMovieDetail } from '@/features/film/types/movie.type';
-import { MovieCredit } from '@/features/film/types/credits.type';
-import { fetchFilmCredits } from '@/features/film/actions/film.action';
+import { Crew, MovieCredit } from '@/features/film/types/credits.type';
+import { fetchFilmCredits, fetchKeywords } from '@/features/film/actions/film.action';
 import { FILM_TYPE } from '@/features/film/types/film.type';
 import { MovieCastCard } from '@/features/film/components/movies/MovieCastCard';
 import { VideoResponse } from '@/features/film/types/video.type';
-import {
-  checkStreamAvailability,
-  fetchFilmImages,
-  fetchFilmVideos,
-  fetchKeywords,
-} from '@/features/film/actions/movie.action';
+import { checkStreamAvailability, fetchFilmImages, fetchFilmVideos } from '@/features/film/actions/movie.action';
 import Link from 'next/link';
 import { fUSD } from '@/utils/formatter.helper';
-import { MovieCrewCard } from '@/features/film/components/movies/MovieCrewCard';
 import { useDisclosure } from '@mantine/hooks';
 import { VideoCard } from '@/features/film/components/movies/VideoCard';
 import { ImageCollection } from '@/features/film/types/image.type';
 import { KeywordCollection } from '@/features/film/types/keyword.type';
-import {
-  IconCheck,
-  IconCross,
-  IconExternalLink,
-  IconHeart,
-  IconPlayerPlay,
-} from '@tabler/icons-react';
+import { IconArrowRight, IconCheck, IconCross, IconExternalLink, IconHeart, IconPlayerPlay } from '@tabler/icons-react';
 import classes from './MovieDetail.module.css';
+import { MovieCrewCard } from '@/features/film/components/movies/MovieCrewCard';
 
 export type MovieDetailProps = {
   movie: TMovieDetail;
@@ -65,11 +48,20 @@ export enum MEDIA_TAB {
   LOGO = 'Logos',
 }
 
+export enum CAST_TAB {
+  CAST = 'Cast',
+  CREW = 'Crew',
+}
+
 export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
   const [isMediaOpened, media] = useDisclosure(false);
   const [isAlertOpened, alert] = useDisclosure(true);
   const [isStreamOpened, stream] = useDisclosure(false);
-  const [isStreamAvailable, setIsStreamAvailable] = useState<boolean>(false);
+  const [isCastOpened, cast] = useDisclosure(false);
+
+  const [isStreamAvailable, setIsStreamAvailable] = useState(false);
+  const [castActiveTab, setCastActiveTab] = useState<CAST_TAB>(CAST_TAB.CAST);
+
   const [activeTab, setActiveTab] = useState<MEDIA_TAB>(MEDIA_TAB.VIDEO);
   const [keywords, setKeywords] = useState<KeywordCollection>({
     id: 0,
@@ -102,6 +94,17 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
       type: FILM_TYPE.MOVIE,
     }).then(setIsStreamAvailable);
   }, [movie]);
+
+  const crewList: Record<string, Crew[]> = useMemo(() => {
+    return credit.crew
+      .reduce((acc: Record<string, Crew[]>, crew) => {
+        if (!acc[crew.job]) {
+          acc[crew.job] = [];
+        }
+        acc[crew.job].push(crew);
+        return acc;
+      }, {});
+  }, [credit.crew]);
 
   const movieMetaData = [
     {
@@ -228,14 +231,14 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
               <IconHeart size="1.5rem" className={classes.actionButton} />
             </Avatar>
             {isStreamAvailable && (
-              <Indicator size={11} processing position="top-start">
-                <Button variant="subtle" onClick={stream.open}>
-                  <Group gap="xs">
-                    <IconPlayerPlay size={20} />
-                    <Text>Streaming</Text>
-                  </Group>
-                </Button>
-              </Indicator>
+              // <Indicator size={11} processing position="top-start">
+              <Button variant="subtle" onClick={stream.open}>
+                <Group gap="xs">
+                  <IconPlayerPlay size={20} />
+                  <Text>Streaming</Text>
+                </Group>
+              </Button>
+              // </Indicator>
             )}
           </Group>
           <Box>
@@ -244,7 +247,7 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
             </Text>
             <Text>{movie.overview}</Text>
           </Box>
-          <Group grow py="lg">
+          <Group py="lg" justify="space-between">
             {credit.crew
               .filter((_, i) => i < 4)
               .map(crew => (
@@ -256,48 +259,79 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
                 </Box>
               ))}
           </Group>
-          {Boolean(credit.cast.length) && (
-            <Box>
-              <Text size="xl" mt="lg" fw="bold">
-                Cast
-              </Text>
-              <ScrollArea offsetScrollbars>
-                <Group wrap="nowrap">
+          <Drawer opened={isCastOpened} onClose={cast.close} size="xl" position="right"
+                  title={`Cast of ${movie.title}`}>
+            <Tabs value={castActiveTab} onChange={(v) => setCastActiveTab(v as CAST_TAB)}>
+              <Tabs.List grow>
+                <Tabs.Tab value={CAST_TAB.CAST}>
+                  {CAST_TAB.CAST} ({credit.cast.length})
+                </Tabs.Tab>
+                <Tabs.Tab value={CAST_TAB.CREW}>
+                  {CAST_TAB.CREW} ({credit.crew.length})
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value={CAST_TAB.CAST}>
+                <Group justify="space-between" py="lg">
                   {credit.cast
-                    .filter((_, i) => i < 10)
                     .map(cast => (
                       <MovieCastCard cast={cast} key={cast.credit_id} />
                     ))}
                 </Group>
-              </ScrollArea>
-            </Box>
-          )}
-          {Boolean(credit.crew.length) && (
-            <Box>
-              <Text size="xl" mt="lg" fw="bold">
-                Crew
+              </Tabs.Panel>
+
+              <Tabs.Panel value={CAST_TAB.CREW}>
+                <Stack py="lg">
+                  {Object.keys(crewList).map(crewJob => {
+                    return (
+                      <Stack key={crewJob}>
+                        <Text size="xl" fw="bold">{crewJob}</Text>
+                        <Group gap="md">
+                          {crewList[crewJob]
+                            .map(crew => (
+                              <MovieCrewCard crew={crew} key={crew.credit_id} />
+                            ))}
+                        </Group>
+                      </Stack>
+                    );
+                  })}
+                </Stack>
+              </Tabs.Panel>
+            </Tabs>
+          </Drawer>
+          {Boolean(credit.cast.length) && (
+            <Box mt="lg">
+              <Group justify="space-between">
+                <Text size="xl" fw="bold">
+                  Cast ({credit.cast.length + credit.crew.length})
+                </Text>
+                <Button variant="transparent" onClick={cast.open}
+                        className={classes.title} fw={500}>
+                  View More <IconArrowRight />
+                </Button>
+              </Group>
+              <Text pb="md">
+                Top billed cast, displaying the actors in their respective roles.
               </Text>
               <ScrollArea offsetScrollbars>
                 <Group wrap="nowrap">
-                  {credit.crew
-                    .filter((_, i) => i < 10)
-                    .map(crew => (
-                      <MovieCrewCard crew={crew} key={crew.credit_id} />
+                  {credit.cast
+                    .filter((_, i) => i < 5)
+                    .map(cast => (
+                      <MovieCastCard cast={cast} key={cast.credit_id} />
                     ))}
+                  {/*<Box w={200} h={300} display="flex" style={{ alignItems: 'center' }}>*/}
+                  {/*  <Button variant="transparent" onClick={cast.open}*/}
+                  {/*          className={classes.title} fw={500}>*/}
+                  {/*    View More <IconArrowRight />*/}
+                  {/*  </Button>*/}
+                  {/*</Box>*/}
                 </Group>
               </ScrollArea>
             </Box>
           )}
           {Boolean(videos.results.length) && (
             <Box>
-              <Group justify="space-between">
-                <Text size="xl" my="lg" fw="bold">
-                  Media
-                </Text>
-                <Button variant="transparent" onClick={media.open}>
-                  See others
-                </Button>
-              </Group>
               <Drawer
                 opened={isMediaOpened}
                 onClose={media.close}
@@ -396,64 +430,51 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
                   </Tabs.Panel>
                 </Tabs>
               </Drawer>
-              {/*<Drawer opened={opened} onClose={close} title="Media"*/}
-              {/*        size="xl" position="right"*/}
-              {/*        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}>*/}
-              {/*  <Tabs radius="xs" value={activeTab} onChange={setActiveTab}>*/}
-              {/*    <Tabs.List>*/}
-              {/*      {Object.keys(media).map(type => (*/}
-              {/*        <Tabs.Tab value={type} key={type}>*/}
-              {/*          <Text>{type} ({media[type].length})</Text>*/}
-              {/*        </Tabs.Tab>*/}
-              {/*      ))}*/}
-              {/*    </Tabs.List>*/}
-
-              {/*    {Object.keys(media).map(type => (*/}
-              {/*      <Tabs.Panel value={type} key={type}>*/}
-              {/*        <ScrollArea scrollbars="x" offsetScrollbars py="md">*/}
-              {/*          <Stack>*/}
-              {/*            {media[type].map(video => (*/}
-              {/*              <VideoCard video={video} key={video.id} />*/}
-              {/*            ))}*/}
-              {/*          </Stack>*/}
-              {/*        </ScrollArea>*/}
-              {/*      </Tabs.Panel>*/}
-              {/*    ))}*/}
-              {/*  </Tabs>*/}
-              {/*</Drawer>*/}
-              {/*<Tabs radius="xs" value={activeTab} onChange={setActiveTab}>*/}
-              {/*  <Tabs.List>*/}
-              {/*    {Object.keys(media).map(type => (*/}
-              {/*      <Tabs.Tab value={type} key={type}>*/}
-              {/*        <Text>{type} ({media[type].length})</Text>*/}
-              {/*      </Tabs.Tab>*/}
-              {/*    ))}*/}
-              {/*  </Tabs.List>*/}
-
-              {/*  {videos.results.map(type => (*/}
-              {/*    <Tabs.Panel value={type} key={type}>*/}
-              {/*      <ScrollArea scrollbars="x" offsetScrollbars py="md">*/}
-              {/*        /!*<Spoiler maxHeight={500} showLabel="Show more" hideLabel="Hide">*!/*/}
-              {/*        <Group wrap="nowrap">*/}
-              {/*          {media[type].map(video => (*/}
-              {/*            <Box key={video.id}>*/}
-              {/*              /!*<Text my="xs">{video.name} - {fDateTimeGB(new Date(video.published_at))}</Text>*!/*/}
-              {/*              <Text my="xs">{video.name}</Text>*/}
-              {/*              <Box*/}
-              {/*                component="iframe"*/}
-              {/*                src={`https://www.youtube.com/embed/${video.key}`}*/}
-              {/*                allowFullScreen={true}*/}
-              {/*                allow="fullscreen; autoplay"*/}
-              {/*                style={{ width: 320, height: 216, border: 0 }}*/}
-              {/*              ></Box>*/}
-              {/*            </Box>*/}
-              {/*          ))}*/}
-              {/*        </Group>*/}
-              {/*        /!*</Spoiler>*!/*/}
-              {/*      </ScrollArea>*/}
-              {/*    </Tabs.Panel>*/}
-              {/*  ))}*/}
-              {/*</Tabs>*/}
+              <Stack gap={0}>
+                <Group justify="space-between">
+                  <Text size="xl" fw="bold">
+                    Media ({videos.results.length})
+                  </Text>
+                  {videos.results.length > 3 && (
+                    <Button variant="transparent" onClick={media.open}
+                            className={classes.title} fw={500}>
+                      View More <IconArrowRight />
+                    </Button>
+                  )}
+                </Group>
+                <Text pb="md">Explore photos, videos, and other media related to the movie.</Text>
+                <ScrollArea offsetScrollbars>
+                  <Group wrap="nowrap" gap="xs">
+                    <Box
+                      component="iframe"
+                      src={`https://www.youtube.com/embed/${videos.results[0].key}`}
+                      allowFullScreen={true}
+                      allow="fullscreen; autoplay"
+                      style={{ width: '100%', height: 250, border: 0 }}
+                    ></Box>
+                    {Boolean(images.backdrops.length) && (
+                      <Image
+                        src={getTmdbImage(
+                          images.backdrops[0].file_path,
+                          ImageSize.ORIGINAL,
+                        )}
+                        alt={'Background image'}
+                        height={250}
+                      />
+                    )}
+                    {Boolean(images.posters.length) && (
+                      <Image
+                        src={getTmdbImage(
+                          images.posters[0].file_path,
+                          ImageSize.ORIGINAL,
+                        )}
+                        alt={'Background image'}
+                        height={250}
+                      />
+                    )}
+                  </Group>
+                </ScrollArea>
+              </Stack>
             </Box>
           )}
           <Box>{children}</Box>

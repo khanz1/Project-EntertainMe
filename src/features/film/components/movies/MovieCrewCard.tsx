@@ -15,7 +15,7 @@ export function MovieCrewCard({ crew }: MovieCrewCardProps) {
       shadow="lg"
       className={classes.card}
       radius="md"
-      w={200}
+      w={230}
       h={300}
     >
       <Box

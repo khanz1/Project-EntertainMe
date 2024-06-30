@@ -15,7 +15,7 @@ export function MovieCastCard({ cast }: MovieCastCardProps) {
       shadow="lg"
       className={classes.card}
       radius="md"
-      w={200}
+      w={230}
       h={300}
     >
       <Box

@@ -1,5 +1,5 @@
 'use client';
-import { FILM_FILTERS } from '@/features/film/types/film.type';
+import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { Container } from '@mantine/core';
 import { fetchMovies } from '@/features/film/actions/movie.action';
 import { MovieList } from '@/features/film/components/movies/MovieList';
@@ -17,7 +17,7 @@ type PageProps = {
 
 export default function Page({ searchParams }: PageProps) {
   const router = useRouter();
-  const [movies, setMovies] = useState<ResgiData<Movie[]>>({
+  const [movies, setMovies] = useState<ResData<Movie[]>>({
     page: 0,
     results: [],
     total_pages: 0,
@@ -30,13 +30,6 @@ export default function Page({ searchParams }: PageProps) {
     : search
       ? FILM_FILTERS.NONE
       : FILM_FILTERS.POPULAR;
-
-
-  // const movies = await fetchMovies({
-  //   page,
-  //   filter,
-  //   search,
-  // });
 
   useEffect(() => {
     (async () => {
@@ -68,9 +61,6 @@ export default function Page({ searchParams }: PageProps) {
       ? true
       : movies.results.length < movies.total_results;
   }, [movies]);
-  // const hasMoreMovies = movies.results.length === 0
-  //   ? true
-  //   : movies.results.length < movies.total_results;
 
   return (
     <Container size="xl" my={25}>

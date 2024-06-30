@@ -1,5 +1,5 @@
 'use client';
-import { Avatar, Box, Group, Spoiler, Text } from '@mantine/core';
+import { Avatar, Box, Group, Rating, Stack, Text } from '@mantine/core';
 import { getTmdbImage } from '../film.helper';
 import { useEffect, useState } from 'react';
 import { Review } from '../types/film.type';
@@ -28,21 +28,22 @@ export function Comment({ review }: CommentProps) {
           radius="xl"
           onError={() => setImgUrl(defaultAvatar)}
         />
-        <div>
+        <Stack gap={0}>
           <Text size="sm">{review.author}</Text>
           <Text size="xs" c="dimmed">
             {fDateTimeGB(new Date(review.created_at))}
           </Text>
-        </div>
+          <Rating value={review.author_details.rating / 2} fractions={1} />
+        </Stack>
       </Group>
       <Box pl={54}>
-        <Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">
-          <Text
-            pt="sm"
-            size="sm"
-            dangerouslySetInnerHTML={{ __html: review.content }}
-          />
-        </Spoiler>
+        {/*<Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">*/}
+        <Text
+          pt="sm"
+          size="sm"
+          dangerouslySetInnerHTML={{ __html: review.content }}
+        />
+        {/*</Spoiler>*/}
       </Box>
     </div>
   );

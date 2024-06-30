@@ -8,7 +8,6 @@ import {
   type ResFailed,
   Review,
   StreamAvailabilityProps,
-  WithType,
 } from '@/features/film/types/film.type';
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { Movie, MovieDetail } from '@/features/film/types/movie.type';
@@ -42,7 +41,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   const cache = await kv.get(KV_KEY);
 
   if (cache) {
-    return cache as ResData<WithType<Movie>[]>;
+    return cache as ResData<Movie[]>;
   }
 
   const response = await fetch(url, {
@@ -51,14 +50,14 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
     },
   });
 
-  const movies: ResData<WithType<Movie>[]> | ResFailed = await response.json();
+  const movies: ResData<Movie[]> | ResFailed = await response.json();
   if ('success' in movies) {
     return {
       page: 0,
       results: [],
       total_pages: 0,
       total_results: 0,
-    } as ResData<Review[]>;
+    } as ResData<Movie[]>;
   }
   await kv.set(KV_KEY, movies);
   return movies;

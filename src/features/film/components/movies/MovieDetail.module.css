@@ -33,3 +33,13 @@
     color: var(--mantine-color-blue-4);
     text-decoration: underline;
 }
+
+.title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.title:hover {
+    color: var(--mantine-color-blue-7);
+}
