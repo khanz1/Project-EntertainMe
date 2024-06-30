@@ -4,6 +4,7 @@ import { getTmdbImage } from '../film.helper';
 import { useEffect, useState } from 'react';
 import { Review } from '../types/film.type';
 import { fDateTimeGB } from '@/utils/formatter.helper';
+import classes from './Comment.module.css';
 
 export type CommentProps = {
   review: Review;
@@ -20,7 +21,7 @@ export function Comment({ review }: CommentProps) {
   }, [review]);
 
   return (
-    <div>
+    <div className={classes.commentWrapper}>
       <Group>
         <Avatar
           src={imgUrl}
@@ -40,6 +41,7 @@ export function Comment({ review }: CommentProps) {
         {/*<Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">*/}
         <Text
           pt="sm"
+          pb="lg"
           size="sm"
           dangerouslySetInnerHTML={{ __html: review.content }}
         />

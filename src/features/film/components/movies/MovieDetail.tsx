@@ -21,8 +21,8 @@ import { fMinutes, getTmdbImage, getVidSrcStreamUrl, ImageSize } from '@/feature
 import React, { useEffect, useMemo, useState } from 'react';
 import { type MovieDetail as TMovieDetail } from '@/features/film/types/movie.type';
 import { Crew, MovieCredit } from '@/features/film/types/credits.type';
-import { fetchFilmCredits, fetchKeywords } from '@/features/film/actions/film.action';
-import { FILM_TYPE } from '@/features/film/types/film.type';
+import { fetchFilmCredits, fetchKeywords, fetchRecommendations } from '@/features/film/actions/film.action';
+import { FILM_TYPE, ResData } from '@/features/film/types/film.type';
 import { MovieCastCard } from '@/features/film/components/movies/MovieCastCard';
 import { VideoResponse } from '@/features/film/types/video.type';
 import { checkStreamAvailability, fetchFilmImages, fetchFilmVideos } from '@/features/film/actions/movie.action';
@@ -35,6 +35,8 @@ import { KeywordCollection } from '@/features/film/types/keyword.type';
 import { IconArrowRight, IconCheck, IconCross, IconExternalLink, IconHeart, IconPlayerPlay } from '@tabler/icons-react';
 import classes from './MovieDetail.module.css';
 import { MovieCrewCard } from '@/features/film/components/movies/MovieCrewCard';
+import { MovieRecommendation } from '@/features/film/types/recommendation.type';
+import { MovieRecommendationCard } from '@/features/film/components/movies/MovieRecommendationCard';
 
 export type MovieDetailProps = {
   movie: TMovieDetail;
@@ -68,6 +70,13 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
     keywords: [],
   });
 
+  const [recommendations, setRecommendations] = useState<ResData<MovieRecommendation[]>>({
+    page: 0,
+    total_pages: 0,
+    total_results: 0,
+    results: [],
+  });
+
   const [videos, setVideos] = useState<VideoResponse>({
     id: 0,
     results: [],
@@ -89,6 +98,7 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
     fetchFilmCredits(FILM_TYPE.MOVIE, movie.id).then(setCredit);
     fetchFilmImages(FILM_TYPE.MOVIE, movie.id).then(setImages);
     fetchKeywords(FILM_TYPE.MOVIE, movie.id).then(setKeywords);
+    fetchRecommendations(FILM_TYPE.MOVIE, movie.id).then(setRecommendations);
     checkStreamAvailability({
       movieId: movie.id,
       type: FILM_TYPE.MOVIE,
@@ -196,7 +206,7 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
                 onClose={isAlertOpened ? alert.close : alert.open}
               ></Alert>
             )}
-            <Group align="flex-end">
+            <Group gap={0}>
               <Link
                 className={classes.titleLink}
                 href={movie.homepage}
@@ -209,9 +219,9 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
                   </sup>
                 </Title>
               </Link>
-              <Text size={rem(30)}>
+              <Title order={2}>
                 ({new Date(movie.release_date).getFullYear()})
-              </Text>
+              </Title>
             </Group>
             <Text c="dimmed" fs="italic">
               {movie.tagline}
@@ -478,6 +488,27 @@ export const MovieDetail = ({ movie, children }: MovieDetailProps) => {
             </Box>
           )}
           <Box>{children}</Box>
+
+          {Boolean(recommendations.results.length) && (
+            <Box mt="lg">
+              <Group justify="space-between">
+                <Text size="xl" fw="bold">
+                  Recommendation ({recommendations.results.length})
+                </Text>
+              </Group>
+              <Text pb="md">
+                Check out these recommended movies you might enjoy.
+              </Text>
+              <ScrollArea offsetScrollbars>
+                <Group wrap="nowrap">
+                  {recommendations.results
+                    .map(recommendation => (
+                      <MovieRecommendationCard recommendation={recommendation} key={recommendation.id} />
+                    ))}
+                </Group>
+              </ScrollArea>
+            </Box>
+          )}
         </Stack>
       </Grid.Col>
     </Grid>
