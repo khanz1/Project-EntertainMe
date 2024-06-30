@@ -2,35 +2,18 @@
 
 import { Box, Button, Drawer, Group, Stack, Text } from '@mantine/core';
 import { Comment } from '@/features/film/components/Comment';
-import { fetchReviews } from '@/features/film/actions/movie.action';
-import { FILM_TYPE, ResData, Review } from '@/features/film/types/film.type';
-import React, { useEffect, useState } from 'react';
+import { ResData, Review } from '@/features/film/types/film.type';
+import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import classes from '@/features/film/components/movies/MovieDetail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 
 export type MovieReviewProps = {
-  movieId: number;
+  reviews: ResData<Review[]>
 }
 const REVIEW_SHOWN = 3;
-export const MovieReview = ({ movieId }: MovieReviewProps) => {
+export const MovieReview = ({ reviews }: MovieReviewProps) => {
   const [isDrawerOpen, drawer] = useDisclosure(false);
-  const [reviews, setReviews] = useState<ResData<Review[]>>({
-    total_results: 0,
-    results: [],
-    page: 0,
-    total_pages: 0,
-  });
-  useEffect(() => {
-    (async () => {
-      const data = await fetchReviews(movieId, FILM_TYPE.MOVIE);
-      setReviews(data);
-    })();
-  }, [movieId]);
-
-  if (!reviews.total_results) {
-    return null;
-  }
 
   return (
     <Box>

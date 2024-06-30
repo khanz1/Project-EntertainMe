@@ -112,20 +112,32 @@ export const fetchReviews = async (
 };
 
 export const checkStreamAvailability = async (props: StreamAvailabilityProps): Promise<boolean> => {
+  cookies();
+
   let url: URL;
+  let KV_KEY;
   if (props.type === FILM_TYPE.MOVIE) {
     url = new URL(`https://vidsrc.to/embed/movie/${props.movieId}`);
+    KV_KEY = `stream:movie:${props.movieId}`;
   } else {
     url = new URL(`https://vidsrc.to/embed/tv/${props.tvId}/${props.season}/${props.episode}`);
+    KV_KEY = `stream:tv:${props.tvId}:${props.season}:${props.episode}`;
+  }
+
+  const cache = await kv.get<boolean>(KV_KEY);
+
+  if (cache) {
+    return cache;
   }
 
   const response = await fetch(url);
+  await kv.set(KV_KEY, response.ok);
   return response.ok;
 };
 
 
 export const fetchFilmVideos = async (type: FILM_TYPE, movieOrTVId: number): Promise<VideoResponse> => {
-  const _ = cookies();
+  cookies();
   const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/videos`);
   const KV_KEY = `film:videos:${type}:${movieOrTVId}`;
 
