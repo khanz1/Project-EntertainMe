@@ -8,12 +8,17 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 
-const links = [
-  { link: '/', label: 'Home' },
-  { link: '/movies', label: 'Movies' },
-  { link: '/tv', label: 'TV Series' },
-  { link: '/manga', label: 'Manga' },
-  { link: '/about', label: 'About' },
+type TLink = {
+  link: string;
+  label: string;
+}
+
+const links: TLink[] = [
+  // { link: '/', label: 'Home' },
+  // { link: '/movies', label: 'Movies' },
+  // { link: '/tv', label: 'TV Series' },
+  // { link: '/manga', label: 'Manga' },
+  // { link: '/about', label: 'About' },
 ];
 export const Navbar = () => {
   const router = useRouter();
