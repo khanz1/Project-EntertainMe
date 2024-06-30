@@ -3,11 +3,10 @@
 import { Center, Grid, Group, Loader, Select, Text } from '@mantine/core';
 import { MovieCard } from '@/features/film/components/MovieCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
+import { FILM_FILTERS, ResData, WithType } from '@/features/film/types/film.type';
 import { Movie } from '@/features/film/types/movie.type';
 import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
-import { useMemo, useRef } from 'react';
 
 const filterList = [
   FILM_FILTERS.NONE,
@@ -21,14 +20,13 @@ const filterList = [
 }));
 
 export type MovieListProps = {
-  movies: ResData<Movie[]>
+  movies: ResData<WithType<Movie>[]>
   page: number;
   hasMoreMovies: boolean;
   filter: string;
 }
 
-export const MovieList = ({ movies: data, hasMoreMovies, page, filter }: MovieListProps) => {
-  const movieRef = useRef<ResData<Movie[]>>({ ...data });
+export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProps) => {
   const router = useRouter();
 
   const fetchNextMovies = () => {
@@ -48,15 +46,6 @@ export const MovieList = ({ movies: data, hasMoreMovies, page, filter }: MovieLi
       router.push(url.toString());
     }
   };
-
-  const movies = useMemo(() => {
-    if (page > 1) {
-      movieRef.current.results = movieRef.current.results.concat(data.results);
-      movieRef.current.page = data.page;
-    }
-
-    return movieRef.current;
-  }, [data]);
 
   return (
     <Grid>
