@@ -55,7 +55,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: movie.title,
       description: movie.overview,
-      images: [getTmdbImage(movie.backdrop_path, ImageSize.SMALL)], // Must be an absolute URL
+      images: [getTmdbImage(movie.poster_path, ImageSize.SMALL), getTmdbImage(movie.backdrop_path, ImageSize.SMALL)], // Must be an absolute URL
     },
     robots: {
       index: false,
