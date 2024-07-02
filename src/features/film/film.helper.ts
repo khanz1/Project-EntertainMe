@@ -17,6 +17,8 @@ export const getTmdbImage = (
     return `https://image.tmdb.org/t/p/w500${filePath}`;
   } else if (size === ImageSize.MEDIUM) {
     return `https://image.tmdb.org/t/p/w342${filePath}`;
+  } else if (size === ImageSize.SMALL) {
+    return `https://image.tmdb.org/t/p/w185${filePath}`;
   } else {
     return `https://image.tmdb.org/t/p/original${filePath}`;
   }
