@@ -47,6 +47,8 @@ export default function Page({ searchParams }: PageProps) {
 
       if (movies.results.length === 0) {
         setMovies(data);
+      } else if (page === 1) {
+        setMovies(data);
       } else {
         setMovies((prevMovies) => ({
           ...data,

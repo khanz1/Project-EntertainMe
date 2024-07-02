@@ -1,12 +1,12 @@
 'use client';
 
-import { Group, Input } from '@mantine/core';
+import { em, Group, Image, Input } from '@mantine/core';
 import classes from './Navbar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
 
 type TLink = {
   link: string;
@@ -21,12 +21,14 @@ const links: TLink[] = [
   // { link: '/about', label: 'About' },
 ];
 export const Navbar = () => {
+  const isMobile = useMediaQuery(`(max-width: ${em(750)})`);
   const router = useRouter();
   const searchParams = useSearchParams();
   const recentSearch = searchParams.get('search');
   const [search, setSearch] = useState(recentSearch || '');
   const pathname = usePathname();
   const [debounced] = useDebouncedValue(search, 500);
+  console.log(search, debounced, '< asd');
 
   useEffect(() => {
     setSearch(searchParams.get('search') || '');
@@ -57,6 +59,10 @@ export const Navbar = () => {
   return (
     <header className={classes.header}>
       <div className={classes.inner}>
+        <Group pl={isMobile ? 0 : 'sm'} pr="sm">
+          <Image src="/images/FantasyCatLogo.png" width={isMobile ? 40 : 50} height={isMobile ? 40 : 50}
+                 alt="Fantasy Cat Logo" />
+        </Group>
         <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
           {links.map((link) => (
             <Link key={link.label} href={link.link} className={classes.link}>
@@ -64,13 +70,14 @@ export const Navbar = () => {
             </Link>
           ))}
         </Group>
-        <Group>
+        <Group w={isMobile ? '100%' : 'inherit'}>
           {/*<SwitchSearch />*/}
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search Movie"
             leftSection={<IconSearch size={16} />}
+            w={isMobile ? '100%' : 'inherit'}
             rightSection={
               <IconX
                 size={16}

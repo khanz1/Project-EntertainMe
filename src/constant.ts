@@ -1,5 +1,8 @@
+import { em } from '@mantine/core';
+
 export const TMDB_HOST = process.env.TMDB_HOST!;
 export const TMDB_ACCESS_TOKEN = process.env.TMDB_ACCESS_TOKEN!;
+export const MOBILE_BREAKPOINT = `(max-width: ${em(750)})`;
 
 export enum APP {
   NAME = 'Entertain Me',

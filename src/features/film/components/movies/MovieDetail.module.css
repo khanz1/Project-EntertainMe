@@ -12,12 +12,17 @@
 
 .container {
     top: 20vh;
-    width: 90%;
+    width: 100%;
     height: 100%;
-    background-color: var(--mantine-color-dark-8);
-    margin: -31.5rem auto 0;
+    margin: -50rem auto 0;
     border-top-right-radius: 1rem;
     border-top-left-radius: 1rem;
+
+    @media (min-width: 750px) {
+        margin: -31.5rem auto 0;
+        width: 90%;
+        background-color: var(--mantine-color-dark-8);
+    }
 }
 
 .actionButton:hover {

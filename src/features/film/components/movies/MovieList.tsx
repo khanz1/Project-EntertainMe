@@ -1,15 +1,16 @@
 'use client';
 
 import { Center, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { MovieCard } from '@/features/film/components/MovieCard';
+import { MovieCard, MovieCardMobile } from '@/features/film/components/MovieCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FILM_FILTERS, ResData, WithType } from '@/features/film/types/film.type';
 import { Movie } from '@/features/film/types/movie.type';
 import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
+import { useMediaQuery } from '@mantine/hooks';
+import { MOBILE_BREAKPOINT } from '@/constant';
 
 const filterList = [
-  FILM_FILTERS.NONE,
   FILM_FILTERS.POPULAR,
   FILM_FILTERS.TOP_RATED,
   FILM_FILTERS.UPCOMING,
@@ -27,6 +28,7 @@ export type MovieListProps = {
 }
 
 export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProps) => {
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const router = useRouter();
 
   const fetchNextMovies = () => {
@@ -50,7 +52,7 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
   return (
     <Grid>
       <Grid.Col>
-        <Group justify="space-between" mb="md" mx="md">
+        <Group justify="space-between" pb="md" px={isMobile ? 0 : 'md'}>
           <Select
             placeholder="Pick value"
             data={filterList}
@@ -58,8 +60,8 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
             onChange={handleOnFilterChange}
           />
           <Text>
-            Showing {fThousandsNumber(movies.results.length)} from{' '}
-            {fThousandsNumber(movies.total_results)} film
+            {fThousandsNumber(movies.results.length)} from{' '}
+            {fThousandsNumber(movies.total_results)}
           </Text>
         </Group>
 
@@ -77,9 +79,13 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
             gap="md"
             align="center"
           >
-            {movies.results.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
+            {movies.results.map((movie) => {
+              if (isMobile) {
+                return <MovieCardMobile key={movie.id} movie={movie} />;
+              } else {
+                return <MovieCard key={movie.id} movie={movie} />;
+              }
+            })}
           </Group>
         </InfiniteScroll>
       </Grid.Col>

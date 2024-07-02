@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { fUSD } from '@/utils/formatter.helper';
 import { IconExternalLink, IconHeart } from '@tabler/icons-react';
 import classes from './MovieDetail.module.css';
+import { useMediaQuery } from '@mantine/hooks';
+import { MOBILE_BREAKPOINT } from '@/constant';
 
 export type MovieDetailProps = {
   movie: TMovieDetail;
@@ -43,6 +45,8 @@ export const MovieDetail = ({
                               StreamMovie,
                             }: MovieDetailProps) => {
 
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+
   const movieMetaData = [
     {
       label: 'Status',
@@ -72,21 +76,24 @@ export const MovieDetail = ({
 
   return (
     <Grid p="xl" gutter="xl">
-      <Grid.Col span={3}>
+      <Grid.Col span={{ base: 12, lg: 3 }}>
         <Stack>
           <Box style={{ borderRadius: rem(1), overflow: 'hidden' }}>
-            <Image src={getTmdbImage(movie.poster_path)} alt={movie.title} />
+            <Image src={getTmdbImage(movie.poster_path)} alt={movie.title}
+                   style={isMobile ? { width: 200, margin: 'auto' } : {}} />
           </Box>
-          {movieMetaData.map(metaData => (
-            <Box key={metaData.label}>
-              <Text fw="bold">{metaData.label}</Text>
-              <Text size="xs">{metaData.value}</Text>
-            </Box>
-          ))}
-          {KeywordBadge}
+          <Box visibleFrom="lg">
+            {movieMetaData.map(metaData => (
+              <Box key={metaData.label}>
+                <Text fw="bold">{metaData.label}</Text>
+                <Text size="xs">{metaData.value}</Text>
+              </Box>
+            ))}
+            {KeywordBadge}
+          </Box>
         </Stack>
       </Grid.Col>
-      <Grid.Col span={9}>
+      <Grid.Col span={{ base: 12, lg: 9 }}>
         <Stack gap="sm">
           <Stack gap={0}>
             {StreamAlert}
