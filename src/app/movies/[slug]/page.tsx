@@ -88,13 +88,13 @@ export async function generateMetadata(
       //   alt: `${movie.title} - Entertain Me`,
       // },
       images: [
-        {
-          url: lqPosterImage,
-          secureUrl: lqPosterImage,
-          width: 256,
-          height: 256,
-          alt: `${movie.title} - Entertain Me`,
-        },
+        // {
+        //   url: lqPosterImage,
+        //   secureUrl: lqPosterImage,
+        //   width: 256,
+        //   height: 256,
+        //   alt: `${movie.title} - Entertain Me`,
+        // },
         {
           url: posterImage,
           secureUrl: posterImage,
