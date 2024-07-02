@@ -38,9 +38,9 @@ export async function generateMetadata(
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
-  const lqPosterImage = getTmdbImage(movie.poster_path, ImageSize.SMALL);
-  const posterImage = getTmdbImage(movie.poster_path, ImageSize.SMALL);
-  const backdropImage = getTmdbImage(movie.backdrop_path, ImageSize.SMALL);
+  const lqPosterImage = getTmdbImage(movie.poster_path, ImageSize.MEDIUM);
+  const posterImage = getTmdbImage(movie.poster_path, ImageSize.LARGE);
+  const backdropImage = getTmdbImage(movie.backdrop_path, ImageSize.LARGE);
   const canonicalUrl = 'https://entertainme.khanz1.dev';
 
   return {
