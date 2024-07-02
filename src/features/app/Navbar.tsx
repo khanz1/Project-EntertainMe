@@ -51,7 +51,8 @@ export const Navbar = () => {
     pathname.startsWith('/watch/') ||
     pathname.startsWith('/tv/') ||
     pathname.startsWith('/read/') ||
-    pathname.startsWith('/manga/')
+    pathname.startsWith('/manga/') ||
+    pathname.startsWith('/collection/')
   ) {
     return null;
   }

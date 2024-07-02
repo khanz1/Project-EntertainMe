@@ -6,10 +6,12 @@ import classes from '@/features/film/components/movies/MovieDetail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { CAST_TAB } from '@/features/film/components/movies/MovieDetail';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Crew, MovieCredit as TMovieCredit } from '@/features/film/types/credits.type';
+import { MOBILE_BREAKPOINT } from '@/constant';
 
 export const MovieCredit = ({ credit }: { credit: TMovieCredit }) => {
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const [isCastOpened, cast] = useDisclosure(false);
   const [castActiveTab, setCastActiveTab] = useState<CAST_TAB>(CAST_TAB.CAST);
 
@@ -40,7 +42,7 @@ export const MovieCredit = ({ credit }: { credit: TMovieCredit }) => {
             <Group justify="space-between" py="lg">
               {credit.cast
                 .map(cast => (
-                  <MovieCastCard cast={cast} key={cast.credit_id} />
+                  <MovieCastCard cast={cast} key={cast.credit_id} cardWidth={isMobile ? 180 : undefined} />
                 ))}
             </Group>
           </Tabs.Panel>
@@ -54,7 +56,7 @@ export const MovieCredit = ({ credit }: { credit: TMovieCredit }) => {
                     <Group gap="md">
                       {crewList[crewJob]
                         .map(crew => (
-                          <MovieCrewCard crew={crew} key={crew.credit_id} />
+                          <MovieCrewCard crew={crew} key={crew.credit_id} cardWidth={isMobile ? 180 : undefined} />
                         ))}
                     </Group>
                   </Stack>

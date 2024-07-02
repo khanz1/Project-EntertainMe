@@ -1,5 +1,18 @@
 'use client';
-import { Avatar, Badge, Box, Grid, Group, Image, rem, Stack, Text, Title } from '@mantine/core';
+import {
+  Avatar,
+  BackgroundImage,
+  Badge,
+  Box,
+  Button,
+  Grid,
+  Group,
+  Image,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
 import { fMinutes, getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
 import { type MovieDetail as TMovieDetail } from '@/features/film/types/movie.type';
@@ -9,6 +22,7 @@ import { IconExternalLink, IconHeart } from '@tabler/icons-react';
 import classes from './MovieDetail.module.css';
 import { useMediaQuery } from '@mantine/hooks';
 import { MOBILE_BREAKPOINT } from '@/constant';
+import { fSlug } from '@/utils/slugify.helper';
 
 export type MovieDetailProps = {
   movie: TMovieDetail;
@@ -75,22 +89,23 @@ export const MovieDetail = ({
   ];
 
   return (
-    <Grid p="xl" gutter="xl">
+    <Grid p={isMobile ? 'md' : 'xl'} gutter="xl">
       <Grid.Col span={{ base: 12, lg: 3 }}>
         <Stack>
           <Box style={{ borderRadius: rem(1), overflow: 'hidden' }}>
             <Image src={getTmdbImage(movie.poster_path)} alt={movie.title}
+                   radius="md"
                    style={isMobile ? { width: 200, margin: 'auto' } : {}} />
           </Box>
-          <Box visibleFrom="lg">
+          <Stack visibleFrom="lg">
             {movieMetaData.map(metaData => (
               <Box key={metaData.label}>
                 <Text fw="bold">{metaData.label}</Text>
-                <Text size="xs">{metaData.value}</Text>
+                <Text size="sm">{metaData.value}</Text>
               </Box>
             ))}
             {KeywordBadge}
-          </Box>
+          </Stack>
         </Stack>
       </Grid.Col>
       <Grid.Col span={{ base: 12, lg: 9 }}>
@@ -154,6 +169,20 @@ export const MovieDetail = ({
           {CreditWrapper}
           {MediaWrapper}
           {ReviewWrapper}
+          {Boolean(movie.belongs_to_collection) && (
+            <BackgroundImage
+              className={classes.collectionBackground}
+              src={getTmdbImage(movie.belongs_to_collection.backdrop_path)} radius="md">
+              <Box p="xl" style={{ zIndex: 2, position: 'relative' }}>
+                <Stack gap="xl">
+                  <Title order={2} fw="bold">{movie.belongs_to_collection.name}</Title>
+                  <Link href={`/collection/${fSlug(movie.belongs_to_collection.name, movie.belongs_to_collection.id)}`}>
+                    <Button variant="light">Browse Collection</Button>
+                  </Link>
+                </Stack>
+              </Box>
+            </BackgroundImage>
+          )}
           {RecommendationWrapper}
         </Stack>
       </Grid.Col>

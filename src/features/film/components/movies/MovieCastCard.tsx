@@ -6,22 +6,29 @@ import { APP } from '@/constant';
 
 export type MovieCastCardProps = {
   cast: Cast;
+  cardWidth?: number;
 };
 
-export function MovieCastCard({ cast }: MovieCastCardProps) {
+export function MovieCastCard({ cast, cardWidth }: MovieCastCardProps) {
   return (
     <Card
       p="lg"
       shadow="lg"
       className={classes.card}
       radius="md"
-      w={230}
+      w={cardWidth ?? 230}
       h={300}
     >
       <Box
         className={classes.image}
         style={{
-          backgroundImage: cast.profile_path ? `url(${getTmdbImage(cast.profile_path, ImageSize.SMALL)})` : APP.NO_IMAGE,
+          ...(!cast.profile_path && {
+            backgroundSize: 'cover',
+            backgroundPosition: 'bottom',
+            backgroundRepeat: 'no-repeat',
+            scale: 1.1,
+          }),
+          backgroundImage: `url(${cast.profile_path ? getTmdbImage(cast.profile_path, ImageSize.SMALL) : APP.NO_IMAGE})`,
         }}
       />
       <div className={classes.overlay} />

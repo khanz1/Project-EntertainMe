@@ -1,0 +1,18 @@
+
+.collectionBackground {
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.collectionBackground::before {
+    content: "";
+    position: absolute;
+    border-radius: var(--mantine-radius-md);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(31, 31, 31, 0.4) 0%, rgba(31, 31, 31, 0.9) 40%, var(--mantine-color-dark-8) 100%);
+    z-index: 1;
+    height: 100%;
+}

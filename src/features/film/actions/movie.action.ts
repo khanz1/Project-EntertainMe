@@ -111,6 +111,17 @@ export const fetchReviews = async (
   return data;
 };
 
+export const checkTrailerAvailability = async ({ videoKey }: { videoKey: string }) => {
+  const response = await fetch(`https://www.youtube.com/embed/${videoKey}`, {
+    method: 'GET',
+  });
+  const text = await response.text();
+  console.log(text, '<<< r');
+  // Check for specific text that indicates the video is not embeddable
+  const notEmbeddableText = 'Playback on other websites has been disabled by the video owner';
+  return !text.includes(notEmbeddableText);
+};
+
 export const checkStreamAvailability = async (props: StreamAvailabilityProps): Promise<boolean> => {
   cookies();
 

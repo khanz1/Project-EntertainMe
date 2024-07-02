@@ -8,7 +8,7 @@ import { ENTERTAIN_TYPE, FetchProps, Film, FILM_FILTERS, Genre, ResData } from '
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -31,6 +31,8 @@ const filmState: ResData<Film[]> = {
 };
 
 export default function Page() {
+  // TODO: current feature is now only movies, so redirect to /movies
+  redirect('/movies');
   const router = useRouter();
   const [genres, setGenres] = useState<Genre[]>([]);
   const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
