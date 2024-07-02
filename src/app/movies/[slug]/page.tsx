@@ -38,6 +38,10 @@ export async function generateMetadata(
 
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || [];
+  const lqPosterImage = getTmdbImage(movie.poster_path, ImageSize.SMALL);
+  const posterImage = getTmdbImage(movie.poster_path, ImageSize.SMALL);
+  const backdropImage = getTmdbImage(movie.backdrop_path, ImageSize.SMALL);
+  const canonicalUrl = 'https://entertainme.khanz1.dev';
 
   return {
     title: `${movie.title} | Entertain Me`,
@@ -55,7 +59,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: movie.title,
       description: movie.overview,
-      images: [getTmdbImage(movie.poster_path, ImageSize.SMALL), getTmdbImage(movie.backdrop_path, ImageSize.SMALL)], // Must be an absolute URL
+      images: [posterImage, backdropImage], // Must be an absolute URL
     },
     robots: {
       index: false,
@@ -70,18 +74,32 @@ export async function generateMetadata(
         'max-snippet': -1,
       },
     },
-    // openGraph: {
-    //   title: movie.title,
-    //   description: movie.overview,
-    //   images: [
-    //     ...previousImages,
-    //     {
-    //       url: getTmdbImage(movie.poster_path, ImageSize.SMALL), // Must be an absolute URL
-    //       width: 800,
-    //       height: 600,
-    //     },
-    //   ],
-    // },
+    openGraph: {
+      title: movie.title,
+      description: movie.overview,
+      type: 'website',
+      url: canonicalUrl,
+      siteName: 'Entertain Me',
+      images: [
+        {
+          url: lqPosterImage,
+          secureUrl: lqPosterImage,
+          width: 256,
+          height: 256,
+          alt: `${movie.title} - Entertain Me`,
+        },
+        {
+          url: posterImage,
+          secureUrl: posterImage,
+          alt: `${movie.title} - Entertain Me`,
+        },
+        {
+          url: backdropImage,
+          secureUrl: backdropImage,
+          alt: `${movie.title} - Entertain Me`,
+        },
+      ],
+    },
   };
 }
 
