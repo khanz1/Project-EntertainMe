@@ -55,7 +55,7 @@ export async function generateMetadata(
       card: 'summary_large_image',
       title: movie.title,
       description: movie.overview,
-      images: [getTmdbImage(movie.poster_path, ImageSize.SMALL)], // Must be an absolute URL
+      images: [getTmdbImage(movie.backdrop_path, ImageSize.SMALL)], // Must be an absolute URL
     },
     robots: {
       index: false,
@@ -70,18 +70,18 @@ export async function generateMetadata(
         'max-snippet': -1,
       },
     },
-    openGraph: {
-      title: movie.title,
-      description: movie.overview,
-      images: [
-        ...previousImages,
-        {
-          url: getTmdbImage(movie.poster_path, ImageSize.SMALL), // Must be an absolute URL
-          width: 800,
-          height: 600,
-        },
-      ],
-    },
+    // openGraph: {
+    //   title: movie.title,
+    //   description: movie.overview,
+    //   images: [
+    //     ...previousImages,
+    //     {
+    //       url: getTmdbImage(movie.poster_path, ImageSize.SMALL), // Must be an absolute URL
+    //       width: 800,
+    //       height: 600,
+    //     },
+    //   ],
+    // },
   };
 }
 
