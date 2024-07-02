@@ -13,7 +13,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { fMinutes, getTmdbImage } from '@/features/film/film.helper';
+import { fMinutes, getTmdbImage, ImageSize } from '@/features/film/film.helper';
 import React from 'react';
 import { type MovieDetail as TMovieDetail } from '@/features/film/types/movie.type';
 import Link from 'next/link';
@@ -172,7 +172,7 @@ export const MovieDetail = ({
           {Boolean(movie.belongs_to_collection) && (
             <BackgroundImage
               className={classes.collectionBackground}
-              src={getTmdbImage(movie.belongs_to_collection.backdrop_path)} radius="md">
+              src={getTmdbImage(movie.belongs_to_collection.backdrop_path, ImageSize.LARGE)} radius="md">
               <Box p="xl" style={{ zIndex: 2, position: 'relative' }}>
                 <Stack gap="xl">
                   <Title order={2} fw="bold">{movie.belongs_to_collection.name}</Title>

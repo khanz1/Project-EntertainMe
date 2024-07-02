@@ -15,12 +15,75 @@ import {
 import { KeywordBadge } from '@/features/film/components/movies/KeywordBadge';
 import { FILM_TYPE } from '@/features/film/types/film.type';
 import { StreamAlert, StreamMovie } from '@/features/film/components/movies/MovieStream';
+import { Metadata, ResolvingMetadata } from 'next';
 
 export type PageProps = {
   params: {
     slug: string;
   };
 };
+
+
+type Props = {
+  params: { slug: string }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  // read route params
+  const movieId = parseIdFromSlug(params.slug);
+  const movie = await fetchMovieById(movieId);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `${movie.title} | Entertain Me`,
+    description: movie.overview,
+    // icons: {
+    //   icon: getTmdbImage(movie.poster_path, ImageSize.SMALL),
+    //   shortcut: getTmdbImage(movie.poster_path, ImageSize.SMALL),
+    //   apple: getTmdbImage(movie.poster_path, ImageSize.SMALL),
+    //   other: {
+    //     rel: 'apple-touch-icon-precomposed',
+    //     url: getTmdbImage(movie.poster_path, ImageSize.SMALL),
+    //   },
+    // },
+    twitter: {
+      card: 'summary_large_image',
+      title: movie.title,
+      description: movie.overview,
+      images: [getTmdbImage(movie.poster_path, ImageSize.SMALL)], // Must be an absolute URL
+    },
+    robots: {
+      index: false,
+      follow: true,
+      nocache: true,
+      googleBot: {
+        index: true,
+        follow: false,
+        noimageindex: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title: movie.title,
+      description: movie.overview,
+      images: [
+        ...previousImages,
+        {
+          url: getTmdbImage(movie.poster_path, ImageSize.SMALL), // Must be an absolute URL
+          width: 800,
+          height: 600,
+        },
+      ],
+    },
+  };
+}
 
 export default async function Page({ params }: PageProps) {
   const movieId = parseIdFromSlug(params.slug);

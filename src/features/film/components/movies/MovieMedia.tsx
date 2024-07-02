@@ -4,13 +4,12 @@ import { VideoCard } from '@/features/film/components/movies/VideoCard';
 import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
 import classes from '@/features/film/components/movies/MovieDetail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { MEDIA_TAB } from '@/features/film/components/movies/MovieDetail';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { VideoResponse } from '@/features/film/types/video.type';
 import { ImageCollection } from '@/features/film/types/image.type';
 import { MOBILE_BREAKPOINT } from '@/constant';
-import { checkTrailerAvailability } from '@/features/film/actions/movie.action';
 
 export type MovieMediaProps = {
   videos: VideoResponse;
@@ -172,12 +171,12 @@ type MovieVideoProps = {
 }
 
 export const MovieVideo = ({ videoKey }: MovieVideoProps) => {
-  useEffect(() => {
-    (async () => {
-      const response = await checkTrailerAvailability({ videoKey });
-      console.log(response, ',<<ok');
-    })();
-  }, [videoKey]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const response = await checkTrailerAvailability({ videoKey });
+  //     console.log(response, ',<<ok');
+  //   })();
+  // }, [videoKey]);
   return (
     <Box
       component="iframe"
