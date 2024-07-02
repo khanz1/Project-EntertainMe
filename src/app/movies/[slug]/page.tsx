@@ -80,32 +80,32 @@ export async function generateMetadata(
       type: 'website',
       url: canonicalUrl,
       siteName: 'Entertain Me',
-      images: {
-        url: lqPosterImage,
-        secureUrl: lqPosterImage,
-        width: 256,
-        height: 256,
-        alt: `${movie.title} - Entertain Me`,
-      },
-      // images: [
-      //   {
-      //     url: lqPosterImage,
-      //     secureUrl: lqPosterImage,
-      //     width: 256,
-      //     height: 256,
-      //     alt: `${movie.title} - Entertain Me`,
-      //   },
-      //   {
-      //     url: posterImage,
-      //     secureUrl: posterImage,
-      //     alt: `${movie.title} - Entertain Me`,
-      //   },
-      //   {
-      //     url: backdropImage,
-      //     secureUrl: backdropImage,
-      //     alt: `${movie.title} - Entertain Me`,
-      //   },
-      // ],
+      // images: {
+      //   url: lqPosterImage,
+      //   secureUrl: lqPosterImage,
+      //   width: 256,
+      //   height: 256,
+      //   alt: `${movie.title} - Entertain Me`,
+      // },
+      images: [
+        {
+          url: lqPosterImage,
+          secureUrl: lqPosterImage,
+          width: 256,
+          height: 256,
+          alt: `${movie.title} - Entertain Me`,
+        },
+        {
+          url: posterImage,
+          secureUrl: posterImage,
+          alt: `${movie.title} - Entertain Me`,
+        },
+        {
+          url: backdropImage,
+          secureUrl: backdropImage,
+          alt: `${movie.title} - Entertain Me`,
+        },
+      ],
     },
   };
 }
