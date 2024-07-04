@@ -1,10 +1,23 @@
-import { Box } from '@mantine/core';
-import { parseIdFromSlug } from '@/utils/slugify.helper';
+import {
+  BackgroundImage,
+  Badge,
+  Box,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Image,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from '@mantine/core';
+import { fSlug, parseIdFromSlug } from '@/utils/slugify.helper';
 import { BackButton } from '@/features/app/BackButton';
 import classes from '@/features/film/components/movies/MovieDetail.module.css';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
+import { fMinutes, getTmdbImage, ImageSize } from '@/features/film/film.helper';
 import React from 'react';
-import { MovieDetail } from '@/features/film/components/movies/MovieDetail';
+import { FavoriteAction } from '@/features/film/components/movies/MovieDetail';
 import { checkStreamAvailability, fetchMovieById } from '@/features/film/actions/movie.action';
 import {
   CreditWrapper,
@@ -15,7 +28,10 @@ import {
 import { KeywordBadge } from '@/features/film/components/movies/KeywordBadge';
 import { FILM_TYPE } from '@/features/film/types/film.type';
 import { StreamAlert, StreamMovie } from '@/features/film/components/movies/MovieStream';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
+import { fUSD } from '@/utils/formatter.helper';
+import Link from 'next/link';
+import { IconExternalLink } from '@tabler/icons-react';
 
 export type PageProps = {
   params: {
@@ -23,22 +39,16 @@ export type PageProps = {
   };
 };
 
-
 type Props = {
   params: { slug: string }
 }
 
 export async function generateMetadata(
   { params }: Props,
-  parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  // read route params
   const movieId = parseIdFromSlug(params.slug);
   const movie = await fetchMovieById(movieId);
 
-  // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || [];
-  const lqPosterImage = getTmdbImage(movie.poster_path, ImageSize.MEDIUM);
   const posterImage = getTmdbImage(movie.poster_path, ImageSize.LARGE);
   const backdropImage = getTmdbImage(movie.backdrop_path, ImageSize.LARGE);
   const canonicalUrl = 'https://entertainme.khanz1.dev';
@@ -46,20 +56,11 @@ export async function generateMetadata(
   return {
     title: `${movie.title} | Entertain Me`,
     description: movie.overview,
-    // icons: {
-    //   icon: getTmdbImage(movie.poster_path, ImageSize.SMALL),
-    //   shortcut: getTmdbImage(movie.poster_path, ImageSize.SMALL),
-    //   apple: getTmdbImage(movie.poster_path, ImageSize.SMALL),
-    //   other: {
-    //     rel: 'apple-touch-icon-precomposed',
-    //     url: getTmdbImage(movie.poster_path, ImageSize.SMALL),
-    //   },
-    // },
     twitter: {
       card: 'summary_large_image',
       title: movie.title,
       description: movie.overview,
-      images: [posterImage, backdropImage], // Must be an absolute URL
+      images: [posterImage, backdropImage],
     },
     robots: {
       index: false,
@@ -80,21 +81,7 @@ export async function generateMetadata(
       type: 'website',
       url: canonicalUrl,
       siteName: 'Entertain Me',
-      // images: {
-      //   url: lqPosterImage,
-      //   secureUrl: lqPosterImage,
-      //   width: 256,
-      //   height: 256,
-      //   alt: `${movie.title} - Entertain Me`,
-      // },
       images: [
-        // {
-        //   url: lqPosterImage,
-        //   secureUrl: lqPosterImage,
-        //   width: 256,
-        //   height: 256,
-        //   alt: `${movie.title} - Entertain Me`,
-        // },
         {
           url: posterImage,
           secureUrl: posterImage,
@@ -120,23 +107,127 @@ export default async function Page({ params }: PageProps) {
     }),
   ]);
 
+  const movieMetaData = [
+    {
+      label: 'Status',
+      value: movie.status,
+    },
+    {
+      label: 'Original Languages',
+      value: movie.original_language,
+    },
+    {
+      label: 'Budget',
+      value: fUSD(movie.budget),
+    },
+    {
+      label: 'Revenue',
+      value: fUSD(movie.revenue),
+    },
+    {
+      label: 'Runtime',
+      value: fMinutes(movie.runtime),
+    },
+    {
+      label: 'Rating',
+      value: movie.vote_average.toFixed(2),
+    },
+  ];
+
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
       <BackButton />
       <Box className={classes.overlay}
            style={{ background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(movie.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover` }}></Box>
       <Box className={classes.container}>
-        <MovieDetail movie={movie}
-                     isStreamAvailable={isStreamAvailable}
-                     KeywordBadge={<KeywordBadge movieId={movie.id} />}
-                     CreditWrapper={<CreditWrapper movieId={movie.id} />}
-                     ReviewWrapper={<ReviewWrapper movieId={movieId} />}
-                     MediaWrapper={<MediaWrapper movieId={movie.id} />}
-                     RecommendationWrapper={<RecommendationWrapper movieId={movie.id} />}
-                     StreamAlert={<StreamAlert isStreamAvailable={isStreamAvailable} />}
-                     StreamMovie={<StreamMovie isStreamAvailable={isStreamAvailable} movie={movie} />}
-        />
-
+        <Grid p={{ base: 'md', sm: 'xl' }} gutter="xl">
+          <GridCol span={{ base: 12, lg: 3 }}>
+            <Stack>
+              <Box style={{ borderRadius: rem(1), overflow: 'hidden' }}>
+                <Image
+                  src={getTmdbImage(movie.poster_path)} alt={movie.title}
+                  radius="md"
+                  w={{ base: 200, lg: '100%' }}
+                  m={{ base: 'auto' }}
+                />
+              </Box>
+              <Stack visibleFrom="lg">
+                {movieMetaData.map(metaData => (
+                  <Box key={metaData.label}>
+                    <Text fw="bold">{metaData.label}</Text>
+                    <Text size="sm">{metaData.value}</Text>
+                  </Box>
+                ))}
+                <KeywordBadge movieId={movie.id} />
+              </Stack>
+            </Stack>
+          </GridCol>
+          <GridCol span={{ base: 12, lg: 9 }}>
+            <Stack gap="sm">
+              <Stack gap={0}>
+                <StreamAlert isStreamAvailable={isStreamAvailable} />
+                <Group gap={0}>
+                  <Link
+                    className={classes.titleLink}
+                    href={movie.homepage}
+                    target="_blank"
+                  >
+                    <Title order={1} fw="bold">
+                      {movie.title}
+                      <sup>
+                        <IconExternalLink size="1rem" stroke={1.5} />
+                      </sup>
+                    </Title>
+                  </Link>
+                  <Title order={2}>
+                    ({new Date(movie.release_date).getFullYear()})
+                  </Title>
+                </Group>
+                <Text c="dimmed" fs="italic">
+                  {movie.tagline}
+                </Text>
+              </Stack>
+              <Box>
+                <Group gap="xs">
+                  {movie.genres.map(genre => (
+                    <Badge radius="sm" key={genre.id}>
+                      {genre.name}
+                    </Badge>
+                  ))}
+                </Group>
+              </Box>
+              <Group gap="xs">
+                <FavoriteAction movie={movie} />
+                <StreamMovie isStreamAvailable={isStreamAvailable} movie={movie} />
+              </Group>
+              <Box>
+                <Text size="xl" fw="bold" pt="xs">
+                  Overview
+                </Text>
+                <Text>{movie.overview}</Text>
+              </Box>
+              <CreditWrapper movieId={movie.id} />
+              <MediaWrapper movieId={movie.id} />
+              <ReviewWrapper movieId={movieId} />
+              {Boolean(movie.belongs_to_collection) && (
+                <BackgroundImage
+                  className={classes.collectionBackground}
+                  src={getTmdbImage(movie.belongs_to_collection.backdrop_path, ImageSize.LARGE)} radius="md">
+                  <Box p="xl" style={{ zIndex: 2, position: 'relative' }}>
+                    <Stack gap="xl">
+                      <Title order={2} fw="bold">{movie.belongs_to_collection.name}</Title>
+                      <Link
+                        href={`/collection/${fSlug(movie.belongs_to_collection.name, movie.belongs_to_collection.id)}`}>
+                        <Button variant="light">Browse Collection</Button>
+                      </Link>
+                    </Stack>
+                  </Box>
+                </BackgroundImage>
+              )}
+              <RecommendationWrapper movieId={movie.id} />
+            </Stack>
+          </GridCol>
+        </Grid>
       </Box>
     </Box>
   );

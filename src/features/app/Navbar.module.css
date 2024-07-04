@@ -1,3 +1,14 @@
+.appLogo {
+    &:hover {
+        cursor: pointer
+    }
+}
+
+.appNav {
+    text-decoration: none;
+    color: var(--mantine-color-dark-1);
+}
+
 .header {
     height: rem(56px);
     /*margin-bottom: rem(25px);*/

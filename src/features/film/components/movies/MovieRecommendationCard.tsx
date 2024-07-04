@@ -25,7 +25,7 @@ export function MovieRecommendationCard({ recommendation }: MovieRecommendationC
       <Box
         className={classes.image}
         style={{
-          backgroundImage: recommendation.backdrop_path ? `url(${getTmdbImage(recommendation.backdrop_path, ImageSize.SMALL)})` : APP.NO_IMAGE,
+          backgroundImage: recommendation.backdrop_path ? `url(${getTmdbImage(recommendation.backdrop_path, ImageSize.LARGE)})` : APP.NO_IMAGE,
         }}
       />
       <div className={classes.overlay} />

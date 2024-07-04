@@ -1,14 +1,14 @@
-import NextAuth, { DefaultSession } from "next-auth";
-import Google from "next-auth/providers/google";
-import { prisma } from "@/db/prisma/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import NextAuth, { DefaultSession } from 'next-auth';
+import Google from 'next-auth/providers/google';
+import { prisma } from '@/db/prisma/prisma';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       userId: string;
       address: string;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 }
 
@@ -24,10 +24,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         image: user.image,
         email_verified: profile?.email_verified,
       };
+      console.log(u, '<< u');
       return true;
     },
     session: async (props) => {
-      props.session.user.userId = "ANgga";
+      console.log(props.session, '<< props.session');
+      props.session.user.userId = 'ANgga';
       return props.session;
     },
   },

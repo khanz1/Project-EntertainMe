@@ -28,7 +28,7 @@ export function MovieCrewCard({ crew, cardWidth }: MovieCrewCardProps) {
             backgroundRepeat: 'no-repeat',
             scale: 1.1,
           }),
-          backgroundImage: `url(${crew.profile_path ? getTmdbImage(crew.profile_path, ImageSize.SMALL) : APP.NO_IMAGE})`,
+          backgroundImage: `url(${crew.profile_path ? getTmdbImage(crew.profile_path, ImageSize.MEDIUM) : APP.NO_IMAGE})`,
         }}
       />
       <div className={classes.overlay} />

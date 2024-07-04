@@ -1,8 +1,7 @@
 'use client';
 
 import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
-import { fetchTVSeries } from '@/features/film/film.action';
-import { FetchProps, FILM_FILTERS, ResData } from '@/features/film/types/film.type';
+import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
@@ -10,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TVSeries } from '@/features/film/types/series.type';
+import { fetchTVSeries } from '@/features/film/actions/tv.action';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -44,28 +44,56 @@ export default function Page({ searchParams }: PageProps) {
   const filter = searchParams.filter ? searchParams.filter as FILM_FILTERS : search ? FILM_FILTERS.NONE : FILM_FILTERS.POPULAR;
   const [debounced] = useDebouncedValue(search, 500);
 
+
   useEffect(() => {
     (async () => {
-      const options: Partial<FetchProps> = {
+      if (filmList.results.length === 0 && page > 1) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', '1');
+        router.push(url.toString());
+        return;
+      }
+      const data = await fetchTVSeries({
         page,
         filter,
-      };
+        search,
+      });
 
-      if (debounced) {
-        options.search = debounced;
-      }
-      const data = await fetchTVSeries(options as FetchProps);
-
-      if (page === 1) {
+      if (filmList.results.length === 0) {
+        setFilmList(data);
+      } else if (page === 1) {
         setFilmList(data);
       } else {
-        setFilmList((prev) => ({
-          ...prev,
-          results: [...prev.results, ...data.results],
+        setFilmList((prevMovies) => ({
+          ...data,
+          results: [...prevMovies.results, ...data.results],
         }));
       }
     })();
-  }, [page, filter, debounced]);
+  }, [page, filter, search]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const options: Partial<FetchProps> = {
+  //       page,
+  //       filter,
+  //     };
+  //
+  //     if (debounced) {
+  //       options.search = debounced;
+  //     }
+  //     const data = await fetchTVSeries(options as FetchProps);
+  //
+  //     if (page === 1) {
+  //       setFilmList(data);
+  //     } else {
+  //       setFilmList((prev) => ({
+  //         ...prev,
+  //         results: [...prev.results, ...data.results],
+  //       }));
+  //     }
+  //   })();
+  // }, [page, filter, debounced]);
 
   const hasMoreFilm =
     filmList.results.length === 0

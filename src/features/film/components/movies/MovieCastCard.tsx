@@ -28,7 +28,7 @@ export function MovieCastCard({ cast, cardWidth }: MovieCastCardProps) {
             backgroundRepeat: 'no-repeat',
             scale: 1.1,
           }),
-          backgroundImage: `url(${cast.profile_path ? getTmdbImage(cast.profile_path, ImageSize.SMALL) : APP.NO_IMAGE})`,
+          backgroundImage: `url(${cast.profile_path ? getTmdbImage(cast.profile_path, ImageSize.MEDIUM) : APP.NO_IMAGE})`,
         }}
       />
       <div className={classes.overlay} />

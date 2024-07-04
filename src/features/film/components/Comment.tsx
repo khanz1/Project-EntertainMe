@@ -34,7 +34,7 @@ export function Comment({ review }: CommentProps) {
           <Text size="xs" c="dimmed">
             {fDateTimeGB(new Date(review.created_at))}
           </Text>
-          <Rating value={review.author_details.rating / 2} fractions={1} />
+          <Rating value={review.author_details.rating / 2} fractions={1} readOnly />
         </Stack>
       </Group>
       <Box pl={54}>

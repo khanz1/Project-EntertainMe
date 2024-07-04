@@ -12,7 +12,7 @@ import {
   Review,
   WithType,
 } from './types/film.type';
-import { Movie, MovieDetail, Season } from './types/movie.type';
+import { Movie, Season } from './types/movie.type';
 import { TVSeries, TVSeriesDetail } from './types/series.type';
 
 export type FetchFilmList = (
@@ -107,17 +107,6 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   };
 };
 
-export const fetchMovieById = async (id: number): Promise<MovieDetail> => {
-  const url = new URL(`${TMDB_HOST}/3/movie/${id}`);
-
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
-    },
-  });
-
-  return await response.json();
-};
 
 export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
   let url = new URL(`${TMDB_HOST}/3/tv/${props?.filter}`);

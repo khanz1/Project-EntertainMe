@@ -3,6 +3,7 @@ import { Box, Card, Group, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
 import { TVSeries } from '../types/series.type';
+import { fSlug } from '@/utils/slugify.helper';
 
 export type TVSeriesCardProps = {
   tvSeries: TVSeries;
@@ -10,7 +11,7 @@ export type TVSeriesCardProps = {
 
 export function TVSeriesCard({ tvSeries }: TVSeriesCardProps) {
   return (
-    <Link style={{ textDecoration: 'none' }} href={`/tv/${tvSeries.id}`}>
+    <Link style={{ textDecoration: 'none' }} href={`/tv/${fSlug(tvSeries.name, tvSeries.id)}`}>
       <Card
         p="lg"
         shadow="lg"
