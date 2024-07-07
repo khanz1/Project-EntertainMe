@@ -14,7 +14,8 @@ export function MovieRecommendationCard({ recommendation }: MovieRecommendationC
   return (
     <Card
       component={Link}
-      href={`/movies/${fSlug(recommendation.title, recommendation.id)}`}
+      // TODO: in tvSeries the recommendation field is name not title, we should change later on
+      href={`/movies/${fSlug(recommendation.title ?? (recommendation as any).name!, recommendation.id)}`}
       p="lg"
       shadow="lg"
       className={classes.card}
@@ -35,18 +36,6 @@ export function MovieRecommendationCard({ recommendation }: MovieRecommendationC
           <Text className={classes.title} fw={500} lineClamp={1}>
             {recommendation.title}
           </Text>
-
-          {/*<Group justify="space-between" gap="xs">*/}
-          {/*<Text size="sm" className={classes.author}>*/}
-          {/*  {cast.gender === 1 ? 'Actress' : 'Actor'}*/}
-          {/*</Text>*/}
-          {/*<Text size="xs" c="dimmed">*/}
-          {/*  •*/}
-          {/*</Text>*/}
-          {/*<Text size="xs" className={classes.author}>*/}
-          {/*  as {recommendation.character}*/}
-          {/*</Text>*/}
-          {/*</Group>*/}
         </div>
       </div>
     </Card>
