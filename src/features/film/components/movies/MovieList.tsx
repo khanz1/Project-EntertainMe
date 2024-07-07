@@ -1,7 +1,6 @@
 'use client';
 
 import { Center, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { MovieCard, MovieCardMobile } from '@/features/film/components/MovieCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FILM_FILTERS, ResData, WithType } from '@/features/film/types/film.type';
 import { Movie } from '@/features/film/types/movie.type';
@@ -9,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { useMediaQuery } from '@mantine/hooks';
 import { MOBILE_BREAKPOINT } from '@/constant';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { ItemType } from '@prisma/client';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -81,9 +82,9 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
           >
             {movies.results.map((movie) => {
               if (isMobile) {
-                return <MovieCardMobile key={movie.id} movie={movie} />;
+                return <FilmCardMobile key={movie.id} film={movie} type={ItemType.movie} />;
               } else {
-                return <MovieCard key={movie.id} movie={movie} />;
+                return <FilmCard key={movie.id} film={movie} type={ItemType.movie} />;
               }
             })}
           </Group>

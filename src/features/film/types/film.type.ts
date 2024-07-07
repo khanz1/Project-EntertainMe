@@ -85,12 +85,12 @@ export enum ENTERTAIN_TYPE {
 
 
 type MovieStreamProps = {
-  type: FILM_TYPE.MOVIE
+  type: typeof ItemType.movie
   movieId: number;
 }
 
 type TVStreamProps = {
-  type: FILM_TYPE.TV_SERIES
+  type: typeof ItemType.tv
   tvId: number;
   season: number;
   episode: number;

@@ -13,16 +13,16 @@ export const CollectionDetail = ({ collection }: { collection: Collection }) => 
     <Box style={{ display: 'flex', alignItems: 'center', minHeight: '100vh' }}>
       <Grid className={classes.container}>
         <Grid.Col span={{ base: 12, lg: 4 }} px="xl">
-          <Image className={classes.image} src={getTmdbImage(collection.poster_path, ImageSize.LARGE)}
-                 radius="md"
-                 alt={collection.name}
+          <Image
+            className={classes.image} src={getTmdbImage(collection.poster_path, ImageSize.LARGE)}
+            radius="md"
+            alt={collection.name}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, lg: 8 }} px="lg">
           <Stack justify="center" h="100%">
             <Title component={Text} order={1} fw="bold">{collection.name}</Title>
             <Text>{collection.overview}</Text>
-            {/*<Text>Number of Movies: {collection.parts.length}</Text>*/}
             <Group gap="xs">
               {collection.parts.map(part => {
                 if (isMobile) {

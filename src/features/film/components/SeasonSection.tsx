@@ -54,7 +54,7 @@ export const SeasonSection = ({ tvSeries }: SeasonSectionProps) => {
             href={`/watch/${tvSeries.id}?s=${seasonNumber}&e=${seasonNumber}`}
             style={{ textDecoration: 'none' }}
           >
-            <EpisodeCard episode={episode} />
+            <EpisodeCard episode={episode} seasonNumber={seasonNumber} tvSeries={tvSeries} />
           </Box>
         ))}
       </Group>

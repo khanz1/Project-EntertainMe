@@ -1,6 +1,5 @@
 'use client';
 
-import { TVSeriesCard, TVSeriesCardMobile } from '@/features/film/components/TVSeriesCard';
 import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
@@ -12,6 +11,8 @@ import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
 import { MOBILE_BREAKPOINT } from '@/constant';
 import { ScrollToTop } from '@/features/app/ScrollToTop';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { ItemType } from '@prisma/client';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -73,7 +74,7 @@ export default function Page({ searchParams }: PageProps) {
         }));
       }
     })();
-  }, [page, filter, search]);
+  }, [page, filter, debounced]);
 
   const hasMoreFilm =
     filmList.results.length === 0
@@ -127,9 +128,9 @@ export default function Page({ searchParams }: PageProps) {
             >
               {filmList.results.map((film) => {
                 if (isMobile) {
-                  return <TVSeriesCardMobile key={film.id} tvSeries={film} />;
+                  return <FilmCardMobile key={film.id} film={film} type={ItemType.tv} />;
                 } else {
-                  return <TVSeriesCard key={film.id} tvSeries={film} />;
+                  return <FilmCard key={film.id} film={film} type={ItemType.tv} />;
                 }
               })}
             </Group>

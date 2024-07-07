@@ -1,4 +1,4 @@
-import classes from './MovieCard.module.css';
+import classes from './FilmCard.module.css';
 import { Box, Card, Group, Image, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
@@ -27,7 +27,6 @@ export function MovieCard({ movie }: MovieCardProps) {
           }}
         />
         <div className={classes.overlay} />
-
         <div className={classes.content}>
           <div>
             <Text className={classes.title} fw={500} lineClamp={1}>
@@ -54,8 +53,14 @@ export function MovieCard({ movie }: MovieCardProps) {
 
 export const MovieCardMobile = ({ movie }: MovieCardProps) => {
   return (
-    <Card component={Link} href={`/movies/${fSlug(movie.title, movie.id)}`} w="100%" radius="md" p={0}
-          className={classes.cardMobile}>
+    <Card
+      component={Link}
+      href={`/movies/${fSlug(movie.title, movie.id)}`}
+      w="100%"
+      radius="md"
+      p={0}
+      className={classes.cardMobile}
+    >
       <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
         <Image
           className={classes.imageMobile}

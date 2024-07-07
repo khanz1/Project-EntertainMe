@@ -1,12 +1,14 @@
 'use server';
 
-import { FilmType, ResData } from '@/features/film/types/film.type';
+import { FilmType, ResData, Review } from '@/features/film/types/film.type';
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { kv } from '@vercel/kv';
 import { MovieCredit } from '@/features/film/types/credits.type';
 import { cookies } from 'next/headers';
 import { KeywordCollection } from '@/features/film/types/keyword.type';
 import { MovieRecommendation } from '@/features/film/types/recommendation.type';
+import { VideoResponse } from '@/features/film/types/video.type';
+import { ImageCollection } from '@/features/film/types/image.type';
 
 export const fetchFilmCredits = async (type: FilmType, movieOrTVId: number): Promise<MovieCredit> => {
   cookies();
@@ -29,6 +31,7 @@ export const fetchFilmCredits = async (type: FilmType, movieOrTVId: number): Pro
   await kv.set(KV_KEY, data);
   return data;
 };
+
 export const fetchKeywords = async (type: FilmType, movieOrTVId: number): Promise<KeywordCollection> => {
   cookies();
   const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/keywords`);
@@ -60,6 +63,77 @@ export const fetchRecommendations = async (type: FilmType, movieOrTVId: number):
 
   if (cache) {
     return cache;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+    },
+  });
+
+  const data = await response.json();
+  await kv.set(KV_KEY, data);
+  return data;
+};
+
+export const fetchReviews = async (
+  filmType: FilmType,
+  movieOrTVId: number,
+): Promise<ResData<Review[]>> => {
+  const _ = cookies();
+
+  const url = new URL(`${TMDB_HOST}/3/${filmType}/${movieOrTVId}/reviews`);
+  const KV_KEY = `movie:reviews:${filmType}:${movieOrTVId}`;
+
+  const cache = await kv.get(KV_KEY);
+
+  if (cache) {
+    return cache as ResData<Review[]>;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+    },
+  });
+
+  const data = await response.json();
+  await kv.set(KV_KEY, data);
+  return data;
+};
+
+export const fetchFilmVideos = async (type: FilmType, movieOrTVId: number): Promise<VideoResponse> => {
+  cookies();
+  const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/videos`);
+  const KV_KEY = `film:videos:${type}:${movieOrTVId}`;
+
+  const cache = await kv.get(KV_KEY);
+
+  if (cache) {
+    return cache as VideoResponse;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+    },
+  });
+
+  const data = await response.json();
+  await kv.set(KV_KEY, data);
+  return data;
+};
+
+
+export const fetchFilmImages = async (type: FilmType, movieOrTVId: number): Promise<ImageCollection> => {
+  const _ = cookies();
+  const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/images`);
+  const KV_KEY = `film:images:${type}:${movieOrTVId}`;
+
+  const cache = await kv.get(KV_KEY);
+
+  if (cache) {
+    return cache as ImageCollection;
   }
 
   const response = await fetch(url, {

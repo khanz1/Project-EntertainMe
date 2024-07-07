@@ -56,6 +56,7 @@ export default function Page({ searchParams }: PageProps) {
         }));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter, search]);
 
   const hasMoreMovies = useMemo(() => {
@@ -66,7 +67,12 @@ export default function Page({ searchParams }: PageProps) {
 
   return (
     <Container size="xl" my={25}>
-      <MovieList movies={movies} page={page} hasMoreMovies={hasMoreMovies} filter={filter} />
+      <MovieList
+        movies={movies}
+        page={page}
+        hasMoreMovies={hasMoreMovies}
+        filter={filter}
+      />
     </Container>
   );
 }

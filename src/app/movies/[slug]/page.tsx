@@ -14,25 +14,24 @@ import {
 } from '@mantine/core';
 import { fSlug, parseIdFromSlug } from '@/utils/slugify.helper';
 import { BackButton } from '@/features/app/BackButton';
-import classes from '@/features/film/components/movies/MovieDetail.module.css';
+import classes from './page.module.css';
 import { fMinutes, getTmdbImage, ImageSize } from '@/features/film/film.helper';
 import React from 'react';
 import { checkStreamAvailability, fetchMovieById } from '@/features/film/actions/movie.action';
-import {
-  CreditWrapper,
-  MediaWrapper,
-  RecommendationWrapper,
-  ReviewWrapper,
-} from '@/features/film/components/movies/MovieWrapper';
-import { KeywordBadge } from '@/features/film/components/movies/KeywordBadge';
-import { FILM_TYPE } from '@/features/film/types/film.type';
 import { StreamAlert, StreamMovie } from '@/features/film/components/movies/MovieStream';
 import { Metadata } from 'next';
 import { fUSD } from '@/utils/formatter.helper';
 import Link from 'next/link';
 import { IconExternalLink } from '@tabler/icons-react';
-import { FavoriteAction } from '@/features/film/components/movies/FavoriteAction';
 import { ItemType } from '@prisma/client';
+import {
+  fetchFilmCredits,
+  fetchFilmImages,
+  fetchFilmVideos,
+  fetchRecommendations,
+  fetchReviews,
+} from '@/features/film/actions/film.action';
+import { Credit, FavoriteAction, KeywordBadge, Media, Recommendation, Review } from '@/features/film/components';
 
 export type PageProps = {
   params: {
@@ -100,10 +99,15 @@ export async function generateMetadata(
 
 export default async function Page({ params }: PageProps) {
   const movieId = parseIdFromSlug(params.slug);
-  const [movie, isStreamAvailable] = await Promise.all([
+  const [movie, recommendations, credit, reviews, videos, images, isStreamAvailable] = await Promise.all([
     fetchMovieById(movieId),
+    fetchRecommendations(ItemType.movie, movieId),
+    fetchFilmCredits(ItemType.movie, movieId),
+    fetchReviews(ItemType.movie, movieId),
+    fetchFilmVideos(ItemType.movie, movieId),
+    fetchFilmImages(ItemType.movie, movieId),
     checkStreamAvailability({
-      type: FILM_TYPE.MOVIE,
+      type: ItemType.movie,
       movieId,
     }),
   ]);
@@ -138,8 +142,10 @@ export default async function Page({ params }: PageProps) {
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
       <BackButton />
-      <Box className={classes.overlay}
-           style={{ background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(movie.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover` }}></Box>
+      <Box
+        className={classes.overlay}
+        style={{ background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(movie.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover` }}
+      ></Box>
       <Box className={classes.container}>
         <Grid p={{ base: 'md', sm: 'xl' }} gutter="xl">
           <GridCol span={{ base: 12, lg: 3 }}>
@@ -159,7 +165,7 @@ export default async function Page({ params }: PageProps) {
                     <Text size="sm">{metaData.value}</Text>
                   </Box>
                 ))}
-                <KeywordBadge movieOrTVId={movie.id} type={FILM_TYPE.MOVIE} />
+                <KeywordBadge movieOrTVId={movie.id} type={ItemType.movie} />
               </Stack>
             </Stack>
           </GridCol>
@@ -207,9 +213,9 @@ export default async function Page({ params }: PageProps) {
                 </Text>
                 <Text>{movie.overview}</Text>
               </Box>
-              <CreditWrapper movieOrTVId={movie.id} type={ItemType.movie} />
-              <MediaWrapper movieOrTVId={movie.id} type={ItemType.movie} />
-              <ReviewWrapper movieOrTVId={movie.id} type={ItemType.movie} />
+              <Credit credit={credit} />
+              <Media videos={videos} images={images} />
+              <Review reviews={reviews} />
               {Boolean(movie.belongs_to_collection) && (
                 <BackgroundImage
                   className={classes.collectionBackground}
@@ -225,7 +231,7 @@ export default async function Page({ params }: PageProps) {
                   </Box>
                 </BackgroundImage>
               )}
-              <RecommendationWrapper movieOrTVId={movie.id} type={ItemType.movie} />
+              <Recommendation recommendations={recommendations} />
             </Stack>
           </GridCol>
         </Grid>

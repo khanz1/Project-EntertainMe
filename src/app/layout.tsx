@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { ColorSchemeScript, MantineColorScheme, MantineProvider } from '@mantine/core';
 import { cookies } from 'next/headers';
 import { NavbarProvider } from '@/features/app/NavbarProvider';
+import React from 'react';
 
 const inter = Inter({ subsets: ['latin'] });
 

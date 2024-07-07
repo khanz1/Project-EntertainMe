@@ -1,4 +1,4 @@
-import classes from './MovieCard.module.css';
+import classes from './FilmCard.module.css';
 import { Box, Card, Group, Image, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
@@ -55,8 +55,14 @@ export function TVSeriesCard({ tvSeries }: TVSeriesCardProps) {
 
 export const TVSeriesCardMobile = ({ tvSeries }: TVSeriesCardProps) => {
   return (
-    <Card component={Link} href={`/tv/${fSlug(tvSeries.name, tvSeries.id)}`} w="100%" radius="md" p={0}
-          className={classes.cardMobile}>
+    <Card
+      component={Link}
+      href={`/tv/${fSlug(tvSeries.name, tvSeries.id)}`}
+      w="100%"
+      radius="md"
+      p={0}
+      className={classes.cardMobile}
+    >
       <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
         <Image
           className={classes.imageMobile}

@@ -1,16 +1,19 @@
 'use client';
 
-import { MovieCard } from '@/features/film/components/MovieCard';
-import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
-import { fetchFilmList, fetchGenreList } from '@/features/film/film.action';
+// import { MovieCard } from '@/features/film/components/MovieCard';
+// import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
+import { fetchFilmList } from '@/features/film/film.action';
 import { isMovie, isTVSeries } from '@/features/film/film.helper';
-import { ENTERTAIN_TYPE, FetchProps, Film, FILM_FILTERS, Genre, ResData } from '@/features/film/types/film.type';
+import { FetchProps, Film, FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { MOBILE_BREAKPOINT } from '@/constant';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { ItemType } from '@prisma/client';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -31,10 +34,8 @@ const filmState: ResData<Film[]> = {
 };
 
 export default function Page() {
-  // TODO: current feature is now only movies, so redirect to /movies
-  // redirect('/movies');
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const router = useRouter();
-  const [genres, setGenres] = useState<Genre[]>([]);
   const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
 
   const searchParams = useSearchParams();
@@ -42,13 +43,7 @@ export default function Page() {
   const search = searchParams.get('search') || '';
   const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   const filter = searchParams.get('filter') as FILM_FILTERS || FILM_FILTERS.POPULAR;
-  const type = searchParams.get('type') as ENTERTAIN_TYPE || 'movie';
   const [debounced] = useDebouncedValue(search, 500);
-
-
-  useEffect(() => {
-    fetchGenreList().then(setGenres);
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -77,22 +72,26 @@ export default function Page() {
     filmList.results.length === 0
       ? true
       : filmList.results.length < filmList.total_results;
-  // const { genres, filmList, hasMoreFilm, filter, setFilter, setPage } =
-  //   useFilm();
 
   return (
     <Container size="xl" my={25}>
       <Grid>
-        {/*<Grid.Col span={2}>*/}
-        {/*  <Card shadow="sm" radius="md" withBorder>*/}
-        {/*    <InputLabel>Filter by Genre</InputLabel>*/}
-        {/*    <Stack my="sm">*/}
-        {/*      {genres.map((genre) => (*/}
-        {/*        <Checkbox label={genre.name} key={genre.id} />*/}
-        {/*      ))}*/}
-        {/*    </Stack>*/}
-        {/*  </Card>*/}
+        {/*<Grid.Col span={{ base: 12, sm: 4, lg: 2 }}>*/}
+        {/*<Button.Group orientation="vertical">*/}
+        {/*  <Button variant="default" justify="start">Movies</Button>*/}
+        {/*  <Button variant="default" justify="start">TV Series</Button>*/}
+        {/*  <Button variant="default" justify="start">Manga</Button>*/}
+        {/*</Button.Group>*/}
+        {/*<Card shadow="sm" radius="md" withBorder>*/}
+        {/*  <InputLabel>Filter by Genre</InputLabel>*/}
+        {/*  <Stack my="sm">*/}
+        {/*    {genres.map((genre) => (*/}
+        {/*      <Checkbox label={genre.name} key={genre.id} />*/}
+        {/*    ))}*/}
+        {/*  </Stack>*/}
+        {/*</Card>*/}
         {/*</Grid.Col>*/}
+        {/*<Grid.Col span={{ base: 12, sm: 8, lg: 10 }}>*/}
         <Grid.Col>
           <Group justify="space-between" mb="md" mx="md">
             <Select
@@ -139,9 +138,15 @@ export default function Page() {
                   return null;
                 }
                 if (isMovie(film)) {
-                  return <MovieCard key={film.id} movie={film} />;
+                  if (isMobile) {
+                    return <FilmCardMobile film={film} type={ItemType.movie} key={film.id} />;
+                  }
+                  return <FilmCard key={film.id} film={film} type={ItemType.movie} />;
                 } else if (isTVSeries(film)) {
-                  return <TVSeriesCard key={film.id} tvSeries={film} />;
+                  if (isMobile) {
+                    return <FilmCardMobile film={film} type={ItemType.tv} key={film.id} />;
+                  }
+                  return <FilmCard key={film.id} film={film} type={ItemType.tv} />;
                 }
               })}
             </Group>
