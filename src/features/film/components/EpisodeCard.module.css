@@ -16,9 +16,14 @@
 
 .image {
     object-fit: cover;
-    height: 160px;
-    width: 210px;
+    height: 120px;
+    width: 100px;
     transition: transform 500ms ease;
+
+    @media (min-width: em(750px)) {
+        height: 160px;
+        width: 210px;
+    }
 }
 
 .image:hover {

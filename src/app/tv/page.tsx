@@ -1,15 +1,17 @@
 'use client';
 
-import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
+import { TVSeriesCard, TVSeriesCardMobile } from '@/features/film/components/TVSeriesCard';
 import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
+import { MOBILE_BREAKPOINT } from '@/constant';
+import { ScrollToTop } from '@/features/app/ScrollToTop';
 
 const filterList = [
   FILM_FILTERS.POPULAR,
@@ -36,6 +38,7 @@ type PageProps = {
 }
 
 export default function Page({ searchParams }: PageProps) {
+  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
   const router = useRouter();
   const [filmList, setFilmList] = useState<ResData<TVSeries[]>>(filmState);
 
@@ -72,29 +75,6 @@ export default function Page({ searchParams }: PageProps) {
     })();
   }, [page, filter, search]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const options: Partial<FetchProps> = {
-  //       page,
-  //       filter,
-  //     };
-  //
-  //     if (debounced) {
-  //       options.search = debounced;
-  //     }
-  //     const data = await fetchTVSeries(options as FetchProps);
-  //
-  //     if (page === 1) {
-  //       setFilmList(data);
-  //     } else {
-  //       setFilmList((prev) => ({
-  //         ...prev,
-  //         results: [...prev.results, ...data.results],
-  //       }));
-  //     }
-  //   })();
-  // }, [page, filter, debounced]);
-
   const hasMoreFilm =
     filmList.results.length === 0
       ? true
@@ -102,9 +82,10 @@ export default function Page({ searchParams }: PageProps) {
 
   return (
     <Container size="xl" my={25}>
+      <ScrollToTop />
       <Grid>
         <Grid.Col>
-          <Group justify="space-between" mb="md" mx="md">
+          <Group justify="space-between" mb="md" mx={{ base: 0, sm: 'md' }}>
             <Select
               placeholder="Pick value"
               data={filterList}
@@ -120,8 +101,8 @@ export default function Page({ searchParams }: PageProps) {
               }}
             />
             <Text>
-              Showing {fThousandsNumber(filmList.results.length)} from{' '}
-              {fThousandsNumber(filmList.total_results)} film
+              {fThousandsNumber(filmList.results.length)} from{' '}
+              {fThousandsNumber(filmList.total_results)}
             </Text>
           </Group>
           <InfiniteScroll
@@ -145,10 +126,11 @@ export default function Page({ searchParams }: PageProps) {
               align="center"
             >
               {filmList.results.map((film) => {
-                if (!film.vote_average) {
-                  return null;
+                if (isMobile) {
+                  return <TVSeriesCardMobile key={film.id} tvSeries={film} />;
+                } else {
+                  return <TVSeriesCard key={film.id} tvSeries={film} />;
                 }
-                return <TVSeriesCard key={film.id} tvSeries={film} />;
               })}
             </Group>
           </InfiniteScroll>

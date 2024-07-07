@@ -2,13 +2,17 @@ import { Badge, Group, Stack, Text } from '@mantine/core';
 import React from 'react';
 import { fetchKeywords } from '@/features/film/actions/film.action';
 import { FILM_TYPE } from '@/features/film/types/film.type';
-import { WrapperProps } from '@/features/film/components/movies/MovieWrapper';
 
+export type KeywordBadgeProps<T> = {
+  type: T extends FILM_TYPE.MOVIE ? FILM_TYPE.MOVIE : FILM_TYPE.TV_SERIES,
+  movieOrTVId: number
+}
 
-export const KeywordBadge = async ({ movieId }: WrapperProps) => {
-  const keywords = await fetchKeywords(FILM_TYPE.MOVIE, movieId);
+export const KeywordBadge = async <T extends FILM_TYPE>({ type, movieOrTVId }: KeywordBadgeProps<T>) => {
+  const data = await fetchKeywords(type, movieOrTVId);
+  const keywords = 'results' in data ? data.results : data.keywords;
 
-  if (!keywords.keywords.length) {
+  if (!keywords.length) {
     return null;
   }
 
@@ -16,7 +20,7 @@ export const KeywordBadge = async ({ movieId }: WrapperProps) => {
     <Stack>
       <Text fw="bold">Keyword</Text>
       <Group gap="xs">
-        {keywords.keywords.map(keyword => (
+        {keywords.map(keyword => (
           <Badge variant="light" radius="sm" key={keyword.id}>
             {keyword.name}
           </Badge>

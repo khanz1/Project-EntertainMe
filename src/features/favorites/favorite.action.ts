@@ -4,9 +4,12 @@ import { prisma } from '@/db/prisma/prisma';
 import { Favorites } from '@prisma/client';
 
 export type CreateFavoriteProps = Favorites;
+export type FavoriteProps = {
+  userId: string,
+  itemId: string
+}
 
 export const createFavorite = async (props: CreateFavoriteProps) => {
-  console.log(props);
   return await prisma.favorites.create({
     data: {
       itemId: props.itemId,
@@ -23,28 +26,28 @@ export const createFavorite = async (props: CreateFavoriteProps) => {
   });
 };
 
-export const removeFavorite = async ({ userId, movieId }: { userId: string, movieId: string }) => {
+export const removeFavorite = async ({ userId, itemId }: FavoriteProps) => {
   return await prisma.favorites.delete({
     where: {
       userId_itemId: {
         userId,
-        itemId: movieId,
+        itemId,
       },
     },
   });
 
 };
 
-export const getIsFavoriteByUser = async ({ userId, movieId }: { userId: string, movieId: string }) => {
+export const getIsFavoriteByUser = async ({ userId, itemId }: FavoriteProps) => {
   return await prisma.favorites.findFirst({
     where: {
       userId,
-      itemId: movieId,
+      itemId,
     },
   });
 };
 
-export const getFavoritesByUser = async ({ userId }: { userId: string }): Promise<Favorites[]> => {
+export const getFavoritesByUser = async ({ userId }: Pick<FavoriteProps, 'userId'>): Promise<Favorites[]> => {
   return await prisma.favorites.findMany({
     where: {
       userId,

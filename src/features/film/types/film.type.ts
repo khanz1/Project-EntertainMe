@@ -1,5 +1,6 @@
 import { Movie } from './movie.type';
 import { TVSeries } from './series.type';
+import { ItemType } from '@prisma/client';
 
 export interface Genre {
   id: number;
@@ -56,6 +57,8 @@ export enum FILM_TYPE {
   MOVIE = 'movie',
   TV_SERIES = 'tv',
 }
+
+export type FilmType = typeof ItemType.movie | typeof ItemType.tv;
 
 export enum FILM_FILTERS {
   NONE = '',

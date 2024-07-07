@@ -17,7 +17,6 @@ import { BackButton } from '@/features/app/BackButton';
 import classes from '@/features/film/components/movies/MovieDetail.module.css';
 import { fMinutes, getTmdbImage, ImageSize } from '@/features/film/film.helper';
 import React from 'react';
-import { FavoriteAction } from '@/features/film/components/movies/MovieDetail';
 import { checkStreamAvailability, fetchMovieById } from '@/features/film/actions/movie.action';
 import {
   CreditWrapper,
@@ -32,6 +31,8 @@ import { Metadata } from 'next';
 import { fUSD } from '@/utils/formatter.helper';
 import Link from 'next/link';
 import { IconExternalLink } from '@tabler/icons-react';
+import { FavoriteAction } from '@/features/film/components/movies/FavoriteAction';
+import { ItemType } from '@prisma/client';
 
 export type PageProps = {
   params: {
@@ -158,7 +159,7 @@ export default async function Page({ params }: PageProps) {
                     <Text size="sm">{metaData.value}</Text>
                   </Box>
                 ))}
-                <KeywordBadge movieId={movie.id} />
+                <KeywordBadge movieOrTVId={movie.id} type={FILM_TYPE.MOVIE} />
               </Stack>
             </Stack>
           </GridCol>
@@ -197,7 +198,7 @@ export default async function Page({ params }: PageProps) {
                 </Group>
               </Box>
               <Group gap="xs">
-                <FavoriteAction movie={movie} />
+                <FavoriteAction item={movie} type={ItemType.movie} />
                 <StreamMovie isStreamAvailable={isStreamAvailable} movie={movie} />
               </Group>
               <Box>
@@ -206,9 +207,9 @@ export default async function Page({ params }: PageProps) {
                 </Text>
                 <Text>{movie.overview}</Text>
               </Box>
-              <CreditWrapper movieId={movie.id} />
-              <MediaWrapper movieId={movie.id} />
-              <ReviewWrapper movieId={movieId} />
+              <CreditWrapper movieOrTVId={movie.id} type={ItemType.movie} />
+              <MediaWrapper movieOrTVId={movie.id} type={ItemType.movie} />
+              <ReviewWrapper movieOrTVId={movie.id} type={ItemType.movie} />
               {Boolean(movie.belongs_to_collection) && (
                 <BackgroundImage
                   className={classes.collectionBackground}
@@ -224,7 +225,7 @@ export default async function Page({ params }: PageProps) {
                   </Box>
                 </BackgroundImage>
               )}
-              <RecommendationWrapper movieId={movie.id} />
+              <RecommendationWrapper movieOrTVId={movie.id} type={ItemType.movie} />
             </Stack>
           </GridCol>
         </Grid>

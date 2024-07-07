@@ -1,5 +1,5 @@
 import classes from './MovieCard.module.css';
-import { Box, Card, Group, Text } from '@mantine/core';
+import { Box, Card, Group, Image, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
 import { TVSeries } from '../types/series.type';
@@ -51,3 +51,30 @@ export function TVSeriesCard({ tvSeries }: TVSeriesCardProps) {
     </Link>
   );
 }
+
+
+export const TVSeriesCardMobile = ({ tvSeries }: TVSeriesCardProps) => {
+  return (
+    <Card component={Link} href={`/tv/${fSlug(tvSeries.name, tvSeries.id)}`} w="100%" radius="md" p={0}
+          className={classes.cardMobile}>
+      <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
+        <Image
+          className={classes.imageMobile}
+          src={getTmdbImage(tvSeries.poster_path)}
+          alt={tvSeries.name}
+        />
+        <Box px="md" pt="sm" w="100%">
+          <Group justify="space-between" wrap="nowrap">
+            <Text className={classes.titleMobile} tt="uppercase" lineClamp={1} fw={700}>
+              {tvSeries.name}
+            </Text>
+            <Text>{tvSeries.vote_average.toFixed(2)}</Text>
+          </Group>
+          <Text mt="xs" mb="md" lineClamp={3}>
+            {tvSeries.overview}
+          </Text>
+        </Box>
+      </Group>
+    </Card>
+  );
+};

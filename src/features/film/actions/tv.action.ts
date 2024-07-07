@@ -4,7 +4,7 @@ import { FetchProps, FILM_FILTERS, ResData, type ResFailed } from '@/features/fi
 import { cookies } from 'next/headers';
 import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { kv } from '@vercel/kv';
-import { TVSeries } from '../types/series.type';
+import { TVSeries, TVSeriesDetail } from '../types/series.type';
 
 export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
   // There is a bug when fetch next page in same page are not triggering the kv cache
@@ -49,4 +49,27 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
   }
   await kv.set(KV_KEY, tvSeries);
   return tvSeries;
+};
+
+
+export const fetchTVSeriesById = async (id: number): Promise<TVSeriesDetail> => {
+  const _ = cookies();
+
+  const url = new URL(`${TMDB_HOST}/3/tv/${id}`);
+  const KV_KEY = `tv:detail:${id}`;
+
+  const cache = await kv.get(KV_KEY);
+  if (cache) {
+    return cache as TVSeriesDetail;
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+    },
+  });
+
+  const data = await response.json();
+  await kv.set(KV_KEY, data);
+  return data;
 };

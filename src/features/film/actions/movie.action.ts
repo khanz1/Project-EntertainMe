@@ -4,6 +4,7 @@ import {
   FetchProps,
   FILM_FILTERS,
   FILM_TYPE,
+  FilmType,
   ResData,
   type ResFailed,
   Review,
@@ -86,8 +87,8 @@ export const fetchMovieById = async (id: number): Promise<MovieDetail> => {
 };
 
 export const fetchReviews = async (
+  filmType: FilmType,
   movieOrTVId: number,
-  filmType: FILM_TYPE,
 ): Promise<ResData<Review[]>> => {
   const _ = cookies();
 
@@ -147,7 +148,7 @@ export const checkStreamAvailability = async (props: StreamAvailabilityProps): P
 };
 
 
-export const fetchFilmVideos = async (type: FILM_TYPE, movieOrTVId: number): Promise<VideoResponse> => {
+export const fetchFilmVideos = async (type: FilmType, movieOrTVId: number): Promise<VideoResponse> => {
   cookies();
   const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/videos`);
   const KV_KEY = `film:videos:${type}:${movieOrTVId}`;
@@ -169,7 +170,7 @@ export const fetchFilmVideos = async (type: FILM_TYPE, movieOrTVId: number): Pro
   return data;
 };
 
-export const fetchFilmImages = async (type: FILM_TYPE, movieOrTVId: number): Promise<ImageCollection> => {
+export const fetchFilmImages = async (type: FilmType, movieOrTVId: number): Promise<ImageCollection> => {
   const _ = cookies();
   const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/images`);
   const KV_KEY = `film:images:${type}:${movieOrTVId}`;

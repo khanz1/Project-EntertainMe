@@ -1,9 +1,4 @@
-import {
-  Genre,
-  ProductionCompany,
-  ProductionCountry,
-  SpokenLanguage,
-} from "./film.type";
+import { Genre, ProductionCompany, ProductionCountry, SpokenLanguage } from './film.type';
 
 interface BaseSeries {
   adult: boolean;
@@ -52,7 +47,7 @@ interface Network {
   origin_country: string;
 }
 
-interface Season {
+export interface Season {
   air_date: string;
   episode_count: number;
   id: number;

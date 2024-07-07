@@ -80,10 +80,10 @@ model Authenticator {
 }
 
 enum ItemType {
-  Movie
-  TVSeries
-  Manga
-  Anime
+  movie
+  tv
+  manga
+  anime
 }
 
 model Favorites {

@@ -1,6 +1,7 @@
 import { Film, FILM_TYPE, WithType } from './types/film.type';
 import { Movie } from './types/movie.type';
 import { TVSeries } from './types/series.type';
+import { ItemType } from '@prisma/client';
 
 export enum ImageSize {
   SMALL = 'w185',
@@ -43,13 +44,13 @@ export const fMinutes = (minutes: number): string => {
 };
 
 export type MovieVidSrcProps = {
-  type: FILM_TYPE.MOVIE;
+  type: typeof ItemType.movie;
   movieId: number;
 };
 
 export type TVVidSrcProps = {
-  type: FILM_TYPE.TV_SERIES;
-  id: number;
+  type: typeof ItemType.tv;
+  tvSeriesId: number;
   season: number;
   episode: number;
 };
@@ -58,5 +59,5 @@ export const getVidSrcStreamUrl = (props: MovieVidSrcProps | TVVidSrcProps) => {
   if (props.type === FILM_TYPE.MOVIE) {
     return `https://vidsrc.to/embed/movie/${props.movieId}`;
   }
-  return `/watch/${props.id}/season/${props.season}/episode/${props.episode}`;
+  return `https://vidsrc.to/embed/tv/${props.tvSeriesId}/${props.season}/${props.episode}`;
 };

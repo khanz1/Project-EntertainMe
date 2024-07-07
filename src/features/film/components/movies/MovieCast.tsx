@@ -26,8 +26,13 @@ export const MovieCredit = ({ credit }: { credit: TMovieCredit }) => {
 
   return (
     <Box>
-      <Drawer opened={isCastOpened} onClose={cast.close} size="xl" position="right"
-              title="Cast">
+      <Drawer
+        opened={isCastOpened}
+        onClose={cast.close}
+        size="xl"
+        position="right"
+        title="Cast"
+      >
         <Tabs value={castActiveTab} onChange={(v) => setCastActiveTab(v as CAST_TAB)}>
           <Tabs.List grow>
             <Tabs.Tab value={CAST_TAB.CAST}>
@@ -72,8 +77,11 @@ export const MovieCredit = ({ credit }: { credit: TMovieCredit }) => {
             <Text size="xl" fw="bold">
               Cast ({credit.cast.length + credit.crew.length})
             </Text>
-            <Button variant="transparent" onClick={cast.open}
-                    className={classes.title} fw={500}>
+            <Button
+              variant="transparent"
+              onClick={cast.open}
+              className={classes.title} fw={500}
+            >
               View More <IconArrowRight />
             </Button>
           </Group>

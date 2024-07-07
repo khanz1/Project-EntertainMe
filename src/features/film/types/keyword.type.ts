@@ -3,7 +3,14 @@ export interface Keyword {
   name: string;
 }
 
-export interface KeywordCollection {
+export interface MovieKeywordCollection {
   id: number;
   keywords: Keyword[];
 }
+
+export interface TVKeywordCollection {
+  id: number;
+  results: Keyword[];
+}
+
+export type KeywordCollection = MovieKeywordCollection | TVKeywordCollection;

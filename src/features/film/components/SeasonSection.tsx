@@ -1,3 +1,4 @@
+'use client';
 import { Box, Group, NativeSelect } from '@mantine/core';
 import { TVSeriesDetail } from '../types/series.type';
 import { useEffect, useState } from 'react';

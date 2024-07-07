@@ -12,7 +12,7 @@ export type PageProps = {
   };
 };
 
-export default async function Page({ params }: PageProps) {
+export default async function _page({ params }: PageProps) {
   const movieId = parseIdFromSlug(params.slug);
 
   const [tvSeries, reviews] = await Promise.all([
