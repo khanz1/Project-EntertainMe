@@ -12,7 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MOBILE_BREAKPOINT } from '@/constant';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [

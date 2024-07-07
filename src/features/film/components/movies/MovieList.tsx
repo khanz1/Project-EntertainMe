@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { useMediaQuery } from '@mantine/hooks';
 import { MOBILE_BREAKPOINT } from '@/constant';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [

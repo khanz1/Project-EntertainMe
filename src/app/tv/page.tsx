@@ -11,7 +11,7 @@ import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
 import { MOBILE_BREAKPOINT } from '@/constant';
 import { ScrollToTop } from '@/features/app/ScrollToTop';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FIlmCard';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [
