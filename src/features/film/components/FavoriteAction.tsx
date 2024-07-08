@@ -7,7 +7,7 @@ import { Favorites, ItemType } from '@prisma/client';
 import { getTmdbImage } from '@/features/film/film.helper';
 import { Avatar, Tooltip } from '@mantine/core';
 import { IconHeart } from '@tabler/icons-react';
-import classes from './Detail.module.css';
+import classes from '@/features/film/styles/Detail.module.css';
 import { TVSeriesDetail } from '@/features/film/types/series.type';
 import Link from 'next/link';
 
@@ -33,6 +33,7 @@ export const FavoriteAction = ({ item, type }: FavoriteActionProps) => {
 
   useEffect(() => {
     void fetchIsFavorite();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, item]);
 
   const handleOnAddFavorite = async () => {

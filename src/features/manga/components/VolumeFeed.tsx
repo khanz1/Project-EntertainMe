@@ -46,6 +46,7 @@ export const VolumeFeed = ({ manga }: VolumeFeedProps) => {
         }));
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const volumeList = useMemo(() => {

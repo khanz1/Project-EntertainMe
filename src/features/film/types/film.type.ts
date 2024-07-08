@@ -53,10 +53,18 @@ export type ResData<T> = {
   total_results: number;
 };
 
-export enum FILM_TYPE {
-  MOVIE = 'movie',
-  TV_SERIES = 'tv',
-}
+
+export type MovieVidSrcProps = {
+  type: typeof ItemType.movie;
+  movieId: number;
+};
+
+export type TVVidSrcProps = {
+  type: typeof ItemType.tv;
+  tvSeriesId: number;
+  season: number;
+  episode: number;
+};
 
 export type FilmType = typeof ItemType.movie | typeof ItemType.tv;
 
@@ -70,19 +78,13 @@ export enum FILM_FILTERS {
   AIRING_TODAY = 'airing_today',
 }
 
-export type WithType<T> = T & { type?: FILM_TYPE };
+export type WithType<T> = T & { type?: FilmType };
 export type Film = WithType<Movie> | WithType<TVSeries>;
 export type FetchProps = {
   page: number;
   filter: FILM_FILTERS;
   search: string;
 };
-
-export enum ENTERTAIN_TYPE {
-  MOVIE = 'movie',
-  TV = 'tv',
-}
-
 
 type MovieStreamProps = {
   type: typeof ItemType.movie

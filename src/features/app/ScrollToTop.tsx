@@ -11,8 +11,6 @@ export function ScrollToTop() {
       <Transition transition="slide-up" mounted={scroll.y > 0}>
         {(transitionStyles) => (
           <ActionIcon
-            // variant="subtle"
-            // leftSection={}
             style={transitionStyles}
             onClick={() => scrollTo({ y: 0 })}
           >

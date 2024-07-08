@@ -1,6 +1,6 @@
 'use client';
 import { Box, Button, Drawer, Group, ScrollArea, Stack, Tabs, Text } from '@mantine/core';
-import classes from './Detail.module.css';
+import classes from '@/features/film/styles/Detail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 import React, { useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';

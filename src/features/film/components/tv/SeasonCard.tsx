@@ -1,5 +1,5 @@
 import { Box, Card, Group, Image, Text } from '@mantine/core';
-import classes from './SeasonCard.module.css';
+import classes from '../../styles/SeasonCard.module.css';
 import { getTmdbImage } from '@/features/film/film.helper';
 import { Season } from '@/features/film/types/series.type';
 

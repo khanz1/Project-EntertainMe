@@ -13,3 +13,10 @@ export enum APP {
 export enum ENV {
   MANGADEX_API_URL = 'https://api.mangadex.org',
 }
+
+export enum ImageSize {
+  SMALL = 'w185',
+  MEDIUM = 'w342',
+  LARGE = 'w500',
+  ORIGINAL = 'original',
+}

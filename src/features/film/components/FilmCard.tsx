@@ -1,4 +1,4 @@
-import classes from './FilmCard.module.css';
+import classes from '@/features/film/styles/FilmCard.module.css';
 import { Box, Card, Group, Image, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
@@ -15,6 +15,7 @@ export type MediaCardProps = {
   type: typeof ItemType.tv
 };
 
+// TODO: merge FilmCard and FilmCardMobile into one component
 export function FilmCard({ film, type }: MediaCardProps) {
   const title = type === ItemType.movie ? film.title : film.name;
   const link = type === ItemType.movie ? `/movies/${fSlug(title, film.id)}` : `/tv/${fSlug(title, film.id)}`;

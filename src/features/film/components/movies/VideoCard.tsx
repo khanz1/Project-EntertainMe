@@ -1,5 +1,5 @@
 import { Box, Card, Group, Image, Modal, Stack, Text } from '@mantine/core';
-import classes from './VideoCard.module.css';
+import classes from '../../styles/VideoCard.module.css';
 import { Video } from '@/features/film/types/video.type';
 import React from 'react';
 import { fDateTimeGB } from '@/utils/formatter.helper';

@@ -53,7 +53,7 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 
 
 export const fetchTVSeriesById = async (id: number): Promise<TVSeriesDetail> => {
-  const _ = cookies();
+  cookies();
 
   const url = new URL(`${TMDB_HOST}/3/tv/${id}`);
   const KV_KEY = `tv:detail:${id}`;

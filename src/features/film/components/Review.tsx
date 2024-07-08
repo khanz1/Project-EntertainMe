@@ -5,7 +5,7 @@ import { Comment } from '@/features/film/components/Comment';
 import type { ResData, Review as TReview } from '@/features/film/types/film.type';
 import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
-import classes from './Detail.module.css';
+import classes from '@/features/film/styles/Detail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 
 export type ReviewProps = {

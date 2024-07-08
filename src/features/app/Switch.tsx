@@ -1,13 +1,13 @@
 import { Switch } from '@mantine/core';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
-import { ENTERTAIN_TYPE } from '../film/types/film.type';
 import { fCapitalizeSpace } from '@/utils/formatter.helper';
+import { ItemType } from '@prisma/client';
 
 export function SwitchSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageType = (searchParams.get('type') || ENTERTAIN_TYPE.MOVIE) as ENTERTAIN_TYPE;
+  const pageType = (searchParams.get('type') || ItemType.movie) as ItemType;
 
   useEffect(() => {
     if (!searchParams.get('type')) {
@@ -19,11 +19,11 @@ export function SwitchSearch() {
 
   return (
     <Switch
-      checked={pageType === ENTERTAIN_TYPE.MOVIE}
+      checked={pageType === ItemType.movie}
       onChange={(e) => {
         const type = e.currentTarget.checked
-          ? ENTERTAIN_TYPE.MOVIE
-          : ENTERTAIN_TYPE.TV;
+          ? ItemType.movie
+          : ItemType.tv;
 
         const url = new URL(window.location.href);
         url.searchParams.set('type', type);
@@ -32,8 +32,8 @@ export function SwitchSearch() {
       }}
       size="xl"
       color="dark.4"
-      onLabel={fCapitalizeSpace(ENTERTAIN_TYPE.MOVIE)}
-      offLabel={fCapitalizeSpace(ENTERTAIN_TYPE.TV)}
+      onLabel={fCapitalizeSpace(ItemType.movie)}
+      offLabel={fCapitalizeSpace(ItemType.tv)}
     />
   );
 }

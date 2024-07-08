@@ -1,14 +1,8 @@
-import { Film, FILM_TYPE, WithType } from './types/film.type';
+import { Film, MovieVidSrcProps, TVVidSrcProps, WithType } from './types/film.type';
 import { Movie } from './types/movie.type';
 import { TVSeries } from './types/series.type';
 import { ItemType } from '@prisma/client';
-
-export enum ImageSize {
-  SMALL = 'w185',
-  MEDIUM = 'w342',
-  LARGE = 'w500',
-  ORIGINAL = 'original',
-}
+import { ImageSize } from '@/constant';
 
 export const getTmdbImage = (
   filePath: string,
@@ -27,11 +21,11 @@ export const getTmdbImage = (
 
 // Type guard functions
 export const isMovie = (film: Film): film is WithType<Movie> => {
-  return film.type === FILM_TYPE.MOVIE;
+  return film.type === ItemType.movie;
 };
 
 export const isTVSeries = (film: Film): film is WithType<TVSeries> => {
-  return film.type === FILM_TYPE.TV_SERIES;
+  return film.type === ItemType.tv;
 };
 
 export const fMinutes = (minutes: number): string => {
@@ -43,20 +37,8 @@ export const fMinutes = (minutes: number): string => {
   return hoursString + separator + minutesString;
 };
 
-export type MovieVidSrcProps = {
-  type: typeof ItemType.movie;
-  movieId: number;
-};
-
-export type TVVidSrcProps = {
-  type: typeof ItemType.tv;
-  tvSeriesId: number;
-  season: number;
-  episode: number;
-};
-
 export const getVidSrcStreamUrl = (props: MovieVidSrcProps | TVVidSrcProps) => {
-  if (props.type === FILM_TYPE.MOVIE) {
+  if (props.type === ItemType.movie) {
     return `https://vidsrc.to/embed/movie/${props.movieId}`;
   }
   return `https://vidsrc.to/embed/tv/${props.tvSeriesId}/${props.season}/${props.episode}`;

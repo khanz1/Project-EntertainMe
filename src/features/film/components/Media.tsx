@@ -1,13 +1,14 @@
 'use client';
 import { Box, Button, Drawer, Grid, Group, Image, ScrollArea, Select, Stack, Tabs, Text } from '@mantine/core';
 import { VideoCard } from '@/features/film/components/movies/VideoCard';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
-import classes from './Detail.module.css';
+import { getTmdbImage } from '@/features/film/film.helper';
+import classes from '@/features/film/styles/Detail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 import React, { useMemo, useState } from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { VideoResponse } from '@/features/film/types/video.type';
 import { ImageCollection } from '@/features/film/types/image.type';
+import { ImageSize } from '@/constant';
 
 export type MediaProps = {
   videos: VideoResponse;

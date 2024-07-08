@@ -15,7 +15,7 @@ import {
 import { fSlug, parseIdFromSlug } from '@/utils/slugify.helper';
 import { BackButton } from '@/features/app/BackButton';
 import classes from './page.module.css';
-import { fMinutes, getTmdbImage, ImageSize } from '@/features/film/film.helper';
+import { fMinutes, getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
 import { checkStreamAvailability, fetchMovieById } from '@/features/film/actions/movie.action';
 import { StreamAlert, StreamMovie } from '@/features/film/components/movies/MovieStream';
@@ -32,6 +32,7 @@ import {
   fetchReviews,
 } from '@/features/film/actions/film.action';
 import { Credit, FavoriteAction, KeywordBadge, Media, Recommendation, Review } from '@/features/film/components';
+import { ImageSize } from '@/constant';
 
 export type PageProps = {
   params: {

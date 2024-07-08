@@ -1,7 +1,7 @@
 import { Box, Card, Group, Image, Modal, Text } from '@mantine/core';
 import { getTmdbImage, getVidSrcStreamUrl } from '../film.helper';
 import { Episode } from '../types/movie.type';
-import classes from './EpisodeCard.module.css';
+import classes from '@/features/film/styles/EpisodeCard.module.css';
 import React from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { ItemType } from '@prisma/client';

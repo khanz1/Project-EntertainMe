@@ -1,7 +1,7 @@
-import classes from './Detail.module.css';
+import classes from '@/features/film/styles/Detail.module.css';
 import { Box, Card, Text } from '@mantine/core';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
-import { APP } from '@/constant';
+import { getTmdbImage } from '@/features/film/film.helper';
+import { APP, ImageSize } from '@/constant';
 import { MovieRecommendation, TVRecommendation } from '@/features/film/types/recommendation.type';
 import Link from 'next/link';
 import { fSlug } from '@/utils/slugify.helper';

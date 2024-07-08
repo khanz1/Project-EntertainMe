@@ -1,10 +1,11 @@
 import { fetchCollectionById } from '@/features/film/actions/collection.action';
 import { parseIdFromSlug } from '@/utils/slugify.helper';
 import { BackgroundImage } from '@mantine/core';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
+import { getTmdbImage } from '@/features/film/film.helper';
 import classes from './page.module.css';
 import { CollectionDetail } from '@/features/film/components/collection/CollectionDetail';
 import { BackButton } from '@/features/app/BackButton';
+import { ImageSize } from '@/constant';
 
 export default async function Page({ params }: { params: { slug: string } }) {
   const collectionId = parseIdFromSlug(params.slug);

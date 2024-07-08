@@ -1,11 +1,12 @@
 'use client';
 import { Box, Grid, Group, Image, Stack, Text, Title } from '@mantine/core';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
-import { MovieCard, MovieCardMobile } from '@/features/film/components/MovieCard';
+import { getTmdbImage } from '@/features/film/film.helper';
 import { Collection } from '@/features/film/types/collection.type';
-import classes from './CollectionDetail.module.css';
+import classes from '@/features/film/styles/CollectionDetail.module.css';
 import { useMediaQuery } from '@mantine/hooks';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { ImageSize, MOBILE_BREAKPOINT } from '@/constant';
+import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
+import { ItemType } from '@prisma/client';
 
 export const CollectionDetail = ({ collection }: { collection: Collection }) => {
   const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
@@ -26,9 +27,9 @@ export const CollectionDetail = ({ collection }: { collection: Collection }) => 
             <Group gap="xs">
               {collection.parts.map(part => {
                 if (isMobile) {
-                  return <MovieCardMobile movie={part} key={part.id} />;
+                  return <FilmCardMobile film={part} type={ItemType.movie} key={part.id} />;
                 } else {
-                  return <MovieCard movie={part} key={part.id} />;
+                  return <FilmCard film={part} type={ItemType.movie} key={part.id} />;
                 }
               })}
             </Group>

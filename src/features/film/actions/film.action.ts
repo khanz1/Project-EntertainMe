@@ -80,7 +80,7 @@ export const fetchReviews = async (
   filmType: FilmType,
   movieOrTVId: number,
 ): Promise<ResData<Review[]>> => {
-  const _ = cookies();
+  cookies();
 
   const url = new URL(`${TMDB_HOST}/3/${filmType}/${movieOrTVId}/reviews`);
   const KV_KEY = `movie:reviews:${filmType}:${movieOrTVId}`;
@@ -126,7 +126,7 @@ export const fetchFilmVideos = async (type: FilmType, movieOrTVId: number): Prom
 
 
 export const fetchFilmImages = async (type: FilmType, movieOrTVId: number): Promise<ImageCollection> => {
-  const _ = cookies();
+  cookies();
   const url = new URL(`${TMDB_HOST}/3/${type}/${movieOrTVId}/images`);
   const KV_KEY = `film:images:${type}:${movieOrTVId}`;
 

@@ -74,6 +74,7 @@ export default function Page({ searchParams }: PageProps) {
         }));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, filter, debounced]);
 
   const hasMoreFilm =

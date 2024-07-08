@@ -7,7 +7,10 @@ export default function Page() {
   return (
     <Container className={classes.root}>
       <SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
-        <Image src={image.src} className={classes.mobileImage} />
+        <Image
+          src={image.src} className={classes.mobileImage}
+          alt="404 with women on the 0 searching"
+        />
         <div>
           <Title className={classes.title}>Something is not right...</Title>
           <Text c="dimmed" size="lg">
@@ -20,7 +23,10 @@ export default function Page() {
             </Button>
           </Link>
         </div>
-        <Image src={image.src} className={classes.desktopImage} />
+        <Image
+          src={image.src} className={classes.desktopImage}
+          alt="404 with women on the 0 searching"
+        />
       </SimpleGrid>
     </Container>
   );

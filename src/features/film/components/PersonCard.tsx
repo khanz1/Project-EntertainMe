@@ -1,8 +1,8 @@
-import classes from './PersonCard.module.css';
+import classes from '@/features/film/styles/PersonCard.module.css';
 import { Box, Card, Group, Text } from '@mantine/core';
 import { Cast, Crew } from '@/features/film/types/credits.type';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
-import { APP } from '@/constant';
+import { getTmdbImage } from '@/features/film/film.helper';
+import { APP, ImageSize } from '@/constant';
 
 export type MoviePersonCardProps = {
   person: Cast | Crew;

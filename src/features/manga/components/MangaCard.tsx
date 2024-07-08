@@ -37,6 +37,7 @@ export function MangaCard({ manga }: MovieCardProps) {
     if (coverId) {
       fetchMangaCover(coverId).then(setCover);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <Link style={{ textDecoration: 'none' }}

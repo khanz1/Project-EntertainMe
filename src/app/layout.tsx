@@ -11,13 +11,6 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Entertain Me',
   description: 'Entertain Me is your ultimate destination for a diverse range of entertainment options designed to keep you engaged and relaxed. Whether you’re in the mood for movies, TV series, manga, music, or calming ambient sounds, Entertain Me has got you covered.\n',
-  icons: [
-    {
-      url: '/images/FantasyCatLogo.png',
-      rel: 'icon',
-      type: 'image/x-icon',
-    },
-  ],
 };
 
 export type LayoutProps = {

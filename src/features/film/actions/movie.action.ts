@@ -13,7 +13,6 @@ import { kv } from '@vercel/kv';
 import { cookies } from 'next/headers';
 import { ItemType } from '@prisma/client';
 
-
 export const fetchMovies = async (props?: Partial<FetchProps>) => {
   // There is a bug when fetch next page in same page are not triggering the kv cache
   // after read https://github.com/vercel/next.js/discussions/50045#discussioncomment-7218266
@@ -62,7 +61,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
 };
 
 export const fetchMovieById = async (id: number): Promise<MovieDetail> => {
-  const _ = cookies();
+  cookies();
 
   const url = new URL(`${TMDB_HOST}/3/movie/${id}`);
   const KV_KEY = `movie:detail:${id}`;

@@ -2,7 +2,7 @@ import { Badge, Box, Grid, GridCol, Group, Image, rem, Stack, Text, Title } from
 import { parseIdFromSlug } from '@/utils/slugify.helper';
 import { BackButton } from '@/features/app/BackButton';
 import classes from './page.module.css';
-import { getTmdbImage, ImageSize } from '@/features/film/film.helper';
+import { getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -18,6 +18,7 @@ import {
   fetchReviews,
 } from '@/features/film/actions/film.action';
 import { Credit, FavoriteAction, KeywordBadge, Media, Recommendation, Review } from '@/features/film/components';
+import { ImageSize } from '@/constant';
 
 export type PageProps = {
   params: {

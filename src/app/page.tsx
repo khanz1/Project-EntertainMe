@@ -1,7 +1,5 @@
 'use client';
 
-// import { MovieCard } from '@/features/film/components/MovieCard';
-// import { TVSeriesCard } from '@/features/film/components/TVSeriesCard';
 import { fetchFilmList } from '@/features/film/film.action';
 import { isMovie, isTVSeries } from '@/features/film/film.helper';
 import { FetchProps, Film, FILM_FILTERS, ResData } from '@/features/film/types/film.type';

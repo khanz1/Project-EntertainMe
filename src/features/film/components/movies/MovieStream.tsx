@@ -5,19 +5,19 @@ import { IconCheck, IconCross, IconPlayerPlay } from '@tabler/icons-react';
 import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { getVidSrcStreamUrl } from '@/features/film/film.helper';
-import { FILM_TYPE } from '@/features/film/types/film.type';
 import { MovieDetail } from '@/features/film/types/movie.type';
+import { ItemType } from '@prisma/client';
 
 export type StreamAlertProps = {
   isStreamAvailable: boolean;
 }
 
 export const StreamAlert = ({ isStreamAvailable }: StreamAlertProps) => {
-  const [isAlertOpened, alert] = useDisclosure(true);
+  const [isAlertOpen, alert] = useDisclosure(true);
 
-  if (!isStreamAvailable) {
-    return null;
-  }
+  // if (!isStreamAvailable) {
+  //   return null;
+  // }
 
   return (
     <Alert
@@ -31,7 +31,7 @@ export const StreamAlert = ({ isStreamAvailable }: StreamAlertProps) => {
           : 'Stream Not Available'
       }
       icon={isStreamAvailable ? <IconCheck /> : <IconCross />}
-      onClose={isAlertOpened ? alert.close : alert.open}
+      onClose={isAlertOpen ? alert.close : alert.open}
     ></Alert>
   );
 };
@@ -61,7 +61,7 @@ export const StreamMovie = ({ isStreamAvailable, movie }: StreamMovieProps) => {
         <Box
           component="iframe"
           src={getVidSrcStreamUrl({
-            type: FILM_TYPE.MOVIE,
+            type: ItemType.movie,
             movieId: movie.id,
           })}
           allowFullScreen={true}

@@ -1,10 +1,10 @@
 'use client';
 import { Box, Group, NativeSelect } from '@mantine/core';
-import { TVSeriesDetail } from '../types/series.type';
+import { TVSeriesDetail } from '../../types/series.type';
 import { useEffect, useState } from 'react';
-import { fetchSeasonByTvId } from '../film.action';
-import { Season } from '../types/movie.type';
-import { EpisodeCard } from './EpisodeCard';
+import { fetchSeasonByTvId } from '../../film.action';
+import { Season } from '../../types/movie.type';
+import { EpisodeCard } from '../EpisodeCard';
 import Link from 'next/link';
 
 export type SeasonSectionProps = {
