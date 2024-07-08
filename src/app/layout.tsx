@@ -21,8 +21,6 @@ export const metadata: Metadata = {
       url: APP.LOGO_IMAGE_UHD,
       secureUrl: APP.LOGO_IMAGE_UHD,
       alt: APP.NAME,
-      width: 512,
-      height: 512,
     }],
   },
   openGraph: {
@@ -36,8 +34,6 @@ export const metadata: Metadata = {
         url: APP.LOGO_IMAGE_UHD,
         secureUrl: APP.LOGO_IMAGE_UHD,
         alt: APP.NAME,
-        width: 512,
-        height: 512,
       },
     ],
   },
