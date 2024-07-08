@@ -182,8 +182,16 @@ export type GetMangaCoverParams = {
   fileName: string;
 }
 
+export enum ContentRating {
+  SAFE = 'safe',
+  SUGGESTIVE = 'suggestive',
+  EROTICA = 'erotica',
+  PORNOGRAPHIC = 'pornographic',
+}
+
 export type FetchMangaOptions = {
   pageSize: number,
   page: number,
-  searchTerm: string
+  searchTerm: string,
+  contentRatingList: ContentRating[],
 }

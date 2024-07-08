@@ -9,7 +9,7 @@ import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { APP } from '@/constant';
 import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
@@ -32,7 +32,7 @@ const filmState: ResData<Film[]> = {
 };
 
 export default function Page() {
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
   const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
 

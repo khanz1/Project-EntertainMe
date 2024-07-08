@@ -1,10 +1,10 @@
 'use server';
 
-import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { FetchProps, Film, FILM_FILTERS, ResData, ResFailed, WithType } from './types/film.type';
 import { Movie, Season } from './types/movie.type';
 import { TVSeries } from './types/series.type';
 import { ItemType } from '@prisma/client';
+import { APP } from '@/constant';
 
 export type FetchFilmList = (
   props: Partial<FetchProps>,
@@ -32,9 +32,9 @@ export const fetchFilmList: FetchFilmList = async (props) => {
 };
 
 export const fetchMovies = async (props?: Partial<FetchProps>) => {
-  let url = new URL(`${TMDB_HOST}/3/movie/${props?.filter}`);
+  let url = new URL(`${APP.TMDB_HOST}/3/movie/${props?.filter}`);
   if (props?.search) {
-    url = new URL(`${TMDB_HOST}/3/search/movie`);
+    url = new URL(`${APP.TMDB_HOST}/3/search/movie`);
     url.searchParams.append('query', props.search);
   }
 
@@ -44,7 +44,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 
@@ -70,10 +70,10 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
 
 
 export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
-  let url = new URL(`${TMDB_HOST}/3/tv/${props?.filter}`);
+  let url = new URL(`${APP.TMDB_HOST}/3/tv/${props?.filter}`);
 
   if (props?.search) {
-    url = new URL(`${TMDB_HOST}/3/search/tv`);
+    url = new URL(`${APP.TMDB_HOST}/3/search/tv`);
     url.searchParams.append('query', props.search);
   }
 
@@ -83,7 +83,7 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 
@@ -112,11 +112,11 @@ export const fetchSeasonByTvId = async (
   tvId: number,
   seasonNumber: number,
 ): Promise<Season> => {
-  const url = new URL(`${TMDB_HOST}/3/tv/${tvId}/season/${seasonNumber}`);
+  const url = new URL(`${APP.TMDB_HOST}/3/tv/${tvId}/season/${seasonNumber}`);
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 

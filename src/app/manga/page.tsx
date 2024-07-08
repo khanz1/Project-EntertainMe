@@ -1,10 +1,10 @@
 'use client';
 
 import { fThousandsNumber } from '@/utils/formatter.helper';
-import { Box, Center, Container, Grid, Group, Loader, Text } from '@mantine/core';
+import { Card, Center, Container, Grid, Group, InputLabel, Loader, MultiSelect, Stack, Text } from '@mantine/core';
 import { fetchManga } from '@/features/manga/manga.action';
 import { useEffect, useState } from 'react';
-import { MangaCollection } from '@/features/manga/manga.type';
+import { ContentRating, MangaCollection } from '@/features/manga/manga.type';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MangaCard } from '@/features/manga/components/MangaCard';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -12,12 +12,14 @@ import { useDebouncedValue } from '@mantine/hooks';
 
 const PAGE_SIZE = 20;
 
+
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   const search = searchParams.get('search') || '';
   const [debounced] = useDebouncedValue(search, 500);
+  const contentRatingList = searchParams.getAll('content-rating') as ContentRating[];
 
 
   const [data, setData] = useState<MangaCollection>({
@@ -29,7 +31,6 @@ export default function Page() {
     total: 0,
   });
 
-
   useEffect(() => {
     (async () => {
 
@@ -37,6 +38,7 @@ export default function Page() {
         page,
         pageSize: PAGE_SIZE,
         searchTerm: debounced,
+        contentRatingList,
       });
 
       if (page === 1) {
@@ -48,28 +50,40 @@ export default function Page() {
         }));
       }
     })();
-  }, [page, debounced]);
+  }, [page, debounced, contentRatingList]);
 
-  const hasMoreManga = data.total > data.data.length;
+  const hasMoreManga = data.data.length < data.total;
 
   return (
     <Container size="xl" my={25}>
       <Grid>
-        {/*<Grid.Col span={2}>*/}
-        {/*  <Card shadow="sm" radius="md" withBorder>*/}
-        {/*    <InputLabel>Filter by Genre</InputLabel>*/}
-        {/*    <Stack my="sm">*/}
-        {/*      /!* {genres.map((genre) => (*/}
-        {/*        <Checkbox label={genre.name} key={genre.id} />*/}
-        {/*      ))} *!/*/}
-        {/*    </Stack>*/}
-        {/*  </Card>*/}
-        {/*</Grid.Col>*/}
-        <Grid.Col span={12}>
+        <Grid.Col span={2}>
+          <Card shadow="sm" radius="md" withBorder>
+            <Stack>
+              <InputLabel>Search</InputLabel>
+              <MultiSelect
+                data={[ContentRating.SAFE, ContentRating.SUGGESTIVE, ContentRating.EROTICA, ContentRating.PORNOGRAPHIC]}
+                value={contentRatingList}
+                onChange={(contents) => {
+                  const url = new URL(window.location.href);
+                  url.searchParams.delete('content-rating');
+                  for (const content of contents) {
+                    url.searchParams.append('content-rating', content);
+                  }
+
+                  router.push(url.toString(), {
+                    scroll: false,
+                  });
+                }}
+              />
+            </Stack>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={10}>
           <Group justify="space-between" mb="md" mx="md">
             <Text>
-              Showing {fThousandsNumber(data.data.length)} from{' '}
-              {fThousandsNumber(data.total)} manga
+              {fThousandsNumber(data.data.length)} from{' '}
+              {fThousandsNumber(data.total)}
             </Text>
           </Group>
           <InfiniteScroll
@@ -88,19 +102,11 @@ export default function Page() {
               </Center>
             }
           >
-            <Box
-              style={{
-                display: 'flex',
-                gap: 5,
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                alignContent: 'flex-start',
-              }}
-            >
+            <Group gap="sm">
               {data.data.map(manga => (
                 <MangaCard manga={manga} key={manga.id} />
               ))}
-            </Box>
+            </Group>
           </InfiniteScroll>
         </Grid.Col>
       </Grid>

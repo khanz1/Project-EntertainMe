@@ -5,12 +5,30 @@ import { ColorSchemeScript, MantineColorScheme, MantineProvider } from '@mantine
 import { cookies } from 'next/headers';
 import { NavbarProvider } from '@/features/app/NavbarProvider';
 import React from 'react';
+import { APP } from '@/constant';
 
 const inter = Inter({ subsets: ['latin'] });
 
+
 export const metadata: Metadata = {
-  title: 'Entertain Me',
-  description: 'Entertain Me is your ultimate destination for a diverse range of entertainment options designed to keep you engaged and relaxed. Whether you’re in the mood for movies, TV series, manga, music, or calming ambient sounds, Entertain Me has got you covered.\n',
+  title: APP.NAME,
+  description: APP.DESCRIPTION,
+  openGraph: {
+    title: APP.NAME,
+    description: APP.DESCRIPTION,
+    type: 'website',
+    url: APP.WEB_URL,
+    siteName: APP.NAME,
+    images: [
+      {
+        url: APP.LOGO_IMAGE_UHD,
+        secureUrl: APP.LOGO_IMAGE_UHD,
+        alt: APP.NAME,
+        width: 512,
+        height: 512,
+      },
+    ],
+  },
 };
 
 export type LayoutProps = {

@@ -31,7 +31,7 @@ import {
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedValue, useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { APP } from '@/constant';
 import { Session } from 'next-auth';
 import { signOut } from '@/actions/user.action';
 
@@ -44,7 +44,7 @@ const links: TLink[] = [
   // { link: '/', label: 'Home' },
   { link: '/movies', label: 'Movies' },
   { link: '/tv', label: 'TV Series' },
-  // { link: '/manga', label: 'Manga' },
+  { link: '/manga', label: 'Manga' },
   // { link: '/about', label: 'About' },
 ];
 
@@ -135,8 +135,7 @@ const UserControl = ({ session }: { session: Session }) => {
 
 export const Navbar = ({ session }: { session: Session | null }) => {
   const [opened, { toggle }] = useDisclosure(false);
-  const theme = useMantineTheme();
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -144,7 +143,6 @@ export const Navbar = ({ session }: { session: Session | null }) => {
   const [search, setSearch] = useState(recentSearch || '');
   const pathname = usePathname();
   const [debounced] = useDebouncedValue(search, 500);
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
 
   useEffect(() => {
     setSearch(searchParams.get('search') || '');
@@ -173,10 +171,6 @@ export const Navbar = ({ session }: { session: Session | null }) => {
   ) {
     return null;
   }
-
-  const handleSignOut = async () => {
-    await signOut();
-  };
 
   return (
     <header className={classes.header}>

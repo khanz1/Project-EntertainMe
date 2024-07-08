@@ -7,11 +7,11 @@ import {
   type ResFailed,
   StreamAvailabilityProps,
 } from '@/features/film/types/film.type';
-import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { Movie, MovieDetail } from '@/features/film/types/movie.type';
 import { kv } from '@vercel/kv';
 import { cookies } from 'next/headers';
 import { ItemType } from '@prisma/client';
+import { APP } from '@/constant';
 
 export const fetchMovies = async (props?: Partial<FetchProps>) => {
   // There is a bug when fetch next page in same page are not triggering the kv cache
@@ -24,7 +24,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
   const filter = props?.filter || FILM_FILTERS.POPULAR;
   let KV_KEY = `movie:${filter}:${page}`;
 
-  const url = new URL(TMDB_HOST);
+  const url = new URL(APP.TMDB_HOST);
   url.pathname = `/3/movie/${filter}`;
   url.searchParams.append('page', String(page));
 
@@ -43,7 +43,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 
@@ -63,7 +63,7 @@ export const fetchMovies = async (props?: Partial<FetchProps>) => {
 export const fetchMovieById = async (id: number): Promise<MovieDetail> => {
   cookies();
 
-  const url = new URL(`${TMDB_HOST}/3/movie/${id}`);
+  const url = new URL(`${APP.TMDB_HOST}/3/movie/${id}`);
   const KV_KEY = `movie:detail:${id}`;
 
   const cache = await kv.get(KV_KEY);
@@ -73,7 +73,7 @@ export const fetchMovieById = async (id: number): Promise<MovieDetail> => {
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 

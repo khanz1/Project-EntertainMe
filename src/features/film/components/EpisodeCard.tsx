@@ -6,7 +6,7 @@ import React from 'react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { ItemType } from '@prisma/client';
 import { TVSeriesDetail } from '@/features/film/types/series.type';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { APP } from '@/constant';
 
 export type EpisodeCardProps = {
   episode: Episode;
@@ -15,7 +15,7 @@ export type EpisodeCardProps = {
 };
 
 export function EpisodeCard({ episode, seasonNumber, tvSeries }: EpisodeCardProps) {
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const [isModalOpen, modal] = useDisclosure(false);
 
   return (

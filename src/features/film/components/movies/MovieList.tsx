@@ -7,7 +7,7 @@ import { Movie } from '@/features/film/types/movie.type';
 import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { useMediaQuery } from '@mantine/hooks';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { APP } from '@/constant';
 import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
@@ -29,7 +29,7 @@ export type MovieListProps = {
 }
 
 export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProps) => {
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
 
   const fetchNextMovies = () => {

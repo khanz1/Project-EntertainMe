@@ -2,9 +2,9 @@
 
 import { FetchProps, FILM_FILTERS, ResData, type ResFailed } from '@/features/film/types/film.type';
 import { cookies } from 'next/headers';
-import { TMDB_ACCESS_TOKEN, TMDB_HOST } from '@/constant';
 import { kv } from '@vercel/kv';
 import { TVSeries, TVSeriesDetail } from '../types/series.type';
+import { APP } from '@/constant';
 
 export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
   // There is a bug when fetch next page in same page are not triggering the kv cache
@@ -17,12 +17,12 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
   const filter = props?.filter || FILM_FILTERS.POPULAR;
   let KV_KEY = `tv:${filter}:${page}`;
 
-  let url = new URL(`${TMDB_HOST}/3/tv/${props?.filter}`);
+  let url = new URL(`${APP.TMDB_HOST}/3/tv/${props?.filter}`);
   url.searchParams.append('page', String(page));
 
   if (props?.search) {
     KV_KEY = `tv:${search}:${page}`;
-    url = new URL(`${TMDB_HOST}/3/search/tv`);
+    url = new URL(`${APP.TMDB_HOST}/3/search/tv`);
     url.searchParams.append('query', props.search);
   }
 
@@ -34,7 +34,7 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 
@@ -55,7 +55,7 @@ export const fetchTVSeries = async (props?: Partial<FetchProps>) => {
 export const fetchTVSeriesById = async (id: number): Promise<TVSeriesDetail> => {
   cookies();
 
-  const url = new URL(`${TMDB_HOST}/3/tv/${id}`);
+  const url = new URL(`${APP.TMDB_HOST}/3/tv/${id}`);
   const KV_KEY = `tv:detail:${id}`;
 
   const cache = await kv.get(KV_KEY);
@@ -65,7 +65,7 @@ export const fetchTVSeriesById = async (id: number): Promise<TVSeriesDetail> => 
 
   const response = await fetch(url, {
     headers: {
-      Authorization: `Bearer ${TMDB_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${APP.TMDB_ACCESS_TOKEN}`,
     },
   });
 

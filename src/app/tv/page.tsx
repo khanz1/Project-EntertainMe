@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
-import { MOBILE_BREAKPOINT } from '@/constant';
+import { APP } from '@/constant';
 import { ScrollToTop } from '@/features/app/ScrollToTop';
 import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
@@ -39,7 +39,7 @@ type PageProps = {
 }
 
 export default function Page({ searchParams }: PageProps) {
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
   const [filmList, setFilmList] = useState<ResData<TVSeries[]>>(filmState);
 

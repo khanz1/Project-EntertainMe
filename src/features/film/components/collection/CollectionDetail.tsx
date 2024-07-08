@@ -4,12 +4,12 @@ import { getTmdbImage } from '@/features/film/film.helper';
 import { Collection } from '@/features/film/types/collection.type';
 import classes from '@/features/film/styles/CollectionDetail.module.css';
 import { useMediaQuery } from '@mantine/hooks';
-import { ImageSize, MOBILE_BREAKPOINT } from '@/constant';
+import { APP, ImageSize } from '@/constant';
 import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 export const CollectionDetail = ({ collection }: { collection: Collection }) => {
-  const isMobile = useMediaQuery(MOBILE_BREAKPOINT);
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   return (
     <Box style={{ display: 'flex', alignItems: 'center', minHeight: '100vh' }}>
       <Grid className={classes.container}>

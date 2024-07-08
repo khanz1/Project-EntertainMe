@@ -67,15 +67,9 @@ export function MangaCard({ manga }: MovieCardProps) {
               {getMangaTitle(manga)}
             </Text>
 
-            <Group justify="space-between" gap="xs">
+            <Group gap="xs">
               <Text size="sm" className={classes.author}>
                 {manga.attributes.status}
-              </Text>
-              <Text size="xs" c="dimmed">
-                •
-              </Text>
-              <Text size="sm" className={classes.author}>
-                {manga.attributes.year}
               </Text>
             </Group>
           </div>
