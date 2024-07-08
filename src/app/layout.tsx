@@ -13,6 +13,18 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: APP.NAME,
   description: APP.DESCRIPTION,
+  twitter: {
+    card: 'summary_large_image',
+    title: APP.NAME,
+    description: APP.DESCRIPTION,
+    images: [{
+      url: APP.LOGO_IMAGE_UHD,
+      secureUrl: APP.LOGO_IMAGE_UHD,
+      alt: APP.NAME,
+      width: 512,
+      height: 512,
+    }],
+  },
   openGraph: {
     title: APP.NAME,
     description: APP.DESCRIPTION,
