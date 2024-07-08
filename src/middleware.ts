@@ -8,7 +8,6 @@ export default auth((req) => {
     req.cookies.set('theme', 'dark');
   }
 
-  console.log(req.auth, '<<<ASDMK');
   if (req.nextUrl.pathname.startsWith('/auth') && req.auth) {
     return NextResponse.redirect(new URL('/', req.url));
   }

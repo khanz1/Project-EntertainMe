@@ -3,15 +3,14 @@
 import { FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
-import { APP } from '@/constant';
 import { ScrollToTop } from '@/features/app/ScrollToTop';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
+import { FilmCard } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [
@@ -39,7 +38,6 @@ type PageProps = {
 }
 
 export default function Page({ searchParams }: PageProps) {
-  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
   const [filmList, setFilmList] = useState<ResData<TVSeries[]>>(filmState);
 
@@ -127,13 +125,9 @@ export default function Page({ searchParams }: PageProps) {
               gap="md"
               align="center"
             >
-              {filmList.results.map((film) => {
-                if (isMobile) {
-                  return <FilmCardMobile key={film.id} film={film} type={ItemType.tv} />;
-                } else {
-                  return <FilmCard key={film.id} film={film} type={ItemType.tv} />;
-                }
-              })}
+              {filmList.results.map((film) => (
+                <FilmCard key={film.id} film={film} type={ItemType.tv} />
+              ))}
             </Group>
           </InfiniteScroll>
         </Grid.Col>

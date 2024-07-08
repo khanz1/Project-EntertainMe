@@ -6,6 +6,8 @@ import { Movie } from '../types/movie.type';
 import { TVSeries } from '../types/series.type';
 import { fSlug } from '@/utils/slugify.helper';
 import { ItemType } from '@prisma/client';
+import { useMediaQuery } from '@mantine/hooks';
+import { APP } from '@/constant';
 
 export type MediaCardProps = {
   film: Movie;
@@ -17,9 +19,42 @@ export type MediaCardProps = {
 
 // TODO: merge FilmCard and FilmCardMobile into one component
 export function FilmCard({ film, type }: MediaCardProps) {
+  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const title = type === ItemType.movie ? film.title : film.name;
   const link = type === ItemType.movie ? `/movies/${fSlug(title, film.id)}` : `/tv/${fSlug(title, film.id)}`;
   const voteAverage = film.vote_average?.toFixed(2);
+
+  if (isMobile) {
+    return (
+      <Card
+        component={Link}
+        href={link}
+        w="100%"
+        radius="md"
+        p={0}
+        className={classes.cardMobile}
+      >
+        <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
+          <Image
+            className={classes.imageMobile}
+            src={getTmdbImage(film.poster_path)}
+            alt={title}
+          />
+          <Box px="md" pt="sm" w="100%">
+            <Group justify="space-between" wrap="nowrap">
+              <Text className={classes.titleMobile} tt="uppercase" lineClamp={1} fw={700}>
+                {title}
+              </Text>
+              <Text>{voteAverage}</Text>
+            </Group>
+            <Text mt="xs" mb="md" lineClamp={3}>
+              {film.overview}
+            </Text>
+          </Box>
+        </Group>
+      </Card>
+    );
+  }
 
   return (
     <Link style={{ textDecoration: 'none' }} href={link}>
@@ -61,39 +96,3 @@ export function FilmCard({ film, type }: MediaCardProps) {
     </Link>
   );
 }
-
-export const FilmCardMobile = ({ film, type }: MediaCardProps) => {
-  const title = type === ItemType.movie ? film.title : film.name;
-  const link = type === ItemType.movie ? `/movies/${fSlug(title, film.id)}` : `/tv/${fSlug(title, film.id)}`;
-  const voteAverage = film.vote_average?.toFixed(2);
-
-  return (
-    <Card
-      component={Link}
-      href={link}
-      w="100%"
-      radius="md"
-      p={0}
-      className={classes.cardMobile}
-    >
-      <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
-        <Image
-          className={classes.imageMobile}
-          src={getTmdbImage(film.poster_path)}
-          alt={title}
-        />
-        <Box px="md" pt="sm" w="100%">
-          <Group justify="space-between" wrap="nowrap">
-            <Text className={classes.titleMobile} tt="uppercase" lineClamp={1} fw={700}>
-              {title}
-            </Text>
-            <Text>{voteAverage}</Text>
-          </Group>
-          <Text mt="xs" mb="md" lineClamp={3}>
-            {film.overview}
-          </Text>
-        </Box>
-      </Group>
-    </Card>
-  );
-};

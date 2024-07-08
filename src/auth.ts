@@ -24,12 +24,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         image: user.image,
         email_verified: profile?.email_verified,
       };
-      console.log(u, '<< u');
       return true;
     },
     session: async (props) => {
-      console.log(props.session, '<< props.session');
-      props.session.user.userId = 'ANgga';
       return props.session;
     },
   },

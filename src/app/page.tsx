@@ -5,12 +5,11 @@ import { isMovie, isTVSeries } from '@/features/film/film.helper';
 import { FetchProps, Film, FILM_FILTERS, ResData } from '@/features/film/types/film.type';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
 import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { useDebouncedValue, useMediaQuery } from '@mantine/hooks';
+import { useDebouncedValue } from '@mantine/hooks';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { APP } from '@/constant';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
+import { FilmCard } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [
@@ -32,7 +31,6 @@ const filmState: ResData<Film[]> = {
 };
 
 export default function Page() {
-  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
   const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
 
@@ -91,7 +89,7 @@ export default function Page() {
         {/*</Grid.Col>*/}
         {/*<Grid.Col span={{ base: 12, sm: 8, lg: 10 }}>*/}
         <Grid.Col>
-          <Group justify="space-between" mb="md" mx="md">
+          <Group justify="space-between" mb="md" mx={{ base: 0, sm: 'md' }}>
             <Select
               placeholder="Pick value"
               data={filterList}
@@ -107,8 +105,8 @@ export default function Page() {
               }}
             />
             <Text>
-              Showing {fThousandsNumber(filmList.results.length)} from{' '}
-              {fThousandsNumber(filmList.total_results)} film
+              {fThousandsNumber(filmList.results.length)} from{' '}
+              {fThousandsNumber(filmList.total_results)}
             </Text>
           </Group>
           <InfiniteScroll
@@ -136,14 +134,8 @@ export default function Page() {
                   return null;
                 }
                 if (isMovie(film)) {
-                  if (isMobile) {
-                    return <FilmCardMobile film={film} type={ItemType.movie} key={film.id} />;
-                  }
                   return <FilmCard key={film.id} film={film} type={ItemType.movie} />;
                 } else if (isTVSeries(film)) {
-                  if (isMobile) {
-                    return <FilmCardMobile film={film} type={ItemType.tv} key={film.id} />;
-                  }
                   return <FilmCard key={film.id} film={film} type={ItemType.tv} />;
                 }
               })}

@@ -6,9 +6,7 @@ import { FILM_FILTERS, ResData, WithType } from '@/features/film/types/film.type
 import { Movie } from '@/features/film/types/movie.type';
 import { useRouter } from 'next/navigation';
 import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
-import { useMediaQuery } from '@mantine/hooks';
-import { APP } from '@/constant';
-import { FilmCard, FilmCardMobile } from '@/features/film/components/FilmCard';
+import { FilmCard } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
 const filterList = [
@@ -29,7 +27,6 @@ export type MovieListProps = {
 }
 
 export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProps) => {
-  const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
 
   const fetchNextMovies = () => {
@@ -53,7 +50,7 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
   return (
     <Grid>
       <Grid.Col>
-        <Group justify="space-between" pb="md" px={isMobile ? 0 : 'md'}>
+        <Group justify="space-between" pb="md" px={{ base: 0, sm: 'md' }}>
           <Select
             placeholder="Pick value"
             data={filterList}
@@ -80,13 +77,9 @@ export const MovieList = ({ movies, hasMoreMovies, page, filter }: MovieListProp
             gap="md"
             align="center"
           >
-            {movies.results.map((movie) => {
-              if (isMobile) {
-                return <FilmCardMobile key={movie.id} film={movie} type={ItemType.movie} />;
-              } else {
-                return <FilmCard key={movie.id} film={movie} type={ItemType.movie} />;
-              }
-            })}
+            {movies.results.map((movie) => (
+              <FilmCard key={movie.id} film={movie} type={ItemType.movie} />
+            ))}
           </Group>
         </InfiniteScroll>
       </Grid.Col>
