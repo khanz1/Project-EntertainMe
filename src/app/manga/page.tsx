@@ -1,17 +1,7 @@
 'use client';
 
 import { fThousandsNumber } from '@/utils/formatter.helper';
-import {
-  Card,
-  Center,
-  Checkbox,
-  Container,
-  Grid,
-  Group,
-  Loader,
-  Stack,
-  Text,
-} from '@mantine/core';
+import { Card, Center, Checkbox, Container, Grid, Group, Loader, Stack, Text } from '@mantine/core';
 import { fetchManga, fetchMangaTags } from '@/features/manga/manga.action';
 import { useEffect, useState } from 'react';
 import { MangaCollection } from '@/features/manga/manga.type';
@@ -35,9 +25,7 @@ const defaultMangaCollection: MangaCollection = {
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page')
-    ? parseInt(searchParams.get('page')!)
-    : 1;
+  const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   const search = searchParams.get('search') || '';
   const [debounced] = useDebouncedValue(search, 500);
   const defaultTags = searchParams.getAll('includedTags[]');
@@ -89,7 +77,7 @@ export default function Page() {
   return (
     <Container size="xl" my={25}>
       <Grid>
-        <Grid.Col span={2}>
+        <Grid.Col visibleFrom="sm" span={2}>
           <Card shadow="sm" radius="md" withBorder>
             <Stack>
               <Checkbox.Group
@@ -114,29 +102,22 @@ export default function Page() {
                     .filter(tag => tag.attributes.group === 'genre')
                     .toSorted((a, b) => {
                       if (a.attributes.name.en && b.attributes.name.en) {
-                        return a.attributes.name.en.localeCompare(
-                          b.attributes.name.en,
-                        );
+                        return a.attributes.name.en.localeCompare(b.attributes.name.en);
                       }
                       return 1;
                     })
                     .map(tag => (
-                      <Checkbox
-                        key={tag.id}
-                        value={tag.id}
-                        label={tag.attributes.name.en}
-                      />
+                      <Checkbox key={tag.id} value={tag.id} label={tag.attributes.name.en} />
                     ))}
                 </Stack>
               </Checkbox.Group>
             </Stack>
           </Card>
         </Grid.Col>
-        <Grid.Col span={10}>
+        <Grid.Col span={{ base: 12, sm: 10 }}>
           <Group justify="space-between" mb="md" mx="md">
             <Text>
-              {fThousandsNumber(data.data.length)} from{' '}
-              {fThousandsNumber(data.total)}
+              {fThousandsNumber(data.data.length)} from {fThousandsNumber(data.total)}
             </Text>
           </Group>
           <InfiniteScroll
