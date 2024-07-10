@@ -13,7 +13,7 @@ import { ImageSize } from '@/constant';
 export type MediaProps = {
   videos: VideoResponse;
   images: ImageCollection;
-}
+};
 
 export enum TAB {
   VIDEO = 'Videos',
@@ -70,10 +70,7 @@ const TabModeList = ({ videos, images }: MediaProps) => {
           <Stack>
             {images.backdrops.map(backdrop => (
               <Image
-                src={getTmdbImage(
-                  backdrop.file_path,
-                  ImageSize.ORIGINAL,
-                )}
+                src={getTmdbImage(backdrop.file_path, ImageSize.ORIGINAL)}
                 alt={'Background Image'}
                 key={backdrop.file_path}
               />
@@ -86,13 +83,7 @@ const TabModeList = ({ videos, images }: MediaProps) => {
           <Grid>
             {images.posters.map(poster => (
               <Grid.Col span={6} key={poster.file_path}>
-                <Image
-                  src={getTmdbImage(
-                    poster.file_path,
-                    ImageSize.ORIGINAL,
-                  )}
-                  alt={'Poster Image'}
-                />
+                <Image src={getTmdbImage(poster.file_path, ImageSize.ORIGINAL)} alt={'Poster Image'} />
               </Grid.Col>
             ))}
           </Grid>
@@ -103,10 +94,7 @@ const TabModeList = ({ videos, images }: MediaProps) => {
           <Stack>
             {images.logos.map(logo => (
               <Image
-                src={getTmdbImage(
-                  logo.file_path,
-                  ImageSize.ORIGINAL,
-                )}
+                src={getTmdbImage(logo.file_path, ImageSize.ORIGINAL)}
                 alt={'Background image'}
                 key={logo.file_path}
               />
@@ -154,10 +142,7 @@ const OptionModeList = ({ videos, images }: MediaProps) => {
             }
             return (
               <Image
-                src={getTmdbImage(
-                  item.file_path,
-                  ImageSize.ORIGINAL,
-                )}
+                src={getTmdbImage(item.file_path, ImageSize.ORIGINAL)}
                 alt={'Background Image'}
                 key={item.file_path}
               />
@@ -175,6 +160,8 @@ export const Media = ({ videos, images }: MediaProps) => {
   if (!videos.results.length && !images.backdrops.length && !images.posters.length && !images.logos.length) {
     return null;
   }
+
+  const totalMedia = videos.results.length + images.backdrops.length + images.posters.length + images.logos.length;
 
   return (
     <Box>
@@ -196,15 +183,10 @@ export const Media = ({ videos, images }: MediaProps) => {
       <Stack gap={0}>
         <Group justify="space-between">
           <Text size="xl" fw="bold">
-            Media ({videos.results.length})
+            Media ({totalMedia})
           </Text>
-          {videos.results.length > 3 && (
-            <Button
-              variant="transparent"
-              onClick={drawer.open}
-              className={classes.title}
-              fw={500}
-            >
+          {totalMedia > 3 && (
+            <Button variant="transparent" onClick={drawer.open} className={classes.title} fw={500}>
               View More <IconArrowRight />
             </Button>
           )}
@@ -224,20 +206,14 @@ export const Media = ({ videos, images }: MediaProps) => {
             )}
             {Boolean(images.backdrops.length) && (
               <Image
-                src={getTmdbImage(
-                  images.backdrops[0].file_path,
-                  ImageSize.ORIGINAL,
-                )}
+                src={getTmdbImage(images.backdrops[0].file_path, ImageSize.ORIGINAL)}
                 alt={'Background Image'}
                 height={250}
               />
             )}
             {Boolean(images.posters.length) && (
               <Image
-                src={getTmdbImage(
-                  images.posters[0].file_path,
-                  ImageSize.ORIGINAL,
-                )}
+                src={getTmdbImage(images.posters[0].file_path, ImageSize.ORIGINAL)}
                 alt={'Poster Image'}
                 height={250}
               />
