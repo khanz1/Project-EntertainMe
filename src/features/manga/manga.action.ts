@@ -2,6 +2,7 @@
 
 import { APP } from '@/constant';
 import {
+  ContentRating,
   CoverCollection,
   FetchMangaOptions,
   MangaCollection,
@@ -9,6 +10,7 @@ import {
   MangaStatisticsResponse,
 } from '@/features/manga/manga.type';
 import { ChapterCollection, ChapterResponse, FetchChapterOptions } from '@/features/manga/types/chapter.type';
+import { TagCollection } from '@/features/manga/types/tag.type';
 
 /**
  * Fetches a list of manga from the MangaDex API based on the provided options.
@@ -22,26 +24,33 @@ import { ChapterCollection, ChapterResponse, FetchChapterOptions } from '@/featu
  * @param {string} options.searchTerm - The search term to filter the manga titles.
  * @returns {Promise<MangaCollection>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
-export const fetchManga = async (options: FetchMangaOptions): Promise<MangaCollection> => {
+export const fetchManga = async (
+  options: FetchMangaOptions,
+): Promise<MangaCollection> => {
+  console.log('fetch running 1 time');
   const limit: string = (options.pageSize || 10).toString();
   const offset: string = (options.pageSize * (options.page - 1)).toString();
   const search = options.searchTerm || '';
-  const contentRatingList = options.contentRatingList || [];
 
-  const HOST = APP.MANGADEX_API_URL;
-  const url = new URL(`${HOST}/manga`);
+  const url = new URL(APP.MANGADEX_API_URL);
+  url.pathname = '/manga';
 
   url.searchParams.append('limit', limit);
   url.searchParams.append('offset', offset);
   url.searchParams.append('title', search);
   url.searchParams.append('includedTagsMode', 'AND');
-  url.searchParams.append('excludedTagsMode', 'OR');
-  // url.searchParams.append('contentRating[]', 'safe');
-  // url.searchParams.append('contentRating[]', 'suggestive');
-  // url.searchParams.append('contentRating[]', 'erotica');
   url.searchParams.append('order[rating]', 'desc');
-  for (const contentRating of contentRatingList) {
-    url.searchParams.append('contentRating[]', contentRating);
+
+  // to prevent from injected pornography content
+  // we have to remove it and then add the safe content rating
+  url.searchParams.delete('contentRating[]');
+
+  url.searchParams.append('contentRating[]', ContentRating.SAFE);
+  url.searchParams.append('contentRating[]', ContentRating.SUGGESTIVE);
+  url.searchParams.append('contentRating[]', ContentRating.EROTICA);
+
+  for (const tag of options.selectedTags) {
+    url.searchParams.append('includedTags[]', tag);
   }
 
   const res = await fetch(url.toString());
@@ -58,9 +67,11 @@ export const fetchManga = async (options: FetchMangaOptions): Promise<MangaColle
  * @param {string} coverId - The ID of the manga cover to fetch.
  * @returns {Promise<CoverCollection>} A promise that resolves to the JSON response containing cover image information.
  */
-export const fetchMangaCover = async (coverId: string): Promise<CoverCollection> => {
-  const HOST = APP.MANGADEX_API_URL;
-  const url = new URL(`${HOST}/cover/${coverId}`);
+export const fetchMangaCover = async (
+  coverId: string,
+): Promise<CoverCollection> => {
+  const url = new URL(APP.MANGADEX_API_URL);
+  url.pathname = `/cover/${coverId}`;
 
   const res = await fetch(url.toString());
 
@@ -76,7 +87,9 @@ export const fetchMangaCover = async (coverId: string): Promise<CoverCollection>
  * @param {string} mangaId - The ID of the manga to fetch details for.
  * @returns {Promise<MangaResponse>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
-export const fetchMangaByMangaId = async (mangaId: string): Promise<MangaResponse> => {
+export const fetchMangaByMangaId = async (
+  mangaId: string,
+): Promise<MangaResponse> => {
   const HOST = APP.MANGADEX_API_URL;
   const url = new URL(`${HOST}/manga/${mangaId}`);
 
@@ -94,7 +107,9 @@ export const fetchMangaByMangaId = async (mangaId: string): Promise<MangaRespons
  * @param {string} mangaId - The ID of the manga to fetch statistics for.
  * @returns {Promise<MangaStatisticsResponse>} A promise that resolves to the MangaStatisticsResponse from the MangaDex API.
  */
-export const fetchStatisticsByMangaId = async (mangaId: string): Promise<MangaStatisticsResponse> => {
+export const fetchStatisticsByMangaId = async (
+  mangaId: string,
+): Promise<MangaStatisticsResponse> => {
   const HOST = APP.MANGADEX_API_URL;
   const url = new URL(`${HOST}/statistics/manga/${mangaId}`);
 
@@ -116,7 +131,9 @@ export const fetchStatisticsByMangaId = async (mangaId: string): Promise<MangaSt
  * @param {string} params.mangaId - The ID of the manga to fetch chapters for.
  * @returns {Promise<ChapterCollection>} A promise that resolves to the ChapterCollection response from the MangaDex API.
  */
-export const fetchMangaChapterList = async (params: FetchChapterOptions): Promise<ChapterCollection> => {
+export const fetchMangaChapterList = async (
+  params: FetchChapterOptions,
+): Promise<ChapterCollection> => {
   const limit = (params.pageSize || 10).toString();
   const offset = (params.pageSize * (params.page - 1)).toString();
 
@@ -142,7 +159,6 @@ export const fetchMangaChapterList = async (params: FetchChapterOptions): Promis
   return await res.json();
 };
 
-
 /**
  * Fetches detailed information about a manga chapter from the MangaDex API based on the provided chapter ID.
  *
@@ -152,9 +168,29 @@ export const fetchMangaChapterList = async (params: FetchChapterOptions): Promis
  * @param {string} chapterId - The ID of the chapter to fetch details for.
  * @returns {Promise<ChapterResponse>} A promise that resolves to the ChapterResponse from the MangaDex API.
  */
-export const fetchChapterById = async (chapterId: string): Promise<ChapterResponse> => {
+export const fetchChapterById = async (
+  chapterId: string,
+): Promise<ChapterResponse> => {
   const url = new URL(`${APP.MANGADEX_API_URL}/at-home/server/${chapterId}`);
   url.searchParams.set('forcePort443', 'true');
+
+  const res = await fetch(url.toString());
+
+  return await res.json();
+};
+
+export const fetchMangaTags = async (): Promise<TagCollection> => {
+  const url = new URL(APP.MANGADEX_API_URL);
+  url.pathname = '/manga/tag';
+
+  const res = await fetch(url.toString());
+
+  return await res.json();
+};
+
+export const fetchMangaAggregateById = async (mangaId: string) => {
+  const url = new URL(APP.MANGADEX_API_URL);
+  url.pathname = `/manga/${mangaId}/aggregate`;
 
   const res = await fetch(url.toString());
 

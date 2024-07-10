@@ -1,28 +1,49 @@
 'use client';
 
 import { fThousandsNumber } from '@/utils/formatter.helper';
-import { Card, Center, Container, Grid, Group, InputLabel, Loader, MultiSelect, Stack, Text } from '@mantine/core';
-import { fetchManga } from '@/features/manga/manga.action';
+import {
+  Card,
+  Center,
+  Checkbox,
+  Container,
+  Grid,
+  Group,
+  Loader,
+  Stack,
+  Text,
+} from '@mantine/core';
+import { fetchManga, fetchMangaTags } from '@/features/manga/manga.action';
 import { useEffect, useState } from 'react';
-import { ContentRating, MangaCollection } from '@/features/manga/manga.type';
+import { MangaCollection } from '@/features/manga/manga.type';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MangaCard } from '@/features/manga/components/MangaCard';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useDebouncedValue } from '@mantine/hooks';
+import { TagCollection } from '@/features/manga/types/tag.type';
 
 const PAGE_SIZE = 20;
 
+const defaultMangaCollection: MangaCollection = {
+  result: '',
+  response: '',
+  data: [],
+  limit: 0,
+  offset: 0,
+  total: 0,
+};
 
 export default function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
+  const page = searchParams.get('page')
+    ? parseInt(searchParams.get('page')!)
+    : 1;
   const search = searchParams.get('search') || '';
   const [debounced] = useDebouncedValue(search, 500);
-  const contentRatingList = searchParams.getAll('content-rating') as ContentRating[];
+  const defaultTags = searchParams.getAll('includedTags[]');
 
-
-  const [data, setData] = useState<MangaCollection>({
+  const [selectedTags, setSelectedTags] = useState<string[]>(defaultTags);
+  const [tags, setTags] = useState<TagCollection>({
     result: '',
     response: '',
     data: [],
@@ -30,27 +51,38 @@ export default function Page() {
     offset: 0,
     total: 0,
   });
+  const [data, setData] = useState<MangaCollection>(defaultMangaCollection);
+
+  useEffect(() => {
+    fetchMangaTags().then(setTags);
+  }, []);
 
   useEffect(() => {
     (async () => {
+      if (data.data.length === 0 && page > 1) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', '1');
+        router.push(url.toString());
+        return;
+      }
 
       const collection = await fetchManga({
         page,
         pageSize: PAGE_SIZE,
         searchTerm: debounced,
-        contentRatingList,
+        selectedTags,
       });
 
       if (page === 1) {
         setData(collection);
       } else {
-        setData((prev) => ({
+        setData(prev => ({
           ...prev,
           data: prev.data.concat(collection.data),
         }));
       }
     })();
-  }, [page, debounced, contentRatingList]);
+  }, [page, debounced, selectedTags]);
 
   const hasMoreManga = data.data.length < data.total;
 
@@ -60,22 +92,43 @@ export default function Page() {
         <Grid.Col span={2}>
           <Card shadow="sm" radius="md" withBorder>
             <Stack>
-              <InputLabel>Search</InputLabel>
-              <MultiSelect
-                data={[ContentRating.SAFE, ContentRating.SUGGESTIVE, ContentRating.EROTICA, ContentRating.PORNOGRAPHIC]}
-                value={contentRatingList}
-                onChange={(contents) => {
+              <Checkbox.Group
+                label="Filter by Genre"
+                value={selectedTags}
+                onChange={values => {
+                  setData(defaultMangaCollection);
+                  setSelectedTags(values);
                   const url = new URL(window.location.href);
-                  url.searchParams.delete('content-rating');
-                  for (const content of contents) {
-                    url.searchParams.append('content-rating', content);
+                  url.searchParams.delete('includedTags[]');
+                  for (const tag of values) {
+                    url.searchParams.append('includedTags[]', tag);
                   }
 
                   router.push(url.toString(), {
                     scroll: false,
                   });
                 }}
-              />
+              >
+                <Stack mt="xs">
+                  {tags.data
+                    .filter(tag => tag.attributes.group === 'genre')
+                    .toSorted((a, b) => {
+                      if (a.attributes.name.en && b.attributes.name.en) {
+                        return a.attributes.name.en.localeCompare(
+                          b.attributes.name.en,
+                        );
+                      }
+                      return 1;
+                    })
+                    .map(tag => (
+                      <Checkbox
+                        key={tag.id}
+                        value={tag.id}
+                        label={tag.attributes.name.en}
+                      />
+                    ))}
+                </Stack>
+              </Checkbox.Group>
             </Stack>
           </Card>
         </Grid.Col>

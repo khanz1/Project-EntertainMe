@@ -44,7 +44,7 @@ const links: TLink[] = [
   // { link: '/', label: 'Home' },
   { link: '/movies', label: 'Movies' },
   { link: '/tv', label: 'TV Series' },
-  { link: '/manga', label: 'Manga' },
+  // { link: '/manga', label: 'Manga' },
   // { link: '/about', label: 'About' },
 ];
 

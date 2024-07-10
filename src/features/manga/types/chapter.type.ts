@@ -34,11 +34,11 @@ export interface ChapterCollection {
 }
 
 export type FetchChapterOptions = {
-  pageSize: number,
-  page: number,
-  mangaId: string
+  pageSize: number;
+  page: number;
+  mangaId: string;
   // volume: number
-}
+};
 
 export interface ChapterResponse {
   result: string;
@@ -49,3 +49,8 @@ export interface ChapterResponse {
     dataSaver: string[];
   };
 }
+
+export type ChapterFeed = {
+  volume: number;
+  chapters: Chapter[];
+};

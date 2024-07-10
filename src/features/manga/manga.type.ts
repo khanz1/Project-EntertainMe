@@ -1,6 +1,6 @@
 //! MANGA TYPES
 type LanguageCode =
-  'en'
+  | 'en'
   | 'ja'
   | 'pt-br'
   | 'es-la'
@@ -180,7 +180,7 @@ export enum MangaFileSize {
 export type GetMangaCoverParams = {
   mangaId: string;
   fileName: string;
-}
+};
 
 export enum ContentRating {
   SAFE = 'safe',
@@ -190,8 +190,8 @@ export enum ContentRating {
 }
 
 export type FetchMangaOptions = {
-  pageSize: number,
-  page: number,
-  searchTerm: string,
-  contentRatingList: ContentRating[],
-}
+  pageSize: number;
+  page: number;
+  searchTerm: string;
+  selectedTags: string[];
+};

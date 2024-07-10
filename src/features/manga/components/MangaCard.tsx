@@ -1,11 +1,15 @@
 import classes from './MangaCard.module.css';
-import { Box, Card, Group, Text } from '@mantine/core';
+import { Box, Card, Group, Skeleton, Text } from '@mantine/core';
 import Link from 'next/link';
 import { fSlug } from '@/utils/slugify.helper';
-import { CoverCollection, Manga, MangaFileSize } from '@/features/manga/manga.type';
+import {
+  CoverCollection,
+  Manga,
+  MangaFileSize,
+} from '@/features/manga/manga.type';
 import { useEffect, useState } from 'react';
-import { fetchMangaCover } from '@/features/manga/manga.action';
 import { getMangaCover, getMangaTitle } from '@/features/manga/manga.helper';
+import { APP } from '@/constant';
 
 export type MovieCardProps = {
   manga: Manga;
@@ -32,16 +36,24 @@ export function MangaCard({ manga }: MovieCardProps) {
   });
 
   useEffect(() => {
-    const coverId = manga.relationships.find((r) => r.type === 'cover_art')?.id;
+    (async () => {
+      const coverId = manga.relationships.find(r => r.type === 'cover_art')?.id;
 
-    if (coverId) {
-      fetchMangaCover(coverId).then(setCover);
-    }
+      if (coverId) {
+        const url = new URL(APP.MANGADEX_API_URL);
+        url.pathname = `/cover/${coverId}`;
+
+        const res = await fetch(url.toString());
+        setCover(await res.json());
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <Link style={{ textDecoration: 'none' }}
-          href={`/manga/${fSlug(getMangaTitle(manga), manga.id)}`}>
+    <Link
+      style={{ textDecoration: 'none' }}
+      href={`/manga/${fSlug(getMangaTitle(manga), manga.id)}`}
+    >
       <Card
         p="lg"
         shadow="lg"
@@ -50,15 +62,22 @@ export function MangaCard({ manga }: MovieCardProps) {
         w={200}
         h={300}
       >
-        <Box
-          className={classes.image}
-          style={{
-            backgroundImage: `url(${getMangaCover({
-              fileName: cover.data.attributes.fileName,
-              mangaId: manga.id,
-            }, MangaFileSize.LOW)})`,
-          }}
-        />
+        {cover.data.attributes.fileName ? (
+          <Box
+            className={classes.image}
+            style={{
+              backgroundImage: `url(${getMangaCover(
+                {
+                  fileName: cover.data.attributes.fileName,
+                  mangaId: manga.id,
+                },
+                MangaFileSize.LOW,
+              )})`,
+            }}
+          />
+        ) : (
+          <Skeleton />
+        )}
         <div className={classes.overlay} />
 
         <div className={classes.content}>

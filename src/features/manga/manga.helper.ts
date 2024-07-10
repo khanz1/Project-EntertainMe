@@ -1,4 +1,5 @@
 import { GetMangaCoverParams, Manga, MangaFileSize } from '@/features/manga/manga.type';
+import { APP } from '@/constant';
 
 /**
  * Constructs the URL for a manga cover image from the MangaDex API.
@@ -8,9 +9,12 @@ import { GetMangaCoverParams, Manga, MangaFileSize } from '@/features/manga/mang
  *
  * @param {GetMangaCoverParams} props - The parameters required to construct the cover image URL.
  * @param {MangaFileSize} [size=MangaFileSize.ORIGINAL] - The desired size of the cover image. Defaults to original size.
- * @returns {string} The URL of the manga cover image.
+ * @returns {string} The absolute URL of the manga cover image.
  */
-export const getMangaCover = (props: GetMangaCoverParams, size: MangaFileSize = MangaFileSize.ORIGINAL): string => {
+export const getMangaCover = (
+  props: GetMangaCoverParams,
+  size: MangaFileSize = MangaFileSize.ORIGINAL,
+): string => {
   // let ORIGIN = getOrigin();
   // if (size === MangaFileSize.ORIGINAL) {
   //   return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}`;
@@ -18,13 +22,28 @@ export const getMangaCover = (props: GetMangaCoverParams, size: MangaFileSize = 
   //
   // return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
 
-  if (size === MangaFileSize.ORIGINAL) {
-    return `/api/manga/covers/${props.mangaId}/${props.fileName}`;
+  if (!props.fileName) {
+    return 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
+  }
+  // const h = headers();
+  console.log(typeof window, '<<<ads');
+
+  let url: URL;
+
+  if (typeof window === 'undefined') {
+    url = new URL(APP.WEB_URL);
+  } else {
+    url = new URL(window.location.origin);
   }
 
-  return `/api/manga/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
-};
+  if (size === MangaFileSize.ORIGINAL) {
+    url.pathname = `/api/manga/covers/${props.mangaId}/${props.fileName}`;
+  } else {
+    url.pathname = `/api/manga/covers/${props.mangaId}/${props.fileName}.${size}.jpg`;
+  }
 
+  return url.toString();
+};
 
 export const getMangaTitle = (manga: Manga) => {
   const titleLang = Object.keys(manga.attributes.title)[0];
