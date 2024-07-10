@@ -1,6 +1,6 @@
 import { Badge, Box, Grid, GridCol, Group, Image, rem, Stack, Text, Title } from '@mantine/core';
 import { parseIdFromSlug } from '@/utils/slugify.helper';
-import { BackButton } from '@/features/app/BackButton';
+import { HomeButton } from '@/features/app/BackButton';
 import classes from './page.module.css';
 import { getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
@@ -27,12 +27,10 @@ export type PageProps = {
 };
 
 type Props = {
-  params: { slug: string }
-}
+  params: { slug: string };
+};
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tvSeriesId = parseIdFromSlug(params.slug);
   const tvSeries = await fetchTVSeriesById(tvSeriesId);
 
@@ -112,10 +110,12 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
-      <BackButton />
+      <HomeButton />
       <Box
         className={classes.overlay}
-        style={{ background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(tvSeries.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover` }}
+        style={{
+          background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(tvSeries.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover`,
+        }}
       ></Box>
       <Box className={classes.container}>
         <Grid p={{ base: 'md', sm: 'xl' }} gutter="xl">
@@ -123,7 +123,8 @@ export default async function Page({ params }: PageProps) {
             <Stack>
               <Box style={{ borderRadius: rem(1), overflow: 'hidden' }}>
                 <Image
-                  src={getTmdbImage(tvSeries.poster_path)} alt={tvSeries.name}
+                  src={getTmdbImage(tvSeries.poster_path)}
+                  alt={tvSeries.name}
                   radius="md"
                   w={{ base: 200, lg: '100%' }}
                   m={{ base: 'auto' }}
@@ -144,11 +145,7 @@ export default async function Page({ params }: PageProps) {
             <Stack gap="sm">
               <Stack gap={0}>
                 <Group gap={0}>
-                  <Link
-                    className={classes.titleLink}
-                    href={tvSeries.homepage}
-                    target="_blank"
-                  >
+                  <Link className={classes.titleLink} href={tvSeries.homepage} target="_blank">
                     <Title order={1} fw="bold">
                       {tvSeries.name}
                       <sup>

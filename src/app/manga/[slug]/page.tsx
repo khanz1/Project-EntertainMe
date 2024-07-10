@@ -1,23 +1,8 @@
-import {
-  Badge,
-  Box,
-  Grid,
-  GridCol,
-  Group,
-  Image,
-  rem,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Badge, Box, Grid, GridCol, Group, Image, rem, Stack, Text, Title } from '@mantine/core';
 import { parseMangaIdFromSlug } from '@/utils/slugify.helper';
-import {
-  fetchMangaByMangaId,
-  fetchMangaCover,
-  fetchStatisticsByMangaId,
-} from '@/features/manga/manga.action';
+import { fetchMangaByMangaId, fetchMangaCover, fetchStatisticsByMangaId } from '@/features/manga/manga.action';
 import { getMangaCover } from '@/features/manga/manga.helper';
-import { BackButton } from '@/features/app/BackButton';
+import { HomeButton } from '@/features/app/BackButton';
 import { Metadata } from 'next';
 import classes from './page.module.css';
 import React from 'react';
@@ -32,9 +17,7 @@ export type PageProps = {
   };
 };
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const mangaId = parseMangaIdFromSlug(params.slug);
   if (!mangaId) {
     return {};
@@ -125,10 +108,8 @@ export default async function Page({ params }: PageProps) {
   );
 
   return (
-    <Box
-      style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}
-    >
-      <BackButton />
+    <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
+      <HomeButton />
       <Box
         className={classes.overlay}
         style={{
@@ -148,20 +129,14 @@ export default async function Page({ params }: PageProps) {
                   m={{ base: 'auto' }}
                 />
               </Box>
-              <Stack visibleFrom="lg">
-                {/*<KeywordBadge movieOrTVId={movie.id} type={ItemType.movie} />*/}
-              </Stack>
+              <Stack visibleFrom="lg">{/*<KeywordBadge movieOrTVId={movie.id} type={ItemType.movie} />*/}</Stack>
             </Stack>
           </GridCol>
           <GridCol span={{ base: 12, lg: 9 }}>
             <Stack gap="sm">
               <Stack gap={0}>
                 <Group gap={0}>
-                  <Link
-                    className={classes.titleLink}
-                    href={'/'}
-                    target="_blank"
-                  >
+                  <Link className={classes.titleLink} href={'/'} target="_blank">
                     <Title order={1} fw="bold">
                       {manga.attributes.title.en}
                       <sup>
@@ -181,9 +156,7 @@ export default async function Page({ params }: PageProps) {
                   ))}
                 </Group>
               </Box>
-              <Group gap="xs">
-                {/*<FavoriteAction item={movie} type={ItemType.manga} />*/}
-              </Group>
+              <Group gap="xs">{/*<FavoriteAction item={movie} type={ItemType.manga} />*/}</Group>
               <Box>
                 <Text size="xl" fw="bold" pt="xs">
                   Overview

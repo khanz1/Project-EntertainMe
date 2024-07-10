@@ -4,15 +4,13 @@ import { BackgroundImage } from '@mantine/core';
 import { getTmdbImage } from '@/features/film/film.helper';
 import classes from './page.module.css';
 import { CollectionDetail } from '@/features/film/components/collection/CollectionDetail';
-import { BackButton } from '@/features/app/BackButton';
+import { HomeButton } from '@/features/app/BackButton';
 import { ImageSize } from '@/constant';
 import { Metadata } from 'next';
 
-export type PageProps = { params: { slug: string } }
+export type PageProps = { params: { slug: string } };
 
-export async function generateMetadata(
-  { params }: PageProps,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const collectionId = parseIdFromSlug(params.slug);
   const collection = await fetchCollectionById(Number(collectionId));
 
@@ -74,7 +72,7 @@ export default async function Page({ params }: PageProps) {
       // style={{ background: 'rgb(31,31,31)' }}
       src={getTmdbImage(collection.backdrop_path, ImageSize.ORIGINAL)}
     >
-      <BackButton />
+      <HomeButton />
       <CollectionDetail collection={collection} />
     </BackgroundImage>
   );

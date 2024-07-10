@@ -13,7 +13,7 @@ import {
   Title,
 } from '@mantine/core';
 import { fSlug, parseIdFromSlug } from '@/utils/slugify.helper';
-import { BackButton } from '@/features/app/BackButton';
+import { HomeButton } from '@/features/app/BackButton';
 import classes from './page.module.css';
 import { fMinutes, getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
@@ -41,12 +41,10 @@ export type PageProps = {
 };
 
 type Props = {
-  params: { slug: string }
-}
+  params: { slug: string };
+};
 
-export async function generateMetadata(
-  { params }: Props,
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const movieId = parseIdFromSlug(params.slug);
   const movie = await fetchMovieById(movieId);
 
@@ -142,10 +140,12 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
-      <BackButton />
+      <HomeButton />
       <Box
         className={classes.overlay}
-        style={{ background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(movie.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover` }}
+        style={{
+          background: `linear-gradient(to bottom, transparent 0%, var(--mantine-color-dark-8) 70%, var(--mantine-color-dark-8) 100%),  url('${getTmdbImage(movie.backdrop_path, ImageSize.ORIGINAL)}') no-repeat center center/cover`,
+        }}
       ></Box>
       <Box className={classes.container}>
         <Grid p={{ base: 'md', sm: 'xl' }} gutter="xl">
@@ -153,7 +153,8 @@ export default async function Page({ params }: PageProps) {
             <Stack>
               <Box style={{ borderRadius: rem(1), overflow: 'hidden' }}>
                 <Image
-                  src={getTmdbImage(movie.poster_path)} alt={movie.title}
+                  src={getTmdbImage(movie.poster_path)}
+                  alt={movie.title}
                   radius="md"
                   w={{ base: 200, lg: '100%' }}
                   m={{ base: 'auto' }}
@@ -175,11 +176,7 @@ export default async function Page({ params }: PageProps) {
               <Stack gap={0}>
                 <StreamAlert isStreamAvailable={isStreamAvailable} />
                 <Group gap={0}>
-                  <Link
-                    className={classes.titleLink}
-                    href={movie.homepage}
-                    target="_blank"
-                  >
+                  <Link className={classes.titleLink} href={movie.homepage} target="_blank">
                     <Title order={1} fw="bold">
                       {movie.title}
                       <sup>
@@ -187,9 +184,7 @@ export default async function Page({ params }: PageProps) {
                       </sup>
                     </Title>
                   </Link>
-                  <Title order={2}>
-                    ({new Date(movie.release_date).getFullYear()})
-                  </Title>
+                  <Title order={2}>({new Date(movie.release_date).getFullYear()})</Title>
                 </Group>
                 <Text c="dimmed" fs="italic">
                   {movie.tagline}
@@ -220,12 +215,17 @@ export default async function Page({ params }: PageProps) {
               {Boolean(movie.belongs_to_collection) && (
                 <BackgroundImage
                   className={classes.collectionBackground}
-                  src={getTmdbImage(movie.belongs_to_collection.backdrop_path, ImageSize.LARGE)} radius="md">
+                  src={getTmdbImage(movie.belongs_to_collection.backdrop_path, ImageSize.LARGE)}
+                  radius="md"
+                >
                   <Box p="xl" style={{ zIndex: 2, position: 'relative' }}>
                     <Stack gap="xl">
-                      <Title order={2} fw="bold">{movie.belongs_to_collection.name}</Title>
+                      <Title order={2} fw="bold">
+                        {movie.belongs_to_collection.name}
+                      </Title>
                       <Link
-                        href={`/collection/${fSlug(movie.belongs_to_collection.name, movie.belongs_to_collection.id)}`}>
+                        href={`/collection/${fSlug(movie.belongs_to_collection.name, movie.belongs_to_collection.id)}`}
+                      >
                         <Button variant="light">Browse Collection</Button>
                       </Link>
                     </Stack>

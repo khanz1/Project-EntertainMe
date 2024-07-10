@@ -33,14 +33,7 @@ export const ChapterCard = ({ chapter }: ChapterCardProps) => {
   url.pathname = url.pathname + `/${chapter.id}`;
 
   return (
-    <Card
-      component={Link}
-      href={url.toString()}
-      w="100%"
-      radius="md"
-      p={0}
-      className={classes.card}
-    >
+    <Card component={Link} href={url.toString()} w="100%" radius="md" p={0} className={classes.card}>
       <Group wrap="nowrap" gap={0}>
         <Image
           className={classes.image}
@@ -49,13 +42,11 @@ export const ChapterCard = ({ chapter }: ChapterCardProps) => {
         />
         <Stack justify="space-between" px="md" w="100%">
           <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>
-            {chapter.attributes.chapter}.{chapter.attributes.title}
+            {chapter.attributes.chapter}. {chapter.attributes.title}
           </Text>
           <Box>
             <Text>Total Pages: {chapter.attributes.pages}</Text>
-            <Text>
-              Published: {fDateTimeGB(new Date(chapter.attributes.publishAt))}
-            </Text>
+            <Text>Published: {fDateTimeGB(new Date(chapter.attributes.publishAt))}</Text>
           </Box>
         </Stack>
       </Group>

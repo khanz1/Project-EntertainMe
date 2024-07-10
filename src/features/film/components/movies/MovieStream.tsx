@@ -1,7 +1,7 @@
 'use client';
 
 import { Alert, Box, Button, Group, Modal, Text } from '@mantine/core';
-import { IconCheck, IconCross, IconPlayerPlay } from '@tabler/icons-react';
+import { IconCheck, IconPlayerPlay, IconX } from '@tabler/icons-react';
 import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { getVidSrcStreamUrl } from '@/features/film/film.helper';
@@ -10,14 +10,14 @@ import { ItemType } from '@prisma/client';
 
 export type StreamAlertProps = {
   isStreamAvailable: boolean;
-}
+};
 
 export const StreamAlert = ({ isStreamAvailable }: StreamAlertProps) => {
   const [isAlertOpen, alert] = useDisclosure(true);
 
-  // if (!isStreamAvailable) {
-  //   return null;
-  // }
+  if (!isAlertOpen) {
+    return null;
+  }
 
   return (
     <Alert
@@ -25,22 +25,17 @@ export const StreamAlert = ({ isStreamAvailable }: StreamAlertProps) => {
       color={isStreamAvailable ? 'teal' : 'red'}
       radius="md"
       withCloseButton
-      title={
-        isStreamAvailable
-          ? 'Stream Available'
-          : 'Stream Not Available'
-      }
-      icon={isStreamAvailable ? <IconCheck /> : <IconCross />}
-      onClose={isAlertOpen ? alert.close : alert.open}
+      title={isStreamAvailable ? 'Stream Available' : 'Stream Not Available'}
+      icon={isStreamAvailable ? <IconCheck /> : <IconX />}
+      onClose={alert.close}
     ></Alert>
   );
 };
 
-
 export type StreamMovieProps = {
   isStreamAvailable: boolean;
   movie: MovieDetail;
-}
+};
 
 export const StreamMovie = ({ isStreamAvailable, movie }: StreamMovieProps) => {
   const [isStreamOpened, stream] = useDisclosure(false);
@@ -51,13 +46,7 @@ export const StreamMovie = ({ isStreamAvailable, movie }: StreamMovieProps) => {
 
   return (
     <Box>
-      <Modal
-        opened={isStreamOpened}
-        onClose={stream.close}
-        title={`Stream ${movie.title}`}
-        size="xl"
-        centered
-      >
+      <Modal opened={isStreamOpened} onClose={stream.close} title={`Stream ${movie.title}`} size="xl" centered>
         <Box
           component="iframe"
           src={getVidSrcStreamUrl({

@@ -3,13 +3,14 @@
 import { Box, Breadcrumbs, Button, Drawer, Group, Stack, Text } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { ChapterCollection } from '@/features/manga/types/chapter.type';
-import { fetchMangaChapterList } from '@/features/manga/manga.action';
+import { fetchAggregateByMangaId, fetchMangaChapterList } from '@/features/manga/manga.action';
 import { Manga } from '@/features/manga/manga.type';
 import { useDisclosure } from '@mantine/hooks';
 import { IconArrowRight, IconHome } from '@tabler/icons-react';
 import classes from '@/features/manga/styles/Detail.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ChapterCard } from '@/features/manga/components/ChapterCard';
+import { MangaAggregate } from '@/features/manga/types/aggregate.type';
 
 export const chaptersVolume: ChapterCollection = {
   result: '',
@@ -29,11 +30,16 @@ export const VolumeFeed = ({ manga }: VolumeFeedProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [volumes, setVolumes] = useState<ChapterCollection>(chaptersVolume);
+  const [aggregate, setAggregate] = useState<MangaAggregate>({
+    result: '',
+    volumes: {},
+  });
 
   const volume = searchParams.get('volume');
 
   useEffect(() => {
     if (!manga) return;
+    fetchAggregateByMangaId(manga.id).then(setAggregate);
     if (volume) {
       if (!isDrawerOpen) {
         drawer.open();
@@ -47,7 +53,7 @@ export const VolumeFeed = ({ manga }: VolumeFeedProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [volume]);
 
-  const totalChapters = volumes.data.filter(chapter => chapter.attributes.translatedLanguage === 'en').length;
+  console.log(volumes, '<<< v');
 
   return (
     <Box>
@@ -87,12 +93,7 @@ export const VolumeFeed = ({ manga }: VolumeFeedProps) => {
                 </Text>
                 {Boolean(volume) && (
                   <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>
-                    Volume {volume}{' '}
-                    {Boolean(totalChapters) && (
-                      <>
-                        {' - '}({totalChapters} chapters)
-                      </>
-                    )}
+                    Volume {volume}
                   </Text>
                 )}
               </Breadcrumbs>
@@ -108,24 +109,27 @@ export const VolumeFeed = ({ manga }: VolumeFeedProps) => {
               </Group>
             ) : (
               <Box>
-                {Array.from({ length: Number(manga.attributes.lastVolume) }, (_, index) => {
+                {Object.keys(aggregate.volumes).map(volumeNumber => {
                   return (
-                    <Text
-                      onClick={() => {
-                        const url = new URL(window.location.href);
-                        url.searchParams.set('volume', String(index + 1));
-                        router.push(url.toString(), {
-                          scroll: false,
-                        });
-                      }}
-                      key={index}
-                      className={classes.title}
-                      tt="uppercase"
-                      lineClamp={1}
-                      fw={700}
-                    >
-                      Volume {index + 1}
-                    </Text>
+                    <>
+                      <Text
+                        onClick={() => {
+                          const url = new URL(window.location.href);
+                          url.searchParams.set('volume', volumeNumber);
+                          router.push(url.toString(), {
+                            scroll: false,
+                          });
+                        }}
+                        key={volumeNumber}
+                        className={classes.title}
+                        py="md"
+                        tt="uppercase"
+                        lineClamp={1}
+                        fw={700}
+                      >
+                        Volume {volumeNumber}
+                      </Text>
+                    </>
                   );
                 })}
               </Box>

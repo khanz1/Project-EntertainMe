@@ -13,6 +13,7 @@ import { ChapterCollection, ChapterResponse, FetchChapterOptions } from '@/featu
 import { TagCollection } from '@/features/manga/types/tag.type';
 import { kv } from '@vercel/kv';
 import { cookies } from 'next/headers';
+import { MangaAggregate } from '@/features/manga/types/aggregate.type';
 
 /**
  * Fetches a list of manga from the MangaDex API based on the provided options.
@@ -156,9 +157,10 @@ export const fetchMangaChapterList = async (params: FetchChapterOptions): Promis
   const KV_KEY = `manga:chapter:${params.mangaId}:${params.volume}`;
 
   const cached = await kv.get(KV_KEY);
-  if (cached) {
-    return cached as ChapterCollection;
-  }
+  console.log(cached, '<<c');
+  // if (cached) {
+  //   return cached as ChapterCollection;
+  // }
   // const pageSize = params.pageSize || 10;
 
   const url = new URL(APP.MANGADEX_API_URL + '/chapter');
@@ -226,6 +228,25 @@ export const fetchMangaTags = async (): Promise<TagCollection> => {
 
   const res = await fetch(url.toString());
 
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
+};
+
+export const fetchAggregateByMangaId = async (mangaId: string): Promise<MangaAggregate> => {
+  cookies();
+  const KV_KEY = `manga:aggregate:${mangaId}`;
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as MangaAggregate;
+  }
+
+  const url = new URL(APP.MANGADEX_API_URL);
+  url.pathname = `/manga/${mangaId}/aggregate`;
+  url.searchParams.set('translatedLanguage[]', 'en');
+
+  const res = await fetch(url.toString());
   const data = await res.json();
   await kv.set(KV_KEY, data);
 
