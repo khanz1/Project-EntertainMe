@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ChapterResponse } from '@/features/manga/types/chapter.type';
 import { fetchChapterById } from '@/features/manga/manga.action';
 import { BackButton } from '@/features/app/BackButton';
+import classes from './page.module.css';
 
 export type PageProps = {
   params: {
@@ -31,10 +32,10 @@ export default function Page({ params }: PageProps) {
       <ScrollArea>
         <Stack gap="md">
           {chapter.chapter.dataSaver.map((image, index) => (
-            <Box key={index} style={{ height: '100vh', margin: 'auto' }}>
+            <Box key={index} className={classes.imageWrapper}>
               <Image
-                alt={`${index}`}
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                alt={`Page ${index.toString()}`}
+                className={classes.image}
                 src={`/api/manga/data-saver/${chapter.chapter.hash}/${image}`}
               />
             </Box>
