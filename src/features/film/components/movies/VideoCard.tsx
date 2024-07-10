@@ -13,7 +13,16 @@ export function VideoCard({ video }: VideoCardProps) {
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
-      <Modal opened={opened} size="xl" onClose={close} title={`${video.type} - ${video.name}`}>
+      <Modal
+        overlayProps={{
+          backgroundOpacity: 0.5,
+          blur: 4,
+        }}
+        opened={opened}
+        size="xl"
+        onClose={close}
+        title={`${video.type} - ${video.name}`}
+      >
         <Box
           component="iframe"
           src={`https://www.youtube.com/embed/${video.key}`}
@@ -24,10 +33,7 @@ export function VideoCard({ video }: VideoCardProps) {
       </Modal>
       <Card w="100%" radius="md" p={0} onClick={open} className={classes.card}>
         <Stack gap={0} hiddenFrom="sm">
-          <Image
-            src={`https://img.youtube.com/vi/${video.key}/0.jpg`}
-            alt={video.name}
-          />
+          <Image src={`https://img.youtube.com/vi/${video.key}/0.jpg`} alt={video.name} />
           <Stack pt="md" w="100%" gap={0}>
             <Group justify="space-between">
               <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>
@@ -35,17 +41,11 @@ export function VideoCard({ video }: VideoCardProps) {
               </Text>
               <Text>{video.type}</Text>
             </Group>
-            <Text mb="md">
-              {fDateTimeGB(new Date(video.published_at))}
-            </Text>
+            <Text mb="md">{fDateTimeGB(new Date(video.published_at))}</Text>
           </Stack>
         </Stack>
         <Group wrap="nowrap" gap={0} visibleFrom="sm">
-          <Image
-            className={classes.image}
-            src={`https://img.youtube.com/vi/${video.key}/0.jpg`}
-            alt={video.name}
-          />
+          <Image className={classes.image} src={`https://img.youtube.com/vi/${video.key}/0.jpg`} alt={video.name} />
           <Stack px="md" w="100%">
             <Group justify="space-between" wrap="nowrap">
               <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>

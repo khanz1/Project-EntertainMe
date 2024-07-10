@@ -25,7 +25,7 @@ export const HomeButton = () => {
   return (
     <ActionIcon
       component={Link}
-      href="/"
+      href="/discover"
       style={{ position: 'absolute', top: '1%', left: '1%', zIndex: 10 }}
       variant="subtle"
       color="white"

@@ -34,7 +34,7 @@ export const parseIdFromSlug = (slug: string): number => {
   const parts = slug.split('-');
   if (parts.length === 1) {
     // If the slug does not contain an id, then the name is the id
-    // because the link doesn't provide the movie/tv name
+    // because the link doesn't provide the movie/@tv name
     if (isNaN(Number(parts[0]))) {
       // TODO: next we have to handle the error correctly
       throw new Error('Invalid slug format');

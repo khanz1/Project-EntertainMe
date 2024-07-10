@@ -1,7 +1,6 @@
 'use client';
 
-import { fThousandsNumber } from '@/utils/formatter.helper';
-import { Card, Center, Checkbox, Container, Grid, Group, Loader, Stack, Text } from '@mantine/core';
+import { Center, Container, Grid, Group, Loader } from '@mantine/core';
 import { fetchManga, fetchMangaTags } from '@/features/manga/manga.action';
 import { useEffect, useState } from 'react';
 import { MangaCollection } from '@/features/manga/manga.type';
@@ -70,56 +69,58 @@ export default function Page() {
         }));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, debounced, selectedTags]);
 
   const hasMoreManga = data.data.length < data.total;
 
+  console.log(tags, '<<< t');
   return (
-    <Container size="xl" my={25}>
+    <Container size="xxl">
       <Grid>
-        <Grid.Col visibleFrom="sm" span={2}>
-          <Card shadow="sm" radius="md" withBorder>
-            <Stack>
-              <Checkbox.Group
-                label="Filter by Genre"
-                value={selectedTags}
-                onChange={values => {
-                  setData(defaultMangaCollection);
-                  setSelectedTags(values);
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('includedTags[]');
-                  for (const tag of values) {
-                    url.searchParams.append('includedTags[]', tag);
-                  }
+        {/*<Grid.Col visibleFrom="sm" span={2}>*/}
+        {/*  <Card shadow="sm" radius="md" withBorder>*/}
+        {/*    <Stack>*/}
+        {/*      <Checkbox.Group*/}
+        {/*        label="Filter by Genre"*/}
+        {/*        value={selectedTags}*/}
+        {/*        onChange={values => {*/}
+        {/*          setData(defaultMangaCollection);*/}
+        {/*          setSelectedTags(values);*/}
+        {/*          const url = new URL(window.location.href);*/}
+        {/*          url.searchParams.delete('includedTags[]');*/}
+        {/*          for (const tag of values) {*/}
+        {/*            url.searchParams.append('includedTags[]', tag);*/}
+        {/*          }*/}
 
-                  router.push(url.toString(), {
-                    scroll: false,
-                  });
-                }}
-              >
-                <Stack mt="xs">
-                  {tags.data
-                    .filter(tag => tag.attributes.group === 'genre')
-                    .toSorted((a, b) => {
-                      if (a.attributes.name.en && b.attributes.name.en) {
-                        return a.attributes.name.en.localeCompare(b.attributes.name.en);
-                      }
-                      return 1;
-                    })
-                    .map(tag => (
-                      <Checkbox key={tag.id} value={tag.id} label={tag.attributes.name.en} />
-                    ))}
-                </Stack>
-              </Checkbox.Group>
-            </Stack>
-          </Card>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 10 }}>
-          <Group justify="space-between" mb="md" mx="md">
-            <Text>
-              {fThousandsNumber(data.data.length)} from {fThousandsNumber(data.total)}
-            </Text>
-          </Group>
+        {/*          router.push(url.toString(), {*/}
+        {/*            scroll: false,*/}
+        {/*          });*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <Stack mt="xs">*/}
+        {/*          {tags.data*/}
+        {/*            .filter(tag => tag.attributes.group === 'genre')*/}
+        {/*            .toSorted((a, b) => {*/}
+        {/*              if (a.attributes.name.en && b.attributes.name.en) {*/}
+        {/*                return a.attributes.name.en.localeCompare(b.attributes.name.en);*/}
+        {/*              }*/}
+        {/*              return 1;*/}
+        {/*            })*/}
+        {/*            .map(tag => (*/}
+        {/*              <Checkbox key={tag.id} value={tag.id} label={tag.attributes.name.en} />*/}
+        {/*            ))}*/}
+        {/*        </Stack>*/}
+        {/*      </Checkbox.Group>*/}
+        {/*    </Stack>*/}
+        {/*  </Card>*/}
+        {/*</Grid.Col>*/}
+        <Grid.Col span={{ base: 12, sm: 12 }}>
+          {/*<Group justify="space-between" mb="md" mx="md">*/}
+          {/*  <Text>*/}
+          {/*    {fThousandsNumber(data.data.length)} from {fThousandsNumber(data.total)}*/}
+          {/*  </Text>*/}
+          {/*</Group>*/}
           <InfiniteScroll
             dataLength={data.data.length}
             next={() => {

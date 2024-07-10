@@ -156,7 +156,7 @@ export default async function Page({ params }: PageProps) {
                   ))}
                 </Group>
               </Box>
-              <Group gap="xs">{/*<FavoriteAction item={movie} type={ItemType.manga} />*/}</Group>
+              <Group gap="xs">{/*<FavoriteAction item={movie} type={ItemType.@manga} />*/}</Group>
               <Box>
                 <Text size="xl" fw="bold" pt="xs">
                   Overview
@@ -180,12 +180,12 @@ export default async function Page({ params }: PageProps) {
       {/*        : ''*/}
       {/*    }*/}
       {/*    h="100vh"*/}
-      {/*    alt={getMangaTitle(manga)}*/}
+      {/*    alt={getMangaTitle(@manga)}*/}
       {/*  />*/}
       {/*  <ScrollArea h="100vh" w="100%" pr="xl">*/}
       {/*    <Stack gap="xs" justify="center" py="xl">*/}
       {/*      <Text tt="uppercase" ta="center" fw={700} size="xl">*/}
-      {/*        {getMangaTitle(manga)}*/}
+      {/*        {getMangaTitle(@manga)}*/}
       {/*      </Text>*/}
 
       {/*      /!*<Group gap="sm" justify="center">*!/*/}
@@ -195,7 +195,7 @@ export default async function Page({ params }: PageProps) {
       {/*      /!*</Group>*!/*/}
       {/*      <Center>*/}
       {/*        <Text mt="xs" ta="center" mb="md" maw={600}>*/}
-      {/*          {manga.attributes.description['en']}*/}
+      {/*          {@manga.attributes.description['en']}*/}
       {/*        </Text>*/}
       {/*      </Center>*/}
       {/*      <Center>*/}
@@ -206,7 +206,7 @@ export default async function Page({ params }: PageProps) {
       {/*        />*/}
       {/*      </Center>*/}
       {/*      <Group>*/}
-      {/*        <VolumeFeed manga={manga} />*/}
+      {/*        <VolumeFeed @manga={@manga} />*/}
       {/*      </Group>*/}
       {/*    </Stack>*/}
       {/*  </ScrollArea>*/}

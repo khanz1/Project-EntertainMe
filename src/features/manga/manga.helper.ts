@@ -2,14 +2,14 @@ import { GetMangaCoverParams, Manga, MangaFileSize } from '@/features/manga/mang
 import { APP } from '@/constant';
 
 /**
- * Constructs the URL for a manga cover image from the MangaDex API.
+ * Constructs the URL for a @manga cover image from the MangaDex API.
  *
- * This function generates the URL for a manga cover image based on the provided parameters.
+ * This function generates the URL for a @manga cover image based on the provided parameters.
  * It supports different image sizes by appending the size to the file name.
  *
  * @param {GetMangaCoverParams} props - The parameters required to construct the cover image URL.
  * @param {MangaFileSize} [size=MangaFileSize.ORIGINAL] - The desired size of the cover image. Defaults to original size.
- * @returns {string} The absolute URL of the manga cover image.
+ * @returns {string} The absolute URL of the @manga cover image.
  */
 export const getMangaCover = (props: GetMangaCoverParams, size: MangaFileSize = MangaFileSize.ORIGINAL): string => {
   // let ORIGIN = getOrigin();

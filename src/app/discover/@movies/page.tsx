@@ -12,8 +12,8 @@ type PageProps = {
     search?: string;
     page?: string;
     filter?: string;
-  }
-}
+  };
+};
 
 export default function Page({ searchParams }: PageProps) {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function Page({ searchParams }: PageProps) {
   const search = searchParams.search || '';
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
   const filter = searchParams.filter
-    ? searchParams.filter as FILM_FILTERS
+    ? (searchParams.filter as FILM_FILTERS)
     : search
       ? FILM_FILTERS.NONE
       : FILM_FILTERS.POPULAR;
@@ -50,7 +50,7 @@ export default function Page({ searchParams }: PageProps) {
       } else if (page === 1) {
         setMovies(data);
       } else {
-        setMovies((prevMovies) => ({
+        setMovies(prevMovies => ({
           ...data,
           results: [...prevMovies.results, ...data.results],
         }));
@@ -60,19 +60,12 @@ export default function Page({ searchParams }: PageProps) {
   }, [page, filter, search]);
 
   const hasMoreMovies = useMemo(() => {
-    return movies.results.length === 0
-      ? true
-      : movies.results.length < movies.total_results;
+    return movies.results.length === 0 ? true : movies.results.length < movies.total_results;
   }, [movies]);
 
   return (
-    <Container size="xl" my={25}>
-      <MovieList
-        movies={movies}
-        page={page}
-        hasMoreMovies={hasMoreMovies}
-        filter={filter}
-      />
+    <Container size="xxl">
+      <MovieList movies={movies} page={page} hasMoreMovies={hasMoreMovies} filter={filter} />
     </Container>
   );
 }

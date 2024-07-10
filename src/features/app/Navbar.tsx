@@ -8,7 +8,6 @@ import {
   Drawer,
   Group,
   Image,
-  Input,
   Menu,
   rem,
   Text,
@@ -18,16 +17,7 @@ import {
 } from '@mantine/core';
 import classes from './Navbar.module.css';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import {
-  IconChevronDown,
-  IconHeart,
-  IconHistory,
-  IconLogout,
-  IconMessage,
-  IconSearch,
-  IconSettings,
-  IconX,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconHeart, IconHistory, IconLogout, IconMessage, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useDebouncedValue, useDisclosure, useMediaQuery } from '@mantine/hooks';
@@ -41,10 +31,11 @@ type TLink = {
 };
 
 const links: TLink[] = [
+  { link: '/discover', label: 'Discover' },
   // { link: '/', label: 'Home' },
-  { link: '/movies', label: 'Movies' },
-  { link: '/tv', label: 'TV Series' },
-  { link: '/manga', label: 'Manga' },
+  // { link: '/movies', label: 'Movies' },
+  // { link: '/tv', label: 'TV Series' },
+  // { link: '/manga', label: 'Manga' },
   // { link: '/about', label: 'About' },
 ];
 
@@ -159,20 +150,20 @@ export const Navbar = ({ session }: { session: Session | null }) => {
       <div className={classes.inner}>
         <Burger opened={opened} onClick={toggle} size="md" hiddenFrom="sm" mr="md" />
 
-        <Link href="/" className={classes.appNav}>
-          <Group pl={{ base: 0, lg: 'sm' }} pr="sm" gap="xs" className={classes.appLogo} visibleFrom="sm">
-            <Image
-              src="/images/FantasyCatLogo.png"
-              width={isMobile ? 40 : 40}
-              height={isMobile ? 40 : 40}
-              alt="Fantasy Cat Logo"
-            />
-            <Title order={3} fw="bold" fz={rem(18)}>
-              EntertainMe
-            </Title>
-          </Group>
-        </Link>
-        <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
+        <Group gap={5} className={classes.links} visibleFrom="sm">
+          <Link href="/" className={classes.appNav}>
+            <Group pl={{ base: 0, lg: 'sm' }} pr="sm" gap="xs" className={classes.appLogo} visibleFrom="sm">
+              <Image
+                src="/images/FantasyCatLogo.png"
+                width={isMobile ? 40 : 40}
+                height={isMobile ? 40 : 40}
+                alt="Fantasy Cat Logo"
+              />
+              <Title order={3} fw="bold" fz={rem(18)}>
+                EntertainMe
+              </Title>
+            </Group>
+          </Link>
           {links.map(link => (
             <Link key={link.label} href={link.link} className={classes.link}>
               {link.label}
@@ -181,27 +172,27 @@ export const Navbar = ({ session }: { session: Session | null }) => {
         </Group>
         <Group w={{ base: '100%', lg: 'inherit' }}>
           {/*<SwitchSearch />*/}
-          <Input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search Movie"
-            leftSection={<IconSearch size={16} />}
-            w={isMobile ? '100%' : 'inherit'}
-            rightSection={
-              <IconX
-                size={16}
-                style={{
-                  cursor: 'pointer',
-                  display: search ? 'block' : 'none',
-                }}
-                onClick={() => {
-                  const url = new URL(window.location.href);
-                  url.searchParams.delete('search');
-                  router.push(url.toString());
-                }}
-              />
-            }
-          />
+          {/*<Input*/}
+          {/*  value={search}*/}
+          {/*  onChange={e => setSearch(e.target.value)}*/}
+          {/*  placeholder="Search Movie"*/}
+          {/*  leftSection={<IconSearch size={16} />}*/}
+          {/*  w={isMobile ? '100%' : 'inherit'}*/}
+          {/*  rightSection={*/}
+          {/*    <IconX*/}
+          {/*      size={16}*/}
+          {/*      style={{*/}
+          {/*        cursor: 'pointer',*/}
+          {/*        display: search ? 'block' : 'none',*/}
+          {/*      }}*/}
+          {/*      onClick={() => {*/}
+          {/*        const url = new URL(window.location.href);*/}
+          {/*        url.searchParams.delete('search');*/}
+          {/*        router.push(url.toString());*/}
+          {/*      }}*/}
+          {/*    />*/}
+          {/*  }*/}
+          {/*/>*/}
 
           <Drawer opened={opened} onClose={toggle}>
             {session ? (

@@ -9,8 +9,8 @@ import classes from '@/features/film/styles/Detail.module.css';
 import { IconArrowRight } from '@tabler/icons-react';
 
 export type ReviewProps = {
-  reviews: ResData<TReview[]>
-}
+  reviews: ResData<TReview[]>;
+};
 
 const REVIEW_SHOWN = 3;
 export const Review = ({ reviews }: ReviewProps) => {
@@ -28,11 +28,16 @@ export const Review = ({ reviews }: ReviewProps) => {
         size="xl"
         position="right"
         title={`Reviews`}
+        overlayProps={{
+          //    backgroundOpacity={0.5} blur={4}
+          backgroundOpacity: 0.5,
+          blur: 4,
+        }}
       >
         <Stack gap="md">
           {reviews.results
-            .toSorted((a, b) => b.created_at < a.created_at ? -1 : 1)
-            .map((review) => (
+            .toSorted((a, b) => (b.created_at < a.created_at ? -1 : 1))
+            .map(review => (
               <Comment key={review.id} review={review} />
             ))}
         </Stack>
@@ -42,12 +47,7 @@ export const Review = ({ reviews }: ReviewProps) => {
           Comments ({reviews.results.length})
         </Text>
         {reviews.results.length > REVIEW_SHOWN && (
-          <Button
-            variant="transparent"
-            onClick={drawer.open}
-            className={classes.title}
-            fw={500}
-          >
+          <Button variant="transparent" onClick={drawer.open} className={classes.title} fw={500}>
             View More <IconArrowRight />
           </Button>
         )}
@@ -56,7 +56,7 @@ export const Review = ({ reviews }: ReviewProps) => {
         {/* TODO: should be sorted from the most popular comment */}
         {reviews.results
           .filter((_, i) => i < REVIEW_SHOWN)
-          .map((review) => (
+          .map(review => (
             <Comment key={review.id} review={review} />
           ))}
       </Stack>

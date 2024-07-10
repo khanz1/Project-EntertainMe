@@ -16,15 +16,15 @@ import { cookies } from 'next/headers';
 import { MangaAggregate } from '@/features/manga/types/aggregate.type';
 
 /**
- * Fetches a list of manga from the MangaDex API based on the provided options.
+ * Fetches a list of @manga from the MangaDex API based on the provided options.
  *
- * This function sends a GET request to the MangaDex API to retrieve a list of manga.
+ * This function sends a GET request to the MangaDex API to retrieve a list of @manga.
  * It applies various search parameters to filter and order the results.
  *
  * @param {FetchMangaOptions} options - The options to configure the fetch request.
- * @param {number} options.pageSize - The number of manga to fetch per page.
+ * @param {number} options.pageSize - The number of @manga to fetch per page.
  * @param {number} options.page - The page number to fetch.
- * @param {string} options.searchTerm - The search term to filter the manga titles.
+ * @param {string} options.searchTerm - The search term to filter the @manga titles.
  * @returns {Promise<MangaCollection>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
 export const fetchManga = async (options: FetchMangaOptions): Promise<MangaCollection> => {
@@ -59,12 +59,12 @@ export const fetchManga = async (options: FetchMangaOptions): Promise<MangaColle
 };
 
 /**
- * Fetches the cover image information for a manga from the MangaDex API.
+ * Fetches the cover image information for a @manga from the MangaDex API.
  *
  * This function sends a GET request to the MangaDex API to retrieve the cover image information
- * for a specific manga based on the provided cover ID.
+ * for a specific @manga based on the provided cover ID.
  *
- * @param {string} coverId - The ID of the manga cover to fetch.
+ * @param {string} coverId - The ID of the @manga cover to fetch.
  * @returns {Promise<CoverCollection>} A promise that resolves to the JSON response containing cover image information.
  */
 export const fetchMangaCover = async (coverId: string): Promise<CoverCollection> => {
@@ -86,12 +86,12 @@ export const fetchMangaCover = async (coverId: string): Promise<CoverCollection>
 };
 
 /**
- * Fetches manga details from the MangaDex API based on the provided manga ID.
+ * Fetches @manga details from the MangaDex API based on the provided @manga ID.
  *
  * This function sends a GET request to the MangaDex API to retrieve detailed information
- * for a specific manga identified by its ID.
+ * for a specific @manga identified by its ID.
  *
- * @param {string} mangaId - The ID of the manga to fetch details for.
+ * @param {string} mangaId - The ID of the @manga to fetch details for.
  * @returns {Promise<MangaResponse>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
 export const fetchMangaByMangaId = async (mangaId: string): Promise<MangaResponse> => {
@@ -113,12 +113,12 @@ export const fetchMangaByMangaId = async (mangaId: string): Promise<MangaRespons
 };
 
 /**
- * Fetches manga statistics from the MangaDex API based on the provided manga ID.
+ * Fetches @manga statistics from the MangaDex API based on the provided @manga ID.
  *
  * This function sends a GET request to the MangaDex API to retrieve statistics
- * for a specific manga identified by its ID.
+ * for a specific @manga identified by its ID.
  *
- * @param {string} mangaId - The ID of the manga to fetch statistics for.
+ * @param {string} mangaId - The ID of the @manga to fetch statistics for.
  * @returns {Promise<MangaStatisticsResponse>} A promise that resolves to the MangaStatisticsResponse from the MangaDex API.
  */
 export const fetchStatisticsByMangaId = async (mangaId: string): Promise<MangaStatisticsResponse> => {
@@ -140,16 +140,16 @@ export const fetchStatisticsByMangaId = async (mangaId: string): Promise<MangaSt
 };
 
 /**
- * Fetches a list of manga chapters from the MangaDex API based on the provided options.
+ * Fetches a list of @manga chapters from the MangaDex API based on the provided options.
  *
  * This function sends a GET request to the MangaDex API to retrieve a list of chapters
- * for a specific manga identified by its ID. It applies various search parameters to
+ * for a specific @manga identified by its ID. It applies various search parameters to
  * filter and order the results.
  *
  * @param {FetchChapterOptions} params - The options to configure the fetch request.
  * @param {number} params.pageSize - The number of chapters to fetch per page.
  * @param {number} params.page - The page number to fetch.
- * @param {string} params.mangaId - The ID of the manga to fetch chapters for.
+ * @param {string} params.mangaId - The ID of the @manga to fetch chapters for.
  * @returns {Promise<ChapterCollection>} A promise that resolves to the ChapterCollection response from the MangaDex API.
  */
 export const fetchMangaChapterList = async (params: FetchChapterOptions): Promise<ChapterCollection> => {
@@ -190,7 +190,7 @@ export const fetchMangaChapterList = async (params: FetchChapterOptions): Promis
 };
 
 /**
- * Fetches detailed information about a manga chapter from the MangaDex API based on the provided chapter ID.
+ * Fetches detailed information about a @manga chapter from the MangaDex API based on the provided chapter ID.
  *
  * This function sends a GET request to the MangaDex API to retrieve detailed information
  * for a specific chapter identified by its ID.

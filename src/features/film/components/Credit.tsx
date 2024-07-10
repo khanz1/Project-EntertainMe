@@ -14,20 +14,19 @@ export enum TAB {
 
 export type CreditProps = {
   credit: TMovieCredit;
-}
+};
 
 export const Credit = ({ credit }: CreditProps) => {
   const [isDrawerOpen, drawer] = useDisclosure(false);
   const [activeTab, setActiveTab] = useState<TAB>(TAB.CAST);
 
-  const crewList = credit.crew
-    .reduce((acc: Record<string, Crew[]>, crew) => {
-      if (!acc[crew.job]) {
-        acc[crew.job] = [];
-      }
-      acc[crew.job].push(crew);
-      return acc;
-    }, {});
+  const crewList = credit.crew.reduce((acc: Record<string, Crew[]>, crew) => {
+    if (!acc[crew.job]) {
+      acc[crew.job] = [];
+    }
+    acc[crew.job].push(crew);
+    return acc;
+  }, {});
 
   if (!credit.cast.length) {
     return null;
@@ -41,8 +40,13 @@ export const Credit = ({ credit }: CreditProps) => {
         size="xl"
         position="right"
         title="Cast"
+        overlayProps={{
+          //    backgroundOpacity={0.5} blur={4}
+          backgroundOpacity: 0.5,
+          blur: 4,
+        }}
       >
-        <Tabs value={activeTab} onChange={(v) => setActiveTab(v as TAB)}>
+        <Tabs value={activeTab} onChange={v => setActiveTab(v as TAB)}>
           <Tabs.List grow>
             <Tabs.Tab value={TAB.CAST}>
               {TAB.CAST} ({credit.cast.length})
@@ -54,14 +58,9 @@ export const Credit = ({ credit }: CreditProps) => {
 
           <Tabs.Panel value={TAB.CAST}>
             <Group justify="space-between" py="lg" gap="xs">
-              {credit.cast
-                .map(cast => (
-                  <PersonCard
-                    key={cast.credit_id}
-                    person={cast}
-                    description={`as ${cast.character}`}
-                  />
-                ))}
+              {credit.cast.map(cast => (
+                <PersonCard key={cast.credit_id} person={cast} description={`as ${cast.character}`} />
+              ))}
             </Group>
           </Tabs.Panel>
 
@@ -69,16 +68,13 @@ export const Credit = ({ credit }: CreditProps) => {
             <Stack py="lg">
               {Object.keys(crewList).map(job => (
                 <Stack key={job}>
-                  <Text size="xl" fw="bold">{job}</Text>
+                  <Text size="xl" fw="bold">
+                    {job}
+                  </Text>
                   <Group gap="md">
-                    {crewList[job]
-                      .map(crew => (
-                        <PersonCard
-                          key={crew.credit_id}
-                          person={crew}
-                          description={`as ${crew.job}`}
-                        />
-                      ))}
+                    {crewList[job].map(crew => (
+                      <PersonCard key={crew.credit_id} person={crew} description={`as ${crew.job}`} />
+                    ))}
                   </Group>
                 </Stack>
               ))}
@@ -91,28 +87,18 @@ export const Credit = ({ credit }: CreditProps) => {
           <Text size="xl" fw="bold">
             Cast ({credit.cast.length + credit.crew.length})
           </Text>
-          <Button
-            variant="transparent"
-            onClick={drawer.open}
-            className={classes.title} fw={500}
-          >
+          <Button variant="transparent" onClick={drawer.open} className={classes.title} fw={500}>
             View More <IconArrowRight />
           </Button>
         </Group>
-        <Text pb="md">
-          Top billed cast, displaying the actors in their respective roles.
-        </Text>
+        <Text pb="md">Top billed cast, displaying the actors in their respective roles.</Text>
         <ScrollArea offsetScrollbars>
           <Group wrap="nowrap">
             {credit.cast
               // faster than filter, because we create a fix array length
               .slice(0, 5)
               .map(cast => (
-                <PersonCard
-                  key={cast.credit_id}
-                  person={cast}
-                  description={`as ${cast.character}`}
-                />
+                <PersonCard key={cast.credit_id} person={cast} description={`as ${cast.character}`} />
               ))}
           </Group>
         </ScrollArea>

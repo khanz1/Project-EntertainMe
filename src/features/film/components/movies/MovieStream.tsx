@@ -46,7 +46,17 @@ export const StreamMovie = ({ isStreamAvailable, movie }: StreamMovieProps) => {
 
   return (
     <Box>
-      <Modal opened={isStreamOpened} onClose={stream.close} title={`Stream ${movie.title}`} size="xl" centered>
+      <Modal
+        overlayProps={{
+          backgroundOpacity: 0.5,
+          blur: 4,
+        }}
+        opened={isStreamOpened}
+        onClose={stream.close}
+        title={`Stream ${movie.title}`}
+        size="xl"
+        centered
+      >
         <Box
           component="iframe"
           src={getVidSrcStreamUrl({

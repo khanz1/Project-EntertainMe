@@ -1,148 +1,39 @@
-'use client';
-
-import { fetchFilmList } from '@/features/film/film.action';
-import { isMovie, isTVSeries } from '@/features/film/film.helper';
-import { FetchProps, Film, FILM_FILTERS, ResData } from '@/features/film/types/film.type';
-import { fCapitalizeSpace, fThousandsNumber } from '@/utils/formatter.helper';
-import { Center, Container, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { useDebouncedValue } from '@mantine/hooks';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { FilmCard } from '@/features/film/components/FilmCard';
-import { ItemType } from '@prisma/client';
-
-const filterList = [
-  FILM_FILTERS.POPULAR,
-  FILM_FILTERS.TOP_RATED,
-  FILM_FILTERS.UPCOMING,
-  FILM_FILTERS.NOW_PLAYING,
-  FILM_FILTERS.ON_THE_AIR,
-  FILM_FILTERS.AIRING_TODAY,
-].map((f) => ({
-  label: fCapitalizeSpace(f),
-  value: f,
-}));
-const filmState: ResData<Film[]> = {
-  page: 1,
-  results: [],
-  total_pages: 1,
-  total_results: 1,
-};
+import { Button, Container, Text, Title } from '@mantine/core';
+import classes from './page.module.css';
+import Link from 'next/link';
 
 export default function Page() {
-  const router = useRouter();
-  const [filmList, setFilmList] = useState<ResData<Film[]>>(filmState);
-
-  const searchParams = useSearchParams();
-
-  const search = searchParams.get('search') || '';
-  const page = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
-  const filter = searchParams.get('filter') as FILM_FILTERS || FILM_FILTERS.POPULAR;
-  const [debounced] = useDebouncedValue(search, 500);
-
-  useEffect(() => {
-    (async () => {
-      const options: Partial<FetchProps> = {
-        page,
-        filter,
-      };
-
-      if (debounced) {
-        options.search = debounced;
-      }
-      const data = await fetchFilmList(options as FetchProps);
-
-      if (page === 1) {
-        setFilmList(data);
-      } else {
-        setFilmList((prev) => ({
-          ...prev,
-          results: [...prev.results, ...data.results],
-        }));
-      }
-    })();
-  }, [page, filter, debounced]);
-
-  const hasMoreFilm =
-    filmList.results.length === 0
-      ? true
-      : filmList.results.length < filmList.total_results;
-
   return (
-    <Container size="xl" my={25}>
-      <Grid>
-        {/*<Grid.Col span={{ base: 12, sm: 4, lg: 2 }}>*/}
-        {/*<Button.Group orientation="vertical">*/}
-        {/*  <Button variant="default" justify="start">Movies</Button>*/}
-        {/*  <Button variant="default" justify="start">TV Series</Button>*/}
-        {/*  <Button variant="default" justify="start">Manga</Button>*/}
-        {/*</Button.Group>*/}
-        {/*<Card shadow="sm" radius="md" withBorder>*/}
-        {/*  <InputLabel>Filter by Genre</InputLabel>*/}
-        {/*  <Stack my="sm">*/}
-        {/*    {genres.map((genre) => (*/}
-        {/*      <Checkbox label={genre.name} key={genre.id} />*/}
-        {/*    ))}*/}
-        {/*  </Stack>*/}
-        {/*</Card>*/}
-        {/*</Grid.Col>*/}
-        {/*<Grid.Col span={{ base: 12, sm: 8, lg: 10 }}>*/}
-        <Grid.Col>
-          <Group justify="space-between" mb="md" mx={{ base: 0, sm: 'md' }}>
-            <Select
-              placeholder="Pick value"
-              data={filterList}
-              value={filter}
-              onChange={(val) => {
-                if (val) {
-                  const url = new URL(window.location.href);
-                  url.searchParams.set('filter', val);
-                  url.searchParams.set('page', '1');
-                  router.push(url.toString());
-                  // setFilter(val as FILM_FILTERS);
-                }
-              }}
-            />
-            <Text>
-              {fThousandsNumber(filmList.results.length)} from{' '}
-              {fThousandsNumber(filmList.total_results)}
+    <div className={classes.root}>
+      <Container size="lg">
+        <div className={classes.inner}>
+          <div className={classes.content}>
+            <Title className={classes.title}>Dragon Ball Super</Title>
+
+            <Text className={classes.description} mt={30} lineClamp={4}>
+              The events of Battle of Gods take place some years after the battle with Majin Buu, which determined the
+              fate of the entire universe. After awakening from a long slumber, Beerus, the God of Destruction is
+              visited by Whis, his attendant and learns that the galactic overlord Frieza has been defeated by a Super
+              Saiyan from the North Quadrant of the universe named Goku, who is also a former student of the North Kai.
+              Ecstatic over the new challenge, Goku ignores King Kai&#39;s advice and battles Beerus, but he is easily
+              overwhelmed and defeated. Beerus leaves, but his eerie remark of &#34;Is there nobody on Earth more worthy
+              to destroy?&#34; lingers on. Now it is up to the heroes to stop the God of Destruction before all is lost.
             </Text>
-          </Group>
-          <InfiniteScroll
-            dataLength={filmList.results.length}
-            next={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.set('page', (page + 1).toString());
-              router.push(url.toString(), {
-                scroll: false,
-              });
-            }}
-            hasMore={hasMoreFilm}
-            loader={
-              <Center my="xl">
-                <Loader color="blue" />
-              </Center>
-            }
-          >
-            <Group
-              gap="md"
-              align="center"
+
+            <Button
+              component={Link}
+              href={'/movies/dragon-ball-z-battle-of-gods-126963'}
+              variant="gradient"
+              gradient={{ from: 'pink', to: 'yellow' }}
+              size="xl"
+              className={classes.control}
+              mt={40}
             >
-              {filmList.results.map((film) => {
-                if (!film.vote_average) {
-                  return null;
-                }
-                if (isMovie(film)) {
-                  return <FilmCard key={film.id} film={film} type={ItemType.movie} />;
-                } else if (isTVSeries(film)) {
-                  return <FilmCard key={film.id} film={film} type={ItemType.tv} />;
-                }
-              })}
-            </Group>
-          </InfiniteScroll>
-        </Grid.Col>
-      </Grid>
-    </Container>
+              Watch Now
+            </Button>
+          </div>
+        </div>
+      </Container>
+    </div>
   );
 }
