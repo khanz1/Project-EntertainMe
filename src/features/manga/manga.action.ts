@@ -11,6 +11,8 @@ import {
 } from '@/features/manga/manga.type';
 import { ChapterCollection, ChapterResponse, FetchChapterOptions } from '@/features/manga/types/chapter.type';
 import { TagCollection } from '@/features/manga/types/tag.type';
+import { kv } from '@vercel/kv';
+import { cookies } from 'next/headers';
 
 /**
  * Fetches a list of manga from the MangaDex API based on the provided options.
@@ -24,10 +26,7 @@ import { TagCollection } from '@/features/manga/types/tag.type';
  * @param {string} options.searchTerm - The search term to filter the manga titles.
  * @returns {Promise<MangaCollection>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
-export const fetchManga = async (
-  options: FetchMangaOptions,
-): Promise<MangaCollection> => {
-  console.log('fetch running 1 time');
+export const fetchManga = async (options: FetchMangaOptions): Promise<MangaCollection> => {
   const limit: string = (options.pageSize || 10).toString();
   const offset: string = (options.pageSize * (options.page - 1)).toString();
   const search = options.searchTerm || '';
@@ -67,15 +66,22 @@ export const fetchManga = async (
  * @param {string} coverId - The ID of the manga cover to fetch.
  * @returns {Promise<CoverCollection>} A promise that resolves to the JSON response containing cover image information.
  */
-export const fetchMangaCover = async (
-  coverId: string,
-): Promise<CoverCollection> => {
+export const fetchMangaCover = async (coverId: string): Promise<CoverCollection> => {
+  cookies();
+  const KV_KEY = `manga:cover:${coverId}`;
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as CoverCollection;
+  }
   const url = new URL(APP.MANGADEX_API_URL);
   url.pathname = `/cover/${coverId}`;
 
   const res = await fetch(url.toString());
 
-  return await res.json();
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
 };
 
 /**
@@ -87,15 +93,22 @@ export const fetchMangaCover = async (
  * @param {string} mangaId - The ID of the manga to fetch details for.
  * @returns {Promise<MangaResponse>} A promise that resolves to the MangaCollection response from the MangaDex API.
  */
-export const fetchMangaByMangaId = async (
-  mangaId: string,
-): Promise<MangaResponse> => {
+export const fetchMangaByMangaId = async (mangaId: string): Promise<MangaResponse> => {
+  cookies();
+  const KV_KEY = `manga:${mangaId}`;
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as MangaResponse;
+  }
   const HOST = APP.MANGADEX_API_URL;
   const url = new URL(`${HOST}/manga/${mangaId}`);
 
   const res = await fetch(url.toString());
 
-  return await res.json();
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
 };
 
 /**
@@ -107,15 +120,22 @@ export const fetchMangaByMangaId = async (
  * @param {string} mangaId - The ID of the manga to fetch statistics for.
  * @returns {Promise<MangaStatisticsResponse>} A promise that resolves to the MangaStatisticsResponse from the MangaDex API.
  */
-export const fetchStatisticsByMangaId = async (
-  mangaId: string,
-): Promise<MangaStatisticsResponse> => {
+export const fetchStatisticsByMangaId = async (mangaId: string): Promise<MangaStatisticsResponse> => {
+  cookies();
+  const KV_KEY = `manga:statistics:${mangaId}`;
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as MangaStatisticsResponse;
+  }
   const HOST = APP.MANGADEX_API_URL;
   const url = new URL(`${HOST}/statistics/manga/${mangaId}`);
 
   const res = await fetch(url.toString());
 
-  return await res.json();
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
 };
 
 /**
@@ -131,32 +151,40 @@ export const fetchStatisticsByMangaId = async (
  * @param {string} params.mangaId - The ID of the manga to fetch chapters for.
  * @returns {Promise<ChapterCollection>} A promise that resolves to the ChapterCollection response from the MangaDex API.
  */
-export const fetchMangaChapterList = async (
-  params: FetchChapterOptions,
-): Promise<ChapterCollection> => {
-  const limit = (params.pageSize || 10).toString();
-  const offset = (params.pageSize * (params.page - 1)).toString();
+export const fetchMangaChapterList = async (params: FetchChapterOptions): Promise<ChapterCollection> => {
+  cookies();
+  const KV_KEY = `manga:chapter:${params.mangaId}:${params.volume}`;
+
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as ChapterCollection;
+  }
+  // const pageSize = params.pageSize || 10;
 
   const url = new URL(APP.MANGADEX_API_URL + '/chapter');
-  url.searchParams.set('limit', limit);
-  url.searchParams.set('offset', offset);
+  // if (params.page) {
+  //   const limit = pageSize.toString();
+  //   const offset = (pageSize * (params.page - 1)).toString();
+  //   url.searchParams.set('limit', limit);
+  //   url.searchParams.set('offset', offset);
+  // }
+  url.searchParams.set('limit', '100');
+  url.searchParams.set('offset', '0');
   url.searchParams.set('manga', params.mangaId);
-  url.searchParams.set('translatedLanguage[]', 'en');
-  // url.searchParams.set('volume', params.volume.toString());
+  url.searchParams.append('translatedLanguage[]', 'en');
+  url.searchParams.set('volume[]', params.volume.toString());
   url.searchParams.append('contentRating[]', 'safe');
   url.searchParams.append('contentRating[]', 'suggestive');
   url.searchParams.append('contentRating[]', 'erotica');
-  url.searchParams.set('includeFutureUpdates', '1');
-  url.searchParams.set('order[createdAt]', 'asc');
-  url.searchParams.set('order[updatedAt]', 'asc');
-  url.searchParams.set('order[publishAt]', 'asc');
-  url.searchParams.set('order[readableAt]', 'asc');
   url.searchParams.set('order[volume]', 'asc');
   url.searchParams.set('order[chapter]', 'asc');
 
   const res = await fetch(url.toString());
 
-  return await res.json();
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
 };
 
 /**
@@ -168,31 +196,38 @@ export const fetchMangaChapterList = async (
  * @param {string} chapterId - The ID of the chapter to fetch details for.
  * @returns {Promise<ChapterResponse>} A promise that resolves to the ChapterResponse from the MangaDex API.
  */
-export const fetchChapterById = async (
-  chapterId: string,
-): Promise<ChapterResponse> => {
+export const fetchChapterById = async (chapterId: string): Promise<ChapterResponse> => {
+  cookies();
+  const KV_KEY = `manga:chapter:content:${chapterId}`;
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as ChapterResponse;
+  }
   const url = new URL(`${APP.MANGADEX_API_URL}/at-home/server/${chapterId}`);
   url.searchParams.set('forcePort443', 'true');
 
   const res = await fetch(url.toString());
 
-  return await res.json();
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
+
+  return data;
 };
 
 export const fetchMangaTags = async (): Promise<TagCollection> => {
+  cookies();
+  const KV_KEY = 'manga:tags';
+  const cached = await kv.get(KV_KEY);
+  if (cached) {
+    return cached as TagCollection;
+  }
   const url = new URL(APP.MANGADEX_API_URL);
   url.pathname = '/manga/tag';
 
   const res = await fetch(url.toString());
 
-  return await res.json();
-};
+  const data = await res.json();
+  await kv.set(KV_KEY, data);
 
-export const fetchMangaAggregateById = async (mangaId: string) => {
-  const url = new URL(APP.MANGADEX_API_URL);
-  url.pathname = `/manga/${mangaId}/aggregate`;
-
-  const res = await fetch(url.toString());
-
-  return await res.json();
+  return data;
 };

@@ -38,13 +38,13 @@ import { signOut } from '@/actions/user.action';
 type TLink = {
   link: string;
   label: string;
-}
+};
 
 const links: TLink[] = [
   // { link: '/', label: 'Home' },
   { link: '/movies', label: 'Movies' },
   { link: '/tv', label: 'TV Series' },
-  // { link: '/manga', label: 'Manga' },
+  { link: '/manga', label: 'Manga' },
   // { link: '/about', label: 'About' },
 ];
 
@@ -66,9 +66,7 @@ const UserControl = ({ session }: { session: Session }) => {
       withinPortal
     >
       <Menu.Target>
-        <UnstyledButton
-          className={cx(classes.user, { [classes.userActive]: userMenuOpened })}
-        >
+        <UnstyledButton className={cx(classes.user, { [classes.userActive]: userMenuOpened })}>
           <Group gap={7}>
             <Avatar src={session.user.image} alt={session.user.name || ''} radius="xl" size={20} />
             <Text fw={500} size="sm" lh={1} mr={3}>
@@ -83,42 +81,26 @@ const UserControl = ({ session }: { session: Session }) => {
           component={Link}
           href="/favorites"
           leftSection={
-            <IconHeart
-              style={{ width: rem(16), height: rem(16) }}
-              color={theme.colors.red[6]}
-              stroke={1.5}
-            />
+            <IconHeart style={{ width: rem(16), height: rem(16) }} color={theme.colors.red[6]} stroke={1.5} />
           }
         >
           Favorites
         </Menu.Item>
         <Menu.Item
           leftSection={
-            <IconHistory
-              style={{ width: rem(16), height: rem(16) }}
-              color={theme.colors.yellow[6]}
-              stroke={1.5}
-            />
+            <IconHistory style={{ width: rem(16), height: rem(16) }} color={theme.colors.yellow[6]} stroke={1.5} />
           }
         >
           Watch History
         </Menu.Item>
         <Menu.Item
           leftSection={
-            <IconMessage
-              style={{ width: rem(16), height: rem(16) }}
-              color={theme.colors.blue[6]}
-              stroke={1.5}
-            />
+            <IconMessage style={{ width: rem(16), height: rem(16) }} color={theme.colors.blue[6]} stroke={1.5} />
           }
         >
           Your Comments
         </Menu.Item>
-        <Menu.Item
-          leftSection={
-            <IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
-          }
-        >
+        <Menu.Item leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
           Settings
         </Menu.Item>
         <Menu.Item
@@ -183,12 +165,15 @@ export const Navbar = ({ session }: { session: Session | null }) => {
               src="/images/FantasyCatLogo.png"
               width={isMobile ? 40 : 40}
               height={isMobile ? 40 : 40}
-              alt="Fantasy Cat Logo" />
-            <Title order={3} fw="bold" fz={rem(18)}>EntertainMe</Title>
+              alt="Fantasy Cat Logo"
+            />
+            <Title order={3} fw="bold" fz={rem(18)}>
+              EntertainMe
+            </Title>
           </Group>
         </Link>
         <Group ml={50} gap={5} className={classes.links} visibleFrom="sm">
-          {links.map((link) => (
+          {links.map(link => (
             <Link key={link.label} href={link.link} className={classes.link}>
               {link.label}
             </Link>
@@ -198,7 +183,7 @@ export const Navbar = ({ session }: { session: Session | null }) => {
           {/*<SwitchSearch />*/}
           <Input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             placeholder="Search Movie"
             leftSection={<IconSearch size={16} />}
             w={isMobile ? '100%' : 'inherit'}

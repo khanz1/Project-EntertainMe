@@ -9,7 +9,6 @@ import { APP } from '@/constant';
 
 const inter = Inter({ subsets: ['latin'] });
 
-
 export const metadata: Metadata = {
   title: APP.NAME,
   description: APP.DESCRIPTION,
@@ -17,11 +16,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: APP.NAME,
     description: APP.DESCRIPTION,
-    images: [{
-      url: APP.LOGO_IMAGE_UHD,
-      secureUrl: APP.LOGO_IMAGE_UHD,
-      alt: APP.NAME,
-    }],
+    images: [
+      {
+        url: APP.LOGO_IMAGE_UHD,
+        secureUrl: APP.LOGO_IMAGE_UHD,
+        alt: APP.NAME,
+      },
+    ],
   },
   openGraph: {
     title: APP.NAME,
@@ -55,15 +56,15 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
   // theme = themeCookie!.value as MantineColorScheme;
   return (
     <html lang="en">
-    <head>
-      <ColorSchemeScript />
-    </head>
-    <body className={inter.className}>
-    <MantineProvider defaultColorScheme={theme}>
-      <NavbarProvider />
-      {children}
-    </MantineProvider>
-    </body>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body className={inter.className}>
+        <MantineProvider defaultColorScheme={theme}>
+          <NavbarProvider />
+          {children}
+        </MantineProvider>
+      </body>
     </html>
   );
 }

@@ -11,10 +11,7 @@ import { APP } from '@/constant';
  * @param {MangaFileSize} [size=MangaFileSize.ORIGINAL] - The desired size of the cover image. Defaults to original size.
  * @returns {string} The absolute URL of the manga cover image.
  */
-export const getMangaCover = (
-  props: GetMangaCoverParams,
-  size: MangaFileSize = MangaFileSize.ORIGINAL,
-): string => {
+export const getMangaCover = (props: GetMangaCoverParams, size: MangaFileSize = MangaFileSize.ORIGINAL): string => {
   // let ORIGIN = getOrigin();
   // if (size === MangaFileSize.ORIGINAL) {
   //   return `https://uploads.mangadex.org/covers/${props.mangaId}/${props.fileName}`;
@@ -26,7 +23,6 @@ export const getMangaCover = (
     return 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg';
   }
   // const h = headers();
-  console.log(typeof window, '<<<ads');
 
   let url: URL;
 
