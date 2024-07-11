@@ -35,7 +35,7 @@ export const Hero = ({ movies }: HeroProps) => {
             <Container size="xl" className={classes.inner}>
               <div className={classes.content}>
                 <Text size="xl" fw={900} variant="gradient" gradient={{ from: 'pink', to: 'yellow' }}>
-                  Trending #{index}
+                  Trending #{index + 1}
                 </Text>
                 <Title className={classes.title}>{movie.title}</Title>
                 <Group py="md">
