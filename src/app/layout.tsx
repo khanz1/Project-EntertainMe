@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ColorSchemeScript, MantineColorScheme, MantineProvider } from '@mantine/core';
 import { cookies } from 'next/headers';
-import { NavbarProvider } from '@/features/app/NavbarProvider';
+import { NavbarProvider } from '@/features/app/components/NavbarProvider';
 import React from 'react';
 import { APP } from '@/constant';
-import { Footer } from '@/features/app/Footer';
+import { Footer } from '@/features/app/components/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 

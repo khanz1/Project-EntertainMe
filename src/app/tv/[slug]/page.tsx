@@ -9,15 +9,9 @@ import { IconExternalLink } from '@tabler/icons-react';
 import { fetchTVSeriesById } from '@/features/film/actions/tv.action';
 import { ItemType } from '@prisma/client';
 import { TVSeason } from '@/features/film/components/tv/TVSeason';
-import {
-  fetchFilmCredits,
-  fetchFilmImages,
-  fetchFilmVideos,
-  fetchRecommendations,
-  fetchReviews,
-} from '@/features/film/actions/film.action';
 import { Credit, FavoriteAction, KeywordBadge, Media, Recommendation, Review } from '@/features/film/components';
 import { ImageSize } from '@/constant';
+import { fetchDetailTVPage } from '@/features/app/action';
 
 export type PageProps = {
   params: {
@@ -83,14 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: PageProps) {
   const tvSeriesId = parseIdFromSlug(params.slug);
-  const [tvSeries, recommendations, credit, reviews, videos, images] = await Promise.all([
-    fetchTVSeriesById(tvSeriesId),
-    fetchRecommendations(ItemType.tv, tvSeriesId),
-    fetchFilmCredits(ItemType.tv, tvSeriesId),
-    fetchReviews(ItemType.tv, tvSeriesId),
-    fetchFilmVideos(ItemType.tv, tvSeriesId),
-    fetchFilmImages(ItemType.tv, tvSeriesId),
-  ]);
+  const { tvSeries, recommendations, credit, reviews, videos, images } = await fetchDetailTVPage({ tvSeriesId });
 
   const tvSeriesMetaData = [
     {
@@ -180,21 +167,6 @@ export default async function Page({ params }: PageProps) {
               <Credit credit={credit} />
               <Media videos={videos} images={images} />
               <Review reviews={reviews} />
-              {/*{Boolean(movie.belongs_to_collection) && (*/}
-              {/*  <BackgroundImage*/}
-              {/*    className={classes.collectionBackground}*/}
-              {/*    src={getTmdbImage(movie.belongs_to_collection.backdrop_path, ImageSize.LARGE)} radius="md">*/}
-              {/*    <Box p="xl" style={{ zIndex: 2, position: 'relative' }}>*/}
-              {/*      <Stack gap="xl">*/}
-              {/*        <Title order={2} fw="bold">{movie.belongs_to_collection.name}</Title>*/}
-              {/*        <Link*/}
-              {/*          href={`/collection/${fSlug(movie.belongs_to_collection.name, movie.belongs_to_collection.id)}`}>*/}
-              {/*          <Button variant="light">Browse Collection</Button>*/}
-              {/*        </Link>*/}
-              {/*      </Stack>*/}
-              {/*    </Box>*/}
-              {/*  </BackgroundImage>*/}
-              {/*)}*/}
               <Recommendation recommendations={recommendations} />
             </Stack>
           </GridCol>

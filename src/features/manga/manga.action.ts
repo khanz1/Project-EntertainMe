@@ -157,19 +157,11 @@ export const fetchMangaChapterList = async (params: FetchChapterOptions): Promis
   const KV_KEY = `manga:chapter:${params.mangaId}:${params.volume}`;
 
   const cached = await kv.get(KV_KEY);
-  console.log(cached, '<<c');
-  // if (cached) {
-  //   return cached as ChapterCollection;
-  // }
-  // const pageSize = params.pageSize || 10;
+  if (cached) {
+    return cached as ChapterCollection;
+  }
 
   const url = new URL(APP.MANGADEX_API_URL + '/chapter');
-  // if (params.page) {
-  //   const limit = pageSize.toString();
-  //   const offset = (pageSize * (params.page - 1)).toString();
-  //   url.searchParams.set('limit', limit);
-  //   url.searchParams.set('offset', offset);
-  // }
   url.searchParams.set('limit', '100');
   url.searchParams.set('offset', '0');
   url.searchParams.set('manga', params.mangaId);

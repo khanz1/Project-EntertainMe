@@ -1,5 +1,5 @@
 import classes from '@/features/film/styles/FilmCard.module.css';
-import { Box, Card, Group, Image, Text } from '@mantine/core';
+import { Box, Card, Group, Image, Skeleton, Text } from '@mantine/core';
 import Link from 'next/link';
 import { getTmdbImage } from '../film.helper';
 import { Movie } from '../types/movie.type';
@@ -9,13 +9,15 @@ import { ItemType } from '@prisma/client';
 import { useMediaQuery } from '@mantine/hooks';
 import { APP } from '@/constant';
 
-export type MediaCardProps = {
-  film: Movie;
-  type: typeof ItemType.movie;
-} | {
-  film: TVSeries;
-  type: typeof ItemType.tv
-};
+export type MediaCardProps =
+  | {
+      film: Movie;
+      type: typeof ItemType.movie;
+    }
+  | {
+      film: TVSeries;
+      type: typeof ItemType.tv;
+    };
 
 // TODO: merge FilmCard and FilmCardMobile into one component
 export function FilmCard({ film, type }: MediaCardProps) {
@@ -26,20 +28,14 @@ export function FilmCard({ film, type }: MediaCardProps) {
 
   if (isMobile) {
     return (
-      <Card
-        component={Link}
-        href={link}
-        w="100%"
-        radius="md"
-        p={0}
-        className={classes.cardMobile}
-      >
+      <Card component={Link} href={link} w="100%" radius="md" p={0} className={classes.cardMobile}>
         <Group wrap="nowrap" gap={0} className={classes.cardBodyMobile}>
-          <Image
-            className={classes.imageMobile}
-            src={getTmdbImage(film.poster_path)}
-            alt={title}
-          />
+          {film.poster_path ? (
+            <Image className={classes.imageMobile} src={getTmdbImage(film.poster_path)} alt={title} />
+          ) : (
+            <Skeleton style={{ position: 'absolute', top: 0, left: 0 }} width="100%" height="100%" />
+          )}
+
           <Box px="md" pt="sm" w="100%">
             <Group justify="space-between" wrap="nowrap">
               <Text className={classes.titleMobile} tt="uppercase" lineClamp={1} fw={700}>
@@ -58,14 +54,7 @@ export function FilmCard({ film, type }: MediaCardProps) {
 
   return (
     <Link style={{ textDecoration: 'none' }} href={link}>
-      <Card
-        p="lg"
-        shadow="lg"
-        className={classes.card}
-        radius="md"
-        w={200}
-        h={300}
-      >
+      <Card p="lg" shadow="lg" className={classes.card} radius="md" w={200} h={300}>
         <Box
           className={classes.image}
           style={{

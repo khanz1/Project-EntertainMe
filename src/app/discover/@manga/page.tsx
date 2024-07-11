@@ -74,7 +74,6 @@ export default function Page() {
 
   const hasMoreManga = data.data.length < data.total;
 
-  console.log(tags, '<<< t');
   return (
     <Container size="xxl">
       <Grid>

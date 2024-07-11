@@ -2,7 +2,7 @@
 import Autoplay from 'embla-carousel-autoplay';
 import { useRef } from 'react';
 import { Carousel, CarouselSlide } from '@mantine/carousel';
-import classes from '@/features/app/landing/page.module.css';
+import classes from '@/features/app/components/landing/page.module.css';
 import { getTmdbImage } from '@/features/film/film.helper';
 import { ImageSize } from '@/constant';
 import { Button, Container, Group, ScrollArea, Text, Title } from '@mantine/core';

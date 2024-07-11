@@ -3,7 +3,7 @@ import { Box, Image, ScrollArea, Stack } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { ChapterResponse } from '@/features/manga/types/chapter.type';
 import { fetchChapterById } from '@/features/manga/manga.action';
-import { BackButton } from '@/features/app/BackButton';
+import { BackButton } from '@/features/app/components/BackButton';
 import classes from './page.module.css';
 
 export type PageProps = {

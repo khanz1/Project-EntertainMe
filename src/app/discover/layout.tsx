@@ -4,7 +4,7 @@ import { Box, Container, rem, Stack, Tabs, TabsList, TabsPanel, TabsTab } from '
 import { IconBook, IconDeviceTv, IconMovie } from '@tabler/icons-react';
 import React from 'react';
 import classes from './layout.module.css';
-import { DiscoverEntertain } from '@/features/app/DiscoverEntertain';
+import { DiscoverEntertain } from '@/features/app/components/DiscoverEntertain';
 
 type LayoutProps = {
   manga: React.ReactNode;
@@ -69,5 +69,3 @@ export default function Layout({ manga, movies, tv }: LayoutProps) {
     </Container>
   );
 }
-
-// GET https://zoroxtv.to/ajax/server/list/Hj-YDs4h,Hj-YDs4u,Hj-WAsMn?vrf=Q0BkVTlFZ1VUPFNnfj12VDtYLVtnQVNTdllCWIBeVFGAWHdYTkVTUDZRVWZNMFNXTWdRU1VBaWA%3D

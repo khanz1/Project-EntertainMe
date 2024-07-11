@@ -1,17 +1,15 @@
 import '@mantine/carousel/styles.css';
-import { fetchMovies } from '@/features/film/actions/movie.action';
-import { FILM_FILTERS } from '@/features/film/types/film.type';
-import { Hero, TopRatedMovies } from '@/features/app/landing/Hero';
-import { Discover } from '@/features/app/landing/Discover';
+import { Hero, TopRatedMovies } from '@/features/app/components/landing/Hero';
+import { Discover } from '@/features/app/components/landing/Discover';
+import { fetchPopularAndTopMovies } from '@/features/app/action';
 
 export default async function Page() {
-  const popularMovies = await fetchMovies({ page: 1, filter: FILM_FILTERS.POPULAR });
-  const topRatedMovies = await fetchMovies({ page: 1, filter: FILM_FILTERS.TOP_RATED });
+  const { popular, topRated } = await fetchPopularAndTopMovies();
 
   return (
     <>
-      <Hero movies={popularMovies} />
-      <TopRatedMovies movies={topRatedMovies} />
+      <Hero movies={popular} />
+      <TopRatedMovies movies={topRated} />
       <Discover />
     </>
   );

@@ -16,22 +16,16 @@ import { fSlug, parseIdFromSlug } from '@/utils/slugify.helper';
 import classes from './page.module.css';
 import { fMinutes, getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
-import { checkStreamAvailability, fetchMovieById } from '@/features/film/actions/movie.action';
+import { fetchMovieById } from '@/features/film/actions/movie.action';
 import { StreamAlert, StreamMovie } from '@/features/film/components/movies/MovieStream';
 import { Metadata } from 'next';
 import { fUSD } from '@/utils/formatter.helper';
 import Link from 'next/link';
 import { IconExternalLink } from '@tabler/icons-react';
 import { ItemType } from '@prisma/client';
-import {
-  fetchFilmCredits,
-  fetchFilmImages,
-  fetchFilmVideos,
-  fetchRecommendations,
-  fetchReviews,
-} from '@/features/film/actions/film.action';
 import { Credit, FavoriteAction, KeywordBadge, Media, Recommendation, Review } from '@/features/film/components';
 import { ImageSize } from '@/constant';
+import { fetchDetailMoviePage } from '@/features/app/action';
 
 export type PageProps = {
   params: {
@@ -97,18 +91,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Page({ params }: PageProps) {
   const movieId = parseIdFromSlug(params.slug);
-  const [movie, recommendations, credit, reviews, videos, images, isStreamAvailable] = await Promise.all([
-    fetchMovieById(movieId),
-    fetchRecommendations(ItemType.movie, movieId),
-    fetchFilmCredits(ItemType.movie, movieId),
-    fetchReviews(ItemType.movie, movieId),
-    fetchFilmVideos(ItemType.movie, movieId),
-    fetchFilmImages(ItemType.movie, movieId),
-    checkStreamAvailability({
-      type: ItemType.movie,
-      movieId,
-    }),
-  ]);
+  const { movie, recommendations, credit, reviews, videos, images, isStreamAvailable } = await fetchDetailMoviePage({
+    movieId,
+  });
 
   const movieMetaData = [
     {

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { TVSeries } from '@/features/film/types/series.type';
 import { fetchTVSeries } from '@/features/film/actions/tv.action';
-import { ScrollToTop } from '@/features/app/ScrollToTop';
+import { ScrollToTop } from '@/features/app/components/ScrollToTop';
 import { FilmCard } from '@/features/film/components/FilmCard';
 import { ItemType } from '@prisma/client';
 
