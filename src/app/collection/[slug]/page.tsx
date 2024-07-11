@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const canonicalUrl = 'https://entertainme.khanz1.dev';
 
   return {
-    title: `${collection.name} | Entertain Me`,
+    title: collection.name,
     description: collection.overview,
     twitter: {
       card: 'summary_large_image',
@@ -68,10 +68,8 @@ export default async function Page({ params }: PageProps) {
   return (
     <BackgroundImage
       className={classes.collectionBackground}
-      // style={{ background: 'rgb(31,31,31)' }}
       src={getTmdbImage(collection.backdrop_path, ImageSize.ORIGINAL)}
     >
-      {/*<HomeButton />*/}
       <CollectionDetail collection={collection} />
     </BackgroundImage>
   );

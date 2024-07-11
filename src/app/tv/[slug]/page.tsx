@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = 'https://entertainme.khanz1.dev';
 
   return {
-    title: `${tvSeries.name} | Entertain Me`,
+    title: tvSeries.name,
     description: tvSeries.overview,
     twitter: {
       card: 'summary_large_image',

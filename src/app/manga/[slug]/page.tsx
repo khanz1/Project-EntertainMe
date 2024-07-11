@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = data.attributes.description.en;
 
   return {
-    title: `${title} | Entertain Me`,
+    title: title,
     description,
     twitter: {
       card: 'summary_large_image',

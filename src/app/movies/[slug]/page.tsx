@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonicalUrl = 'https://entertainme.khanz1.dev';
 
   return {
-    title: `${movie.title} | Entertain Me`,
+    title: movie.title,
     description: movie.overview,
     twitter: {
       card: 'summary_large_image',

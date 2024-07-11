@@ -16,11 +16,11 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import classes from './Navbar.module.css';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { IconChevronDown, IconHeart, IconHistory, IconLogout, IconMessage, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { useDebouncedValue, useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
+import React, { useState } from 'react';
+import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
 import { APP } from '@/constant';
 import { Session } from 'next-auth';
 import { signOut } from '@/actions/user.action';
@@ -109,39 +109,9 @@ const UserControl = ({ session }: { session: Session }) => {
 export const Navbar = ({ session }: { session: Session | null }) => {
   const [opened, { toggle }] = useDisclosure(false);
   const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
-  const router = useRouter();
-  const [scroll, scrollTo] = useWindowScroll();
+  const [scroll] = useWindowScroll();
 
-  const searchParams = useSearchParams();
-  const recentSearch = searchParams.get('search');
-  const [search, setSearch] = useState(recentSearch || '');
   const pathname = usePathname();
-  const [debounced] = useDebouncedValue(search, 500);
-
-  useEffect(() => {
-    setSearch(searchParams.get('search') || '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (search) {
-      const url = new URL(window.location.href);
-      url.searchParams.set('search', debounced);
-      url.searchParams.set('page', '1');
-      url.searchParams.delete('filter');
-      router.push(url.toString());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounced]);
-
-  // if (
-  //   pathname.startsWith('/movies/') ||
-  //   pathname.startsWith('/tv/') ||
-  //   pathname.startsWith('/manga/') ||
-  //   pathname.startsWith('/collection/')
-  // ) {
-  //   return null;
-  // }
 
   return (
     <header data-page={pathname} data-scrolling={scroll.y > 100} className={classes.header}>
@@ -169,29 +139,6 @@ export const Navbar = ({ session }: { session: Session | null }) => {
           ))}
         </Group>
         <Group w={{ base: '100%', lg: 'inherit' }}>
-          {/*<SwitchSearch />*/}
-          {/*<Input*/}
-          {/*  value={search}*/}
-          {/*  onChange={e => setSearch(e.target.value)}*/}
-          {/*  placeholder="Search Movie"*/}
-          {/*  leftSection={<IconSearch size={16} />}*/}
-          {/*  w={isMobile ? '100%' : 'inherit'}*/}
-          {/*  rightSection={*/}
-          {/*    <IconX*/}
-          {/*      size={16}*/}
-          {/*      style={{*/}
-          {/*        cursor: 'pointer',*/}
-          {/*        display: search ? 'block' : 'none',*/}
-          {/*      }}*/}
-          {/*      onClick={() => {*/}
-          {/*        const url = new URL(window.location.href);*/}
-          {/*        url.searchParams.delete('search');*/}
-          {/*        router.push(url.toString());*/}
-          {/*      }}*/}
-          {/*    />*/}
-          {/*  }*/}
-          {/*/>*/}
-
           <Drawer opened={opened} onClose={toggle}>
             {session ? (
               <UserControl session={session} />
