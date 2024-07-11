@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { NavbarProvider } from '@/features/app/NavbarProvider';
 import React from 'react';
 import { APP } from '@/constant';
+import { Footer } from '@/features/app/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
         <MantineProvider defaultColorScheme={theme}>
           <NavbarProvider />
           {children}
+          <Footer />
         </MantineProvider>
       </body>
     </html>

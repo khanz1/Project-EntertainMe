@@ -20,7 +20,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { IconChevronDown, IconHeart, IconHistory, IconLogout, IconMessage, IconSettings } from '@tabler/icons-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { useDebouncedValue, useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDebouncedValue, useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
 import { APP } from '@/constant';
 import { Session } from 'next-auth';
 import { signOut } from '@/actions/user.action';
@@ -110,6 +110,7 @@ export const Navbar = ({ session }: { session: Session | null }) => {
   const [opened, { toggle }] = useDisclosure(false);
   const isMobile = useMediaQuery(APP.MOBILE_BREAKPOINT);
   const router = useRouter();
+  const [scroll, scrollTo] = useWindowScroll();
 
   const searchParams = useSearchParams();
   const recentSearch = searchParams.get('search');
@@ -133,20 +134,17 @@ export const Navbar = ({ session }: { session: Session | null }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced]);
 
-  if (
-    pathname.startsWith('/movies/') ||
-    pathname.startsWith('/watch/') ||
-    pathname.startsWith('/tv/') ||
-    pathname.startsWith('/read/') ||
-    pathname.startsWith('/manga/') ||
-    pathname.startsWith('/collection/') ||
-    pathname.startsWith('/collection/')
-  ) {
-    return null;
-  }
+  // if (
+  //   pathname.startsWith('/movies/') ||
+  //   pathname.startsWith('/tv/') ||
+  //   pathname.startsWith('/manga/') ||
+  //   pathname.startsWith('/collection/')
+  // ) {
+  //   return null;
+  // }
 
   return (
-    <header className={classes.header}>
+    <header data-page={pathname} data-scrolling={scroll.y > 100} className={classes.header}>
       <div className={classes.inner}>
         <Burger opened={opened} onClick={toggle} size="md" hiddenFrom="sm" mr="md" />
 

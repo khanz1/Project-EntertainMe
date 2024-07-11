@@ -43,8 +43,8 @@ export default function Layout({ manga, movies, tv }: LayoutProps) {
   // );
 
   return (
-    <Container size="xl" py="xl" m="auto">
-      <Stack>
+    <Container size="xl" m="auto" pt={rem(56)}>
+      <Stack py="xl">
         <Box w="50%" m="auto">
           <DiscoverEntertain />
         </Box>

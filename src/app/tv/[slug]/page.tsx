@@ -1,6 +1,5 @@
 import { Badge, Box, Grid, GridCol, Group, Image, rem, Stack, Text, Title } from '@mantine/core';
 import { parseIdFromSlug } from '@/utils/slugify.helper';
-import { HomeButton } from '@/features/app/BackButton';
 import classes from './page.module.css';
 import { getTmdbImage } from '@/features/film/film.helper';
 import React from 'react';
@@ -110,7 +109,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
-      <HomeButton />
+      {/*<HomeButton />*/}
       <Box
         className={classes.overlay}
         style={{

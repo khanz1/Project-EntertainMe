@@ -2,7 +2,6 @@ import { Badge, Box, Grid, GridCol, Group, Image, rem, Stack, Text, Title } from
 import { parseMangaIdFromSlug } from '@/utils/slugify.helper';
 import { fetchMangaByMangaId, fetchMangaCover, fetchStatisticsByMangaId } from '@/features/manga/manga.action';
 import { getMangaCover } from '@/features/manga/manga.helper';
-import { HomeButton } from '@/features/app/BackButton';
 import { Metadata } from 'next';
 import classes from './page.module.css';
 import React from 'react';
@@ -109,7 +108,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <Box style={{ background: 'var(--mantine-color-dark-8)', minHeight: '100vh' }}>
-      <HomeButton />
+      {/*<HomeButton />*/}
       <Box
         className={classes.overlay}
         style={{

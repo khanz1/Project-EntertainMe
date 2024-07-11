@@ -11,7 +11,7 @@ import { APP } from '@/constant';
 export type EpisodeCardProps = {
   episode: Episode;
   seasonNumber: number;
-  tvSeries: TVSeriesDetail
+  tvSeries: TVSeriesDetail;
 };
 
 export function EpisodeCard({ episode, seasonNumber, tvSeries }: EpisodeCardProps) {
@@ -20,11 +20,10 @@ export function EpisodeCard({ episode, seasonNumber, tvSeries }: EpisodeCardProp
 
   return (
     <Box>
-
       <Modal
         opened={isModalOpen}
         onClose={modal.close}
-        title={`Stream ${episode.episode_number}. ${episode.name}`}
+        title={`Stream S${seasonNumber}E${episode.episode_number}`}
         size="xl"
         centered
         overlayProps={{
@@ -47,15 +46,11 @@ export function EpisodeCard({ episode, seasonNumber, tvSeries }: EpisodeCardProp
       </Modal>
       <Card w="100%" radius="md" p={0} className={classes.card} onClick={modal.open}>
         <Group wrap="nowrap" gap={0}>
-          <Image
-            className={classes.image}
-            src={getTmdbImage(episode.still_path)}
-            alt={episode.name}
-          />
+          <Image className={classes.image} src={getTmdbImage(episode.still_path)} alt={episode.name} />
           <Box px="md" w="100%" className={classes.cardBody}>
             <Group justify="space-between" wrap="nowrap">
               <Text className={classes.title} tt="uppercase" lineClamp={1} fw={700}>
-                S{seasonNumber}E{episode.episode_number}{' '}{episode.name}
+                S{seasonNumber}E{episode.episode_number} {episode.name}
               </Text>
               <Text>{episode.runtime}m</Text>
             </Group>
