@@ -4,7 +4,6 @@ import { BackgroundImage } from '@mantine/core';
 import { getTmdbImage } from '@/features/film/film.helper';
 import classes from './page.module.css';
 import { CollectionDetail } from '@/features/film/components/collection/CollectionDetail';
-import { HomeButton } from '@/features/app/components/BackButton';
 import { ImageSize } from '@/constant';
 import { Metadata } from 'next';
 
@@ -72,7 +71,7 @@ export default async function Page({ params }: PageProps) {
       // style={{ background: 'rgb(31,31,31)' }}
       src={getTmdbImage(collection.backdrop_path, ImageSize.ORIGINAL)}
     >
-      <HomeButton />
+      {/*<HomeButton />*/}
       <CollectionDetail collection={collection} />
     </BackgroundImage>
   );

@@ -149,7 +149,7 @@ export const Navbar = ({ session }: { session: Session | null }) => {
         <Burger opened={opened} onClick={toggle} size="md" hiddenFrom="sm" mr="md" />
 
         <Group gap={5} className={classes.links} visibleFrom="sm">
-          <Link href="/public" className={classes.appNav}>
+          <Link href="/" className={classes.appNav}>
             <Group pl={{ base: 0, lg: 'sm' }} pr="sm" gap="xs" className={classes.appLogo} visibleFrom="sm">
               <Image
                 src="/images/FantasyCatLogo.png"
