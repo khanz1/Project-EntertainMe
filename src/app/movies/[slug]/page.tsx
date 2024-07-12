@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function Default({ params }: PageProps) {
   const movieId = parseIdFromSlug(params.slug);
   const { movie, recommendations, credit, reviews, videos, images, isStreamAvailable } = await fetchDetailMoviePage({
     movieId,

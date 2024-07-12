@@ -46,6 +46,26 @@ export const parseIdFromSlug = (slug: string): number => {
   return parseInt(parts[parts.length - 1], 10);
 };
 
+export const parseTitleAndIdFromSlug = (slug: string): { title: string; id: number } => {
+  const parts = slug.split('-');
+  let id = 0;
+  if (parts.length === 1) {
+    // If the slug does not contain an id, then the name is the id
+    // because the link doesn't provide the movie/@tv name
+    if (isNaN(Number(parts[0]))) {
+      // TODO: next we have to handle the error correctly
+      throw new Error('Invalid slug format');
+    } else {
+      id = Number(parts[0]);
+    }
+  }
+
+  id = parseInt(parts[parts.length - 1], 10);
+
+  const title = parts.slice(0, parts.length - 1).join(' ');
+  return { title, id };
+};
+
 /**
  * Extracts the Manga ID (UUID) from a given URL slug.
  *
