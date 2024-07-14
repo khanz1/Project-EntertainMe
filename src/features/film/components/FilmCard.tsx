@@ -1,3 +1,4 @@
+'use client';
 import classes from '@/features/film/styles/FilmCard.module.css';
 import { Box, Card, Group, Image, Skeleton, Text } from '@mantine/core';
 import Link from 'next/link';

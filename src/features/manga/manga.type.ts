@@ -193,5 +193,5 @@ export type FetchMangaOptions = {
   pageSize: number;
   page: number;
   searchTerm: string;
-  selectedTags: string[];
+  selectedTags?: string[];
 };

@@ -49,8 +49,10 @@ export const fetchManga = async (options: FetchMangaOptions): Promise<MangaColle
   url.searchParams.append('contentRating[]', ContentRating.SUGGESTIVE);
   url.searchParams.append('contentRating[]', ContentRating.EROTICA);
 
-  for (const tag of options.selectedTags) {
-    url.searchParams.append('includedTags[]', tag);
+  if (options.selectedTags) {
+    for (const tag of options.selectedTags) {
+      url.searchParams.append('includedTags[]', tag);
+    }
   }
 
   const res = await fetch(url.toString());

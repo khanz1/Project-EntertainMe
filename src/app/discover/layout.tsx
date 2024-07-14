@@ -1,6 +1,4 @@
-// 'use client';
-
-import { Box, Container, rem, Stack, Tabs, TabsList, TabsPanel, TabsTab } from '@mantine/core';
+import { Box, Container, Grid, GridCol, rem, Stack, Tabs, TabsList, TabsPanel, TabsTab } from '@mantine/core';
 import { IconBook, IconDeviceTv, IconMovie } from '@tabler/icons-react';
 import React from 'react';
 import classes from './layout.module.css';
@@ -12,58 +10,47 @@ type LayoutProps = {
   tv: React.ReactNode;
 };
 
-export default function Layout({ manga, movies, tv }: LayoutProps) {
-  // const router = useRouter();
-  // const pathname = usePathname();
-  // const pathList = pathname.split('/');
-  // if (pathList.length > 2) {
-  //   return children;
-  // }
-
+export default async function Layout({ manga, movies, tv }: LayoutProps) {
   const iconStyle = { width: rem(12), height: rem(12) };
-  // return (
-  //   <Container size="xxl" py="xl">
-  //     <Grid>
-  //       <GridCol span={{ base: 12, sm: 2 }}>
-  //         <ButtonGroup orientation="vertical" m="auto">
-  //           <Button component={Link} href="/@movies" variant="default">
-  //             Movies
-  //           </Button>
-  //           <Button component={Link} href="/@tv" variant="default">
-  //             TV Series
-  //           </Button>
-  //           <Button component={Link} href="/@manga" variant="default">
-  //             Manga
-  //           </Button>
-  //         </ButtonGroup>
-  //       </GridCol>
-  //       <GridCol span={{ base: 12, sm: 10 }}>{children}</GridCol>
-  //     </Grid>
-  //   </Container>
-  // );
+
+  // await sleep(10000);
 
   return (
     <Container size="xl" m="auto" pt={rem(56)}>
       <Stack py="xl">
-        <Box w="50%" m="auto">
+        <Box w={{ base: '100%', sm: '50%' }} m="auto">
           <DiscoverEntertain />
         </Box>
         <Tabs variant="pills" defaultValue="movies" orientation="vertical" classNames={classes}>
-          <TabsList>
-            <TabsTab value="movies" leftSection={<IconMovie style={iconStyle} />}>
-              Movies
-            </TabsTab>
-            <TabsTab value="tv" leftSection={<IconDeviceTv style={iconStyle} />}>
-              TV Series
-            </TabsTab>
-            <TabsTab value="manga" leftSection={<IconBook style={iconStyle} />}>
-              Manga
-            </TabsTab>
-          </TabsList>
+          <Grid w="100%">
+            <GridCol span={{ base: 12, sm: 2 }}>
+              <TabsList>
+                <Grid gutter={0}>
+                  <GridCol span={{ base: 4, sm: 12 }}>
+                    <TabsTab my={0} value="movies" leftSection={<IconMovie style={iconStyle} />}>
+                      Movies
+                    </TabsTab>
+                  </GridCol>
+                  <GridCol span={{ base: 4, sm: 12 }}>
+                    <TabsTab value="tv" leftSection={<IconDeviceTv style={iconStyle} />}>
+                      TV Series
+                    </TabsTab>
+                  </GridCol>
+                  <GridCol span={{ base: 4, sm: 12 }}>
+                    <TabsTab value="manga" leftSection={<IconBook style={iconStyle} />}>
+                      Manga
+                    </TabsTab>
+                  </GridCol>
+                </Grid>
+              </TabsList>
+            </GridCol>
 
-          <TabsPanel value="movies">{movies}</TabsPanel>
-          <TabsPanel value="tv">{tv}</TabsPanel>
-          <TabsPanel value="manga">{manga}</TabsPanel>
+            <GridCol span={{ base: 12, sm: 10 }}>
+              <TabsPanel value="movies">{movies}</TabsPanel>
+              <TabsPanel value="tv">{tv}</TabsPanel>
+              <TabsPanel value="manga">{manga}</TabsPanel>
+            </GridCol>
+          </Grid>
         </Tabs>
       </Stack>
     </Container>

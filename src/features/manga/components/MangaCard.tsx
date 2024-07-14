@@ -1,3 +1,4 @@
+'use client';
 import classes from './MangaCard.module.css';
 import { Box, Card, Group, Skeleton, Text } from '@mantine/core';
 import Link from 'next/link';
