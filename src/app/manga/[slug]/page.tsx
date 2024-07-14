@@ -9,6 +9,8 @@ import { MangaFileSize } from '@/features/manga/manga.type';
 import Link from 'next/link';
 import { IconExternalLink } from '@tabler/icons-react';
 import { VolumeFeed } from '@/features/manga/components/VolumeFeed';
+import { FavoriteAction } from '@/features/film/components';
+import { ItemType } from '@prisma/client';
 
 export type PageProps = {
   params: {
@@ -155,6 +157,7 @@ export default async function Page({ params }: PageProps) {
                   ))}
                 </Group>
               </Box>
+              <FavoriteAction type={ItemType.manga} item={manga} />
               <Box>
                 <Text size="xl" fw="bold" pt="xs">
                   Overview

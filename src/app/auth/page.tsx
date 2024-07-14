@@ -11,6 +11,7 @@ import {
   Group,
   Paper,
   PasswordInput,
+  rem,
   Stack,
   Text,
   TextInput,
@@ -31,11 +32,8 @@ export default function Page() {
     },
 
     validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
-      password: (val) =>
-        val.length <= 6
-          ? 'Password should include at least 6 characters'
-          : null,
+      email: val => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
+      password: val => (val.length <= 6 ? 'Password should include at least 6 characters' : null),
     },
   });
 
@@ -45,7 +43,7 @@ export default function Page() {
   };
 
   return (
-    <Container size="xs" mt="xl">
+    <Container size="xs" py={rem(120)}>
       <Paper radius="md" withBorder p="xl">
         <Text size="lg" fw={500}>
           Welcome to EntertainMe, {type} with
@@ -58,23 +56,16 @@ export default function Page() {
           <TwitterButton radius="xl">Twitter</TwitterButton>
         </Group>
 
-        <Divider
-          label="Or continue with email"
-          labelPosition="center"
-          my="lg"
-        />
+        <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-        <form onSubmit={form.onSubmit(() => {
-        })}>
+        <form onSubmit={form.onSubmit(() => {})}>
           <Stack>
             {type === 'register' && (
               <TextInput
                 label="Name"
                 placeholder="Your name"
                 value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue('name', event.currentTarget.value)
-                }
+                onChange={event => form.setFieldValue('name', event.currentTarget.value)}
                 radius="md"
               />
             )}
@@ -84,9 +75,7 @@ export default function Page() {
               label="Email"
               placeholder="hello@mantine.dev"
               value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue('email', event.currentTarget.value)
-              }
+              onChange={event => form.setFieldValue('email', event.currentTarget.value)}
               error={form.errors.email && 'Invalid email'}
               radius="md"
             />
@@ -96,13 +85,8 @@ export default function Page() {
               label="Password"
               placeholder="Your password"
               value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue('password', event.currentTarget.value)
-              }
-              error={
-                form.errors.password &&
-                'Password should include at least 6 characters'
-              }
+              onChange={event => form.setFieldValue('password', event.currentTarget.value)}
+              error={form.errors.password && 'Password should include at least 6 characters'}
               radius="md"
             />
 
@@ -110,24 +94,14 @@ export default function Page() {
               <Checkbox
                 label="I accept terms and conditions"
                 checked={form.values.terms}
-                onChange={(event) =>
-                  form.setFieldValue('terms', event.currentTarget.checked)
-                }
+                onChange={event => form.setFieldValue('terms', event.currentTarget.checked)}
               />
             )}
           </Stack>
 
           <Group justify="space-between" mt="xl">
-            <Anchor
-              component="button"
-              type="button"
-              c="dimmed"
-              onClick={() => toggle()}
-              size="xs"
-            >
-              {type === 'register'
-                ? 'Already have an account? Login'
-                : 'Don\'t have an account? Register'}
+            <Anchor component="button" type="button" c="dimmed" onClick={() => toggle()} size="xs">
+              {type === 'register' ? 'Already have an account? Login' : "Don't have an account? Register"}
             </Anchor>
             <Button type="submit" radius="xl">
               {upperFirst(type)}

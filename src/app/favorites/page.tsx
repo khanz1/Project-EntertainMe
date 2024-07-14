@@ -1,6 +1,6 @@
 import { getFavoritesByUser } from '@/features/favorites/favorite.action';
 import { auth } from '@/auth';
-import { Container, Group } from '@mantine/core';
+import { Container, Group, rem } from '@mantine/core';
 import { FavoriteList } from '@/features/favorites/components/FavoriteList';
 
 export default async function Page() {
@@ -8,8 +8,8 @@ export default async function Page() {
   const favorites = await getFavoritesByUser({ userId: session!.user.id! });
 
   return (
-    <Container py="xl">
-      <Group gap="md" align="center">
+    <Container pt={rem(120)} pb="xl">
+      <Group gap="md">
         <FavoriteList favorites={favorites} />
       </Group>
     </Container>
