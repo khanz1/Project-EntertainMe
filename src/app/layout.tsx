@@ -7,9 +7,9 @@ import { NavbarProvider } from '@/features/app/components/NavbarProvider';
 import React from 'react';
 import { APP } from '@/constant';
 import { Footer } from '@/features/app/components/Footer';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const inter = Inter({ subsets: ['latin'] });
-
 export const metadata: Metadata = {
   metadataBase: new URL(APP.WEB_URL),
   keywords: [
@@ -102,6 +102,7 @@ export default function RootLayout({ children }: Readonly<LayoutProps>) {
           {children}
           <Footer />
         </MantineProvider>
+        <GoogleAnalytics gaId="G-NV7QEV42CQ" />
       </body>
     </html>
   );
