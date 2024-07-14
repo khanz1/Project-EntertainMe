@@ -3,5 +3,11 @@
     "env": {
       "PRISMA_CLIENT_ENGINE_TYPE": "binary"
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 0 * * MON"
+    }
+  ]
 }
