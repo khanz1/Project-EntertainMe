@@ -119,7 +119,7 @@ export const Navbar = ({ session }: { session: Session | null }) => {
       <div className={classes.inner}>
         <Burger opened={opened} onClick={toggle} size="md" hiddenFrom="sm" mr="md" />
 
-        <Group gap={5} className={classes.links} visibleFrom="sm">
+        <Group gap={5} w={{ base: '100%', lg: 'inherit' }} visibleFrom="sm">
           <Link href="/" className={classes.appNav}>
             <Group pl={{ base: 0, lg: 'sm' }} pr="sm" gap="xs" className={classes.appLogo} visibleFrom="sm">
               <Image
@@ -139,39 +139,25 @@ export const Navbar = ({ session }: { session: Session | null }) => {
             </Link>
           ))}
         </Group>
-        <Group w={{ base: '100%', lg: 'inherit' }}>
-          <Drawer
-            opened={opened}
-            onClose={toggle}
-            title={
-              <Group w="100%" justify="space-between">
-                <AppLogo size={50} />
-                {session ? (
-                  <UserControl session={session} />
-                ) : (
-                  <Link href="/auth" onClick={toggle}>
-                    <Button variant="default">Log in</Button>
-                  </Link>
-                )}
-              </Group>
-            }
-          >
+        <Group hiddenFrom="sm" w={{ base: '100%', lg: 'inherit' }}>
+          <Drawer opened={opened} onClose={toggle} title={<AppLogo size={50} />}>
             {links.map(link => (
               <Link key={link.label} href={link.link} className={classes.link}>
                 {link.label}
               </Link>
             ))}
           </Drawer>
-          <Box visibleFrom="lg">
-            {session ? (
-              <UserControl session={session} />
-            ) : (
-              <Link href="/auth">
-                <Button variant="default">Log in</Button>
-              </Link>
-            )}
-          </Box>
         </Group>
+
+        <Box>
+          {session ? (
+            <UserControl session={session} />
+          ) : (
+            <Link href="/auth">
+              <Button variant="default">Log in</Button>
+            </Link>
+          )}
+        </Box>
       </div>
     </header>
   );
