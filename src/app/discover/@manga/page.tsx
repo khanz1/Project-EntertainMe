@@ -2,6 +2,7 @@ import { Box, Group } from '@mantine/core';
 import { fetchManga } from '@/features/manga/manga.action';
 import { MangaCard } from '@/features/manga/components/MangaCard';
 import { Pagination } from '@/features/app/components/discover/Pagination';
+import { NotFoundItem } from '@/features/app/components/not-found/NotFoundItem';
 
 const PAGE_SIZE = 20;
 
@@ -21,6 +22,10 @@ export default async function Page({ searchParams }: PageProps) {
     pageSize: PAGE_SIZE,
     searchTerm: search,
   });
+
+  if (mangaList.total === 0) {
+    return <NotFoundItem />;
+  }
 
   return (
     <Box>

@@ -1,12 +1,14 @@
 'use client';
 
-import { CloseButton, Input } from '@mantine/core';
+import { CloseButton, FocusTrap, Input } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
+import { useDiscoverContext } from '@/features/app/discover.context';
 
 export const DiscoverEntertain = () => {
+  const { searchFocusActive } = useDiscoverContext();
   const router = useRouter();
   const searchParams = useSearchParams();
   const recentSearch = searchParams.get('search');
@@ -24,6 +26,7 @@ export const DiscoverEntertain = () => {
       url.searchParams.set('search', debounced);
       url.searchParams.set('page', '1');
       url.searchParams.delete('filter');
+      console.log('asdf');
       router.push(url.toString());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,42 +34,33 @@ export const DiscoverEntertain = () => {
 
   return (
     <div>
-      <Input
-        value={search}
-        onChange={e => setSearch(e.target.value)}
-        placeholder="Search Movie"
-        leftSection={<IconSearch size={16} />}
-        rightSectionPointerEvents="all"
-        w={{ base: '100%', sm: 'inherit' }}
-        rightSection={
-          <CloseButton
-            aria-label="Clear input"
-            onClick={() => {
-              const url = new URL(window.location.href);
-              url.searchParams.delete('search');
-              router.push(url.toString());
+      <FocusTrap active={searchFocusActive}>
+        <Input
+          value={search}
+          autoFocus
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search Movie"
+          leftSection={<IconSearch size={16} />}
+          rightSectionPointerEvents="all"
+          w={{ base: '100%', sm: 'inherit' }}
+          rightSection={
+            <CloseButton
+              aria-label="Clear input"
+              onClick={() => {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('search');
+                router.push(url.toString());
 
-              setSearch('');
-            }}
-            style={{
-              cursor: 'pointer',
-              display: search ? 'block' : 'none',
-            }}
-          />
-          // <IconX
-          //   size={16}
-          //   style={{
-          //     cursor: 'pointer',
-          //     display: search ? 'block' : 'none',
-          //   }}
-          //   onClick={() => {
-          //     const url = new URL(window.location.href);
-          //     url.searchParams.delete('search');
-          //     router.push(url.toString());
-          //   }}
-          // />
-        }
-      />
+                setSearch('');
+              }}
+              style={{
+                cursor: 'pointer',
+                display: search ? 'block' : 'none',
+              }}
+            />
+          }
+        />
+      </FocusTrap>
     </div>
   );
 };
