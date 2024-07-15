@@ -21,3 +21,23 @@
         }
     }
 }
+
+.firstTab {
+    border-top-left-radius: var(--mantine-radius-md);
+    border-bottom-left-radius: var(--mantine-radius-md);
+
+    @media (min-width: 750px) {
+        border-top-left-radius: var(--mantine-radius-md);
+        border-top-right-radius: var(--mantine-radius-md);
+    }
+}
+
+.lastTab {
+    border-top-right-radius: var(--mantine-radius-md);
+    border-bottom-right-radius: var(--mantine-radius-md);
+
+    @media (min-width: 750px) {
+        border-bottom-left-radius: var(--mantine-radius-md);
+        border-bottom-right-radius: var(--mantine-radius-md);
+    }
+}

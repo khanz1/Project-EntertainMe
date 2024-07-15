@@ -27,17 +27,26 @@ export default async function Layout({ manga, movies, tv }: LayoutProps) {
                 <TabsList>
                   <Grid gutter={0}>
                     <GridCol span={{ base: 4, sm: 12 }}>
-                      <TabsTab my={0} value="movies" leftSection={<IconMovie style={iconStyle} />}>
+                      <TabsTab
+                        className={classes.firstTab}
+                        my={0}
+                        value="movies"
+                        leftSection={<IconMovie style={iconStyle} />}
+                      >
                         Movies
                       </TabsTab>
                     </GridCol>
                     <GridCol span={{ base: 4, sm: 12 }}>
-                      <TabsTab value="tv" leftSection={<IconDeviceTv style={iconStyle} />}>
+                      <TabsTab
+                        className={classes.secondTab}
+                        value="tv"
+                        leftSection={<IconDeviceTv style={iconStyle} />}
+                      >
                         TV Series
                       </TabsTab>
                     </GridCol>
                     <GridCol span={{ base: 4, sm: 12 }}>
-                      <TabsTab value="manga" leftSection={<IconBook style={iconStyle} />}>
+                      <TabsTab className={classes.lastTab} value="manga" leftSection={<IconBook style={iconStyle} />}>
                         Manga
                       </TabsTab>
                     </GridCol>
