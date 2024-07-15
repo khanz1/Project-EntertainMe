@@ -24,6 +24,7 @@ import { useDisclosure, useMediaQuery, useWindowScroll } from '@mantine/hooks';
 import { APP } from '@/constant';
 import { Session } from 'next-auth';
 import { signOut } from '@/actions/user.action';
+import { AppLogo } from '@/features/app/components/Logo';
 
 type TLink = {
   link: string;
@@ -139,14 +140,27 @@ export const Navbar = ({ session }: { session: Session | null }) => {
           ))}
         </Group>
         <Group w={{ base: '100%', lg: 'inherit' }}>
-          <Drawer opened={opened} onClose={toggle}>
-            {session ? (
-              <UserControl session={session} />
-            ) : (
-              <Link href={'/auth'}>
-                <Button variant="default">Log in</Button>
+          <Drawer
+            opened={opened}
+            onClose={toggle}
+            title={
+              <Group w="100%" justify="space-between">
+                <AppLogo size={50} />
+                {session ? (
+                  <UserControl session={session} />
+                ) : (
+                  <Link href="/auth" onClick={toggle}>
+                    <Button variant="default">Log in</Button>
+                  </Link>
+                )}
+              </Group>
+            }
+          >
+            {links.map(link => (
+              <Link key={link.label} href={link.link} className={classes.link}>
+                {link.label}
               </Link>
-            )}
+            ))}
           </Drawer>
           <Box visibleFrom="lg">
             {session ? (
