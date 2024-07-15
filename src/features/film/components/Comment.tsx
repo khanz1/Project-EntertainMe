@@ -23,28 +23,20 @@ export function Comment({ review }: CommentProps) {
   return (
     <div className={classes.commentWrapper}>
       <Group>
-        <Avatar
-          src={imgUrl}
-          alt={review.author}
-          radius="xl"
-          onError={() => setImgUrl(defaultAvatar)}
-        />
+        <Avatar src={imgUrl} alt={review.author} radius="xl" onError={() => setImgUrl(defaultAvatar)} />
         <Stack gap={0}>
           <Text size="sm">{review.author}</Text>
           <Text size="xs" c="dimmed">
             {fDateTimeGB(new Date(review.created_at))}
           </Text>
-          <Rating value={review.author_details.rating / 2} fractions={1} readOnly />
+          {Boolean(review.author_details.rating) && (
+            <Rating value={review.author_details.rating / 2} fractions={1} readOnly />
+          )}
         </Stack>
       </Group>
       <Box pl={54}>
         {/*<Spoiler maxHeight={110} showLabel="Show more" hideLabel="Hide">*/}
-        <Text
-          pt="sm"
-          pb="lg"
-          size="sm"
-          dangerouslySetInnerHTML={{ __html: review.content }}
-        />
+        <Text pt="sm" pb="lg" size="sm" dangerouslySetInnerHTML={{ __html: review.content }} />
         {/*</Spoiler>*/}
       </Box>
     </div>
