@@ -38,8 +38,9 @@ export const fMinutes = (minutes: number): string => {
 };
 
 export const getVidSrcStreamUrl = (props: MovieVidSrcProps | TVVidSrcProps) => {
-  if (props.type === ItemType.movie) {
-    return `https://vidsrc.to/embed/movie/${props.movieId}`;
-  }
-  return `https://vidsrc.to/embed/tv/${props.tvSeriesId}/${props.season}/${props.episode}`;
+  return ''
+  // if (props.type === ItemType.movie) {
+  //  return `https://vidsrc.to/embed/movie/${props.movieId}`;
+  // }
+  // return `https://vidsrc.to/embed/tv/${props.tvSeriesId}/${props.season}/${props.episode}`;
 };
